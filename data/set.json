@@ -1,3 +1,5 @@
 {
-  "foo": "bar"
+  "name": "×5",
+  "chars": "!#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  "powers": "3"
 }

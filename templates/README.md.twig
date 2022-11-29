@@ -3,4 +3,7 @@
 
 {% for i in 1..powers %}
 ## ({{ name }})^{{ i }}
+{% for char in chars|split('') %}
+{{ char }}
+{% endfor %}
 {% endfor %}

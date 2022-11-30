@@ -14,7 +14,15 @@ gulp.task('templates', function() {
         }))
         .pipe(twig({
             errorLogToConsole: true,
-            extname: false
+            extname: false,
+            filters: [
+                {
+                    name: "u",
+                    func: function (args) {
+                        return args.codePointAt(0).toString(16).padStart(4, '0');
+                    }
+                }
+            ]
         }))
         .pipe(gulp.dest('./')); // output the rendered files to the "dist" directory
 });

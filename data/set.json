@@ -1,5 +1,11 @@
 {
   "name": "×5",
   "chars": "!#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ■♥",
-  "powers": "3"
+  "powers": "3",
+  "ligatures": [
+    "22",
+    "Hb",
+    "LE",
+    "tripletau"
+  ]
 }

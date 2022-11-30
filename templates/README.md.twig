@@ -4,7 +4,11 @@
 {% for i in 1..powers %}
 ## ({{ name }})^{{ i }}
 {% for char in chars|split('') %}
-{% set vars = {'code': char|u, 'power': i} %}
+{% set vars = {'code': 'u' ~ char|u, 'power': i} %}
+{%- include "_img.md.twig" with vars -%}
+{% endfor %}
+{%- for ligature in ligatures %}
+{% set vars = {'code': ligature, 'power': i} %}
 {%- include "_img.md.twig" with vars -%}
 {% endfor %}
 {% endfor %}

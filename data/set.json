@@ -7,5 +7,9 @@
     "Hb",
     "LE",
     "tripletau"
+  ],
+  "algorithmic": [
+    "n",
+    "random"
   ]
 }

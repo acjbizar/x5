@@ -1,5 +1,7 @@
 
 # ×5
+
+×5 (pronounced Times Five) is a simple typeface, constructed from a 5 by 5 grid of squares. This concept is far from new: seasoned Web designers will remember [Kottke’s Silkscreen](https://kottke.org/plus/type/silkscreen/), but examples can even be found in Bauhaus-era tiles. What makes this version different/special, is that the grid is used recursively to construct more complex structures. These structures are self-similar, and behave like fractals in that sense.
 ## (×5)^1
 
 ![](https://x5.acjs.net/images/x5-n1-u0021.png)

@@ -1,0 +1,18 @@
+{
+    "name": "acj/x5",
+    "description": "Typeface.",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Acj\\X5\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ACJ",
+            "email": "gitlab@acjs.net"
+        }
+    ],
+    "require": {}
+}

@@ -33,6 +33,7 @@ class X5
     private array $glyph;
     private array $randomGlyph;
     private bool $transparent = true;
+    public string $filename = 'x5-n[power]-[code][t].png';
 
     public function __construct($key = 'random')
     {
@@ -44,13 +45,16 @@ class X5
 
         if(isset($this->chars[$key])) {
             $this->glyph = $this->chars[$key];
+            $this->filename = str_replace('[code]', 'u' . str_pad(dechex($key), 4, '0', STR_PAD_LEFT), $this->filename);
         } elseif(isset($this->specials[$key])) {
             $this->setColor(COLOR_RED);
             $this->glyph = $this->specials[$key];
+            $this->filename = str_replace('[code]', $key, $this->filename);
         } elseif(in_array($key, $this->algorithmics)) {
             $this->algorithmic = true;
             $this->setColor(COLOR_BLUE);
             $this->randomGlyph = $this->_populateRandomGlyph();
+            $this->filename = str_replace('[code]', $key, $this->filename);
         }
     }
 
@@ -64,8 +68,10 @@ class X5
             $transparent = imagecolorallocatealpha($this->im, 0, 0, 0, 127);
             imagesavealpha($this->im, true);
             imagefill($this->im, 0, 0, $transparent);
+            $this->filename = str_replace('[t]', '-t', $this->filename);
         } else {
             imagefill($this->im, 0, 0, $this->bgcolor);
+            $this->filename = str_replace('[t]', '', $this->filename);
         }
     }
 
@@ -213,9 +219,23 @@ class X5
     {
         $this->_createImage();
         $this->_drawChar($this->power);
-        header('Content-Type: image/png');
+        //header('Content-Type: image/png');
 
         imagepng($this->im);
+        imagedestroy($this->im);
+    }
+
+    public function save($filename = null): void
+    {
+        $this->_createImage();
+        $this->_drawChar($this->power);
+        $path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR;
+
+        if(empty($filename)) {
+            $filename = str_replace('[power]', strval($this->power), $this->filename);
+        }
+
+        imagepng($this->im, $path . $filename);
         imagedestroy($this->im);
     }
 }

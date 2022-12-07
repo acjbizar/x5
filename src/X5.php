@@ -29,7 +29,7 @@ class X5
     private bool $borders = true;
     private int $bgcolor = 0xffffff;
     private int $color = 0x0;
-    private string $key;
+    private mixed $key;
     private array $glyph;
     private array $randomGlyph;
 
@@ -74,7 +74,7 @@ class X5
         if($this->algorithmic) {
             switch($this->key) {
                 case 'n':
-                    $l = $this->getGlyph();
+                    $l = $this->chars[mb_ord(strval($n))];
                     break;
                 default:
                     $l = $this->randomGlyph;
@@ -157,7 +157,7 @@ class X5
         //
     }
 
-    private function _populateRandomGlyph()
+    private function _populateRandomGlyph(): array
     {
         return [mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),
             mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),

@@ -73,6 +73,10 @@ class X5
                             imagefilledrectangle($this->im, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
                         }
 
+                        if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
+                            imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, mt_rand(0, 0xffffff));
+                        }
+
                         $this->_drawChar($n - 1);
                     }
                     else

@@ -12,6 +12,11 @@ class X5
     private array $chars;
     private GdImage $im;
     private int $power = 3;
+    private int $x = 9;
+    private int $y = 9;
+    private int $width = 512;
+    private int $height = 512;
+    private int $margin = 3;
 
     public function __construct()
     {
@@ -20,29 +25,67 @@ class X5
 
     private function _createImage(): void
     {
-        $this->im = imagecreatetruecolor(1024, 1024);
+        $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1));
+        $height = $width;
+        $this->im = imagecreatetruecolor($width, $height);
+        imagefill($this->im, 0, 0, 0xffffff);
     }
 
-    private function _drawChar(): void
+    private function _drawChar($n = 1): void
     {
         $f00 = imagecolorallocate($this->im, 255, 0, 0);
         $l = $this->getChar();
         $i = 0;
-        $x = 10;
-        $y = 10;
+        $margin = $this->margin;
 
-        for($row = 1; $row <= 5; ++$row) {
-            for ($col = 1; $col <= 5; ++$col) {
-                if (isset($l[$i]) && $l[$i] === 1) {
-                    imagefilledrectangle($this->im, $x, $y, $x, $y, $f00);
+        if($n === 1) {
+            for($row = 1; $row <= 5; ++$row)
+            {
+                for($col = 1; $col <= 5; ++$col)
+                {
+                    if(isset($l[$i]) && $l[$i] === 1)
+                    {
+                        imagefilledrectangle($this->im, $this->x, $this->y, $this->x, $this->y, $f00);
+                    }
+
+                    ++$i;
+                    $this->x += 1;
                 }
 
-                ++$i;
-                $x += 1;
+                $this->x -= 5;
+                $this->y += 1;
             }
 
-            $x -= 5;
-            $y += 1;
+            $this->y -= 5;
+            //$this->x += $margin;
+        } else {
+            for($row = 1; $row <= 5; ++$row)
+            {
+                for($col = 1; $col <= 5; ++$col)
+                {
+                    if(isset($l[$i]) && $l[$i] === 1)
+                    {
+                        $this->_drawChar($n - 1);
+                    }
+                    else
+                    {
+                        /*
+                        $random = imagecolorallocatealpha($img, 0, mt_rand(0, 255), 0, 63);
+                        //imagefilledrectangle($img, $this->x, $this->y + pow(5, $n), $this->x + pow(5, $n), $this->y, $random);
+                        imagefilledellipse($img, $this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, $this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random);
+                        imageellipse($img, $this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, $this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random);
+                        */
+                    }
+
+                    ++$i;
+                    $this->x += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+                }
+
+                $this->x -= pow(5, $n) + ($margin * pow(5, $n - 1));
+                $this->y += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+            }
+
+            $this->y -= pow(5, $n) + ($margin * pow(5, $n - 1));
         }
     }
 
@@ -69,7 +112,7 @@ class X5
     public function parse(): void
     {
         $this->_createImage();
-        $this->_drawChar();
+        $this->_drawChar($this->power);
         header('Content-Type: image/png');
 
         imagepng($this->im);

@@ -17,7 +17,8 @@ class X5
 {
     private array $chars;
     private array $specials;
-    private array $algorithmics = ['n', 'rand'];
+    private bool $algorithmic = false;
+    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random'];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -28,11 +29,14 @@ class X5
     private bool $borders = true;
     private int $bgcolor = 0xffffff;
     private int $color = 0x0;
+    private string $key;
     private array $glyph;
+    private array $randomGlyph;
 
     public function __construct($key = 'random')
     {
         $this->glyph = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        $this->key = $key;
 
         $this->chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'chars.php';
         $this->specials = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'specials.php';
@@ -42,6 +46,10 @@ class X5
         } elseif(isset($this->specials[$key])) {
             $this->setColor(COLOR_RED);
             $this->glyph = $this->specials[$key];
+        } elseif(in_array($key, $this->algorithmics)) {
+            $this->algorithmic = true;
+            $this->setColor(COLOR_BLUE);
+            $this->randomGlyph = $this->_populateRandomGlyph();
         }
     }
 
@@ -60,10 +68,20 @@ class X5
 
     private function _drawChar($n = 1): void
     {
-        $f00 = imagecolorallocate($this->im, 255, 255, 255);
-        $l = $this->getGlyph();
         $i = 0;
         $margin = $this->margin;
+
+        if($this->algorithmic) {
+            switch($this->key) {
+                case 'n':
+                    $l = $this->getGlyph();
+                    break;
+                default:
+                    $l = $this->randomGlyph;
+            }
+        } else {
+            $l = $this->getGlyph();
+        }
 
         if($n === 1) {
             for($row = 1; $row <= 5; ++$row)
@@ -137,6 +155,15 @@ class X5
     private function _drawPowerChar()
     {
         //
+    }
+
+    private function _populateRandomGlyph()
+    {
+        return [mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),
+            mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),
+            mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),
+            mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1),
+            mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1), mt_rand(0, 1)];
     }
 
     public function dumpChars()

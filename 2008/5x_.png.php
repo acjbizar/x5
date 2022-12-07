@@ -1,4 +1,4 @@
-<?
+<?php
 
 $letter = array(0,1,1,1,0,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1);
 
@@ -29,7 +29,7 @@ $j = 0;
 
 for ($i = 0; $i < 25; $i++) {
 	if ($letter[$i] == 1) {
-		imagefilledrectangle($image, $x + $i * $scale, $y, $x + $i * $scale + $scale, $y + $scale, imagecolorallocate($image, 0, 0, rand()));
+		imagefilledrectangle($image, $x + $i * $scale, $y, $x + $i * $scale + $scale, $y + $scale, imagecolorallocate($image, 0, 0, rand(0, 255)));
 	} else {
 		imagefilledrectangle($image, $x + $i * $scale, $y, $x + $i * $scale + $scale, $y + $scale, $background);
 	}
@@ -37,5 +37,3 @@ for ($i = 0; $i < 25; $i++) {
 
 imagepng($image);
 imagedestroy($image);
-
-?>

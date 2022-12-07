@@ -1,4 +1,4 @@
-<?
+<?php
 header("Content-type: image/png");
 
 $x0021 = array(0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0); //!
@@ -35,85 +35,85 @@ $white = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 if(isset($_GET['letter'])) :
 switch($_GET['letter']) {
-	case 1:
+	case '1':
 		$letter = $x0031;
 		break;
-	case A:
+	case 'A':
 		$letter = $x0041;
 		break;
-	case B:
+	case 'B':
 		$letter = $x0042;
 		break;
-	case C:
+	case 'C':
 		$letter = $x0043;
 		break;
-	case D:
+	case 'D':
 		$letter = $x0044;
 		break;
-	case E:
+	case 'E':
 		$letter = $x0045;
 		break;
-	case F:
+	case 'F':
 		$letter = $x0046;
 		break;
-	case G:
+	case 'G':
 		$letter = $x0047;
 		break;
-	case H:
+	case 'H':
 		$letter = $x0048;
 		break;
-	case I:
+	case 'I':
 		$letter = $x0049;
 		break;
-	case J:
+	case 'J':
 		$letter = $x004A;
 		break;
-	case K:
+	case 'K':
 		$letter = $x004B;
 		break;
-	case L:
+	case 'L':
 		$letter = $x004C;
 		break;
-	case M:
+	case 'M':
 		$letter = $x004D;
 		break;
-	case N:
+	case 'N':
 		$letter = $x004E;
 		break;
-	case O:
+	case 'O':
 		$letter = $x004F;
 		break;
-	case P:
+	case 'P':
 		$letter = $x0050;
 		break;
-	case Q:
+	case 'Q':
 		$letter = $x0051;
 		break;
-	case R:
+	case 'R':
 		$letter = $x0052;
 		break;
-	case S:
+	case 'S':
 		$letter = $x0053;
 		break;
-	case T:
+	case 'T':
 		$letter = $x0054;
 		break;
-	case U:
+	case 'U':
 		$letter = $x0055;
 		break;
-	case V:
+	case 'V':
 		$letter = $x0056;
 		break;
-	case W:
+	case 'W':
 		$letter = $x0057;
 		break;
-	case X:
+	case 'X':
 		$letter = $x0058;
 		break;
-	case Y:
+	case 'Y':
 		$letter = $x0059;
 		break;
-	case Z:
+	case 'Z':
 		$letter = $x005A;
 		break;
 	default:
@@ -225,7 +225,7 @@ $image = imagecreate($width, $height);
 $background = imagecolorallocate($image, 252, 252, 252);
 $color = imagecolorallocate($image, 0, 0, 0);
 
-$letter = $letter;
+$j = 0;
 
 $x1 = $x;
 for ($i = 0; $i < 25; $i++) {
@@ -251,5 +251,3 @@ for ($i = 0; $i < 25; $i++) {
 
 imagepng($image);
 imagedestroy($image);
-
-?>

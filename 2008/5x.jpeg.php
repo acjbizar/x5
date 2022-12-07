@@ -1,86 +1,87 @@
-<?
+<?php
 
+$letter = !empty($_GET['letter']) ? $_GET['letter'] : 'A';
 
-switch($_GET['letter']) {
-	case A:
+switch($letter) {
+	case 'A':
 		$letter = array(0,1,1,1,0,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1);
 		break;
-	case B:
+	case 'B':
 		$letter = array(1,1,1,1,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,1,1,1,0);
 		break;
-	case C:
+	case 'C':
 		$letter = array(0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,1);
 		break;
-	case D:
+	case 'D':
 		$letter = array(1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0);
 		break;
-	case E:
+	case 'E':
 		$letter = array(1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1);
 		break;
-	case F:
+	case'F':
 		$letter = array(1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0);
 		break;
-	case G:
+	case'G':
 		$letter = array(0,1,1,1,1,1,0,0,0,0,1,0,0,1,1,1,0,0,0,1,0,1,1,1,0);
 		break;
-	case H:
+	case 'H':
 		$letter = array(1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1);
 		break;
-	case I:
+	case 'I':
 		$letter = array(0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,1,0);
 		break;
-	case J:
+	case 'J':
 		$letter = array(0,0,1,1,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,1,0,1,1,1,0);
 		break;
-	case K:
+	case 'K':
 		$letter = array(1,0,0,1,0,1,0,1,0,0,1,1,0,0,0,1,0,1,0,0,1,0,0,1,0);
 		break;
-	case L:
+	case 'L':
 		$letter = array(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,1);
 		break;
-	case M:
+	case 'M':
 		$letter = array(1,0,0,0,1,1,1,0,1,1,1,0,1,0,1,1,0,0,0,1,1,0,0,0,1);
 		break;
-	case N:
+	case 'N':
 		$letter = array(1,0,0,0,1,1,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,0,0,0,1);
 		break;
-	case O:
+	case 'O':
 		$letter = array(0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0);
 		break;
-	case P:
+	case 'P':
 		$letter = array(1,1,1,1,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0);
 		break;
-	case Q:
+	case 'Q':
 		$letter = array(0,1,1,1,0,1,0,0,0,1,1,0,1,0,1,1,0,0,1,0,0,1,1,0,1);
 		break;
-	case R:
+	case 'R':
 		$letter = array(1,1,1,1,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1);
 		break;
-	case S:
+	case 'S':
 		$letter = array(0,1,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,1,0);
 		break;
-	case T:
+	case 'T':
 		$letter = array(1,1,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0);
 		break;
-	case U:
+	case 'U':
 		$letter = array(1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0);
 		break;
-	case V:
+	case 'V':
 		$letter = array(1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0);
 		break;
-	case W:
+	case 'W':
 		$letter = array(1,0,0,0,1,1,0,0,0,1,1,0,1,0,1,0,1,0,1,0,0,1,0,1,0);
 		break;
-	case X:
+	case 'X':
 		$letter = array(1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1);
 		break;
-	case Y:
+	case 'Y':
 		$letter = array(1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0);
 		break;
-	case Z:
+	case 'Z':
 		$letter = array(1,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1,1);
 		break;
-	case 1:
+	case '1':
 		$letter = array(0,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,1,0);
 		break;
 	default:
@@ -93,6 +94,7 @@ header("Content-type: image/jpeg");
 $x = 0;
 $y = 0;
 $scale = 100;
+$j = 0;
 
 $width = $scale * 5;
 $height = $scale * 5 ;
@@ -107,14 +109,14 @@ for ($i = 0; $i < 25; $i++) {
 		$y = $y + $scale;
 		$x = 0;
 		if ($letter[$i] == 1) {
-			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, imagecolorallocate($image, 0, 0, rand()));
+			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, imagecolorallocate($image, 0, 0, mt_rand(0, 255)));
 		} else {
 			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, $background);
 		}
 		$j = 0;
 	} else {
 		if ($letter[$i] == 1) {
-			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, imagecolorallocate($image, 0, 0, rand()));
+			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, imagecolorallocate($image, 0, 0, mt_rand(0, 255)));
 		} else {
 			imagefilledrectangle($image, $x, $y, $x + $scale, $y + $scale, $background);
 		}
@@ -125,5 +127,3 @@ for ($i = 0; $i < 25; $i++) {
 
 imagejpeg($image);
 imagedestroy($image);
-
-?>

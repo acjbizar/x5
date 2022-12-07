@@ -32,6 +32,7 @@ class X5
     private mixed $key;
     private array $glyph;
     private array $randomGlyph;
+    private bool $transparent = true;
 
     public function __construct($key = 'random')
     {
@@ -58,7 +59,14 @@ class X5
         $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1)) + $this->x - 1;
         $height = $width;
         $this->im = imagecreatetruecolor($width, $height);
-        imagefill($this->im, 0, 0, $this->bgcolor);
+
+        if($this->transparent) {
+            $transparent = imagecolorallocatealpha($this->im, 0, 0, 0, 127);
+            imagesavealpha($this->im, true);
+            imagefill($this->im, 0, 0, $transparent);
+        } else {
+            imagefill($this->im, 0, 0, $this->bgcolor);
+        }
     }
 
     private function _drawBorders()

@@ -5,22 +5,44 @@ namespace Acj\X5;
 
 use GdImage;
 
+const MIN_POWER = 1;
 const MAX_POWER = 5;
+const DEFAULT_POWER = 3;
+const COLOR_RED = 0xff0000;
+const COLOR_BLUE = 0x0000ff;
+const COLOR_BLACK = 0x000000;
+const COLOR_WHITE = 0xffffff;
 
 class X5
 {
     private array $chars;
+    private array $specials;
+    private array $algorithmics = ['n', 'rand'];
     private GdImage $im;
-    private int $power = 3;
+    private int $power = DEFAULT_POWER;
     private int $x = 9;
     private int $y = 9;
     private int $width = 512;
     private int $height = 512;
     private int $margin = 3;
+    private bool $borders = true;
+    private int $bgcolor = 0xffffff;
+    private int $color = 0x0;
+    private array $glyph;
 
-    public function __construct()
+    public function __construct($key = 'random')
     {
+        $this->glyph = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
         $this->chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'chars.php';
+        $this->specials = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'specials.php';
+
+        if(isset($this->chars[$key])) {
+            $this->glyph = $this->chars[$key];
+        } elseif(isset($this->specials[$key])) {
+            $this->setColor(COLOR_RED);
+            $this->glyph = $this->specials[$key];
+        }
     }
 
     private function _createImage(): void
@@ -28,13 +50,18 @@ class X5
         $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1)) + $this->x - 1;
         $height = $width;
         $this->im = imagecreatetruecolor($width, $height);
-        imagefill($this->im, 0, 0, 0x000000);
+        imagefill($this->im, 0, 0, $this->bgcolor);
+    }
+
+    private function _drawBorders()
+    {
+
     }
 
     private function _drawChar($n = 1): void
     {
         $f00 = imagecolorallocate($this->im, 255, 255, 255);
-        $l = $this->getChar();
+        $l = $this->getGlyph();
         $i = 0;
         $margin = $this->margin;
 
@@ -45,7 +72,7 @@ class X5
                 {
                     if(isset($l[$i]) && $l[$i] === 1)
                     {
-                        imagefilledrectangle($this->im, $this->x, $this->y, $this->x, $this->y, $f00);
+                        imagefilledrectangle($this->im, $this->x, $this->y, $this->x, $this->y, $this->color);
                     }
 
                     ++$i;
@@ -65,20 +92,22 @@ class X5
                 {
                     if(isset($l[$i]) && $l[$i] === 1)
                     {
-                        if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
-                            imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
-                        }
+                        if($this->borders) {
+                            if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
+                                imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                            }
 
-                        if($col === 5 or (isset($l[$i + 1]) and $l[$i + 1] !== 1)) {
-                            imagefilledrectangle($this->im, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
-                        }
+                            if($col === 5 or (isset($l[$i + 1]) and $l[$i + 1] !== 1)) {
+                                imagefilledrectangle($this->im, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                            }
 
-                        if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
-                            imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, mt_rand(0, 0xffffff));
-                        }
+                            if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
+                                imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->color);
+                            }
 
-                        if($row === 5 or (isset($l[$i + 5]) and $l[$i + 5] !== 1)) {
-                            imagefilledrectangle($this->im, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
+                            if($row === 5 or (isset($l[$i + 5]) and $l[$i + 5] !== 1)) {
+                                imagefilledrectangle($this->im, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                            }
                         }
 
                         $this->_drawChar($n - 1);
@@ -115,14 +144,29 @@ class X5
         return $this->chars;
     }
 
-    public function getChar(): array
+    public function getChar($key): mixed
     {
-        return $this->chars[0x53];
+        return $this->chars[$key] ?? false;
+    }
+
+    public function getGlyph(): mixed
+    {
+        return $this->glyph;
     }
 
     public function getPower(): int
     {
         return $this->power;
+    }
+
+    public function getSpecialChar(): mixed
+    {
+        return $this->specials[0x53] ?? false;
+    }
+
+    public function setColor($color): void
+    {
+        $this->color = $color;
     }
 
     public function setPower(int $power): void

@@ -65,7 +65,7 @@ class X5
                 {
                     if(isset($l[$i]) && $l[$i] === 1)
                     {
-                        if($n === 2 && $col === 1) {
+                        if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
                             imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
                         }
 

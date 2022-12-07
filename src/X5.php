@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Acj\X5;
 
+use GdImage;
+
 const MAX_POWER = 5;
 
 class X5
 {
     private array $chars;
+    private GdImage $im;
     private int $power = 3;
 
     public function __construct()
@@ -33,5 +36,14 @@ class X5
     public function setPower(int $power): void
     {
         $this->power = $power;
+    }
+
+    public function parse()
+    {
+        $this->_createImage();
+        header('Content-Type: image/png');
+
+        imagepng($this->im);
+        imagedestroy($this->im);
     }
 }

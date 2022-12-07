@@ -14,5 +14,7 @@
             "email": "gitlab@acjs.net"
         }
     ],
-    "require": {}
+    "require": {
+        "ext-gd": "*"
+    }
 }

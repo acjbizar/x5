@@ -28,7 +28,7 @@ class X5
         $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1)) + $this->x - 1;
         $height = $width;
         $this->im = imagecreatetruecolor($width, $height);
-        imagefill($this->im, 0, 0, 0xffffff);
+        imagefill($this->im, 0, 0, 0x000000);
     }
 
     private function _drawChar($n = 1): void
@@ -65,6 +65,10 @@ class X5
                 {
                     if(isset($l[$i]) && $l[$i] === 1)
                     {
+                        if($n === 2 && $col === 1) {
+                            imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, mt_rand(0, 0xffffff));
+                        }
+
                         $this->_drawChar($n - 1);
                     }
                     else
@@ -101,7 +105,7 @@ class X5
 
     public function getChar(): array
     {
-        return $this->chars[0x58];
+        return $this->chars[0x53];
     }
 
     public function getPower(): int

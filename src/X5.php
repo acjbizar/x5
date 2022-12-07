@@ -25,7 +25,7 @@ class X5
 
     private function _createImage(): void
     {
-        $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1));
+        $width = pow(5, $this->power) + ($this->margin * pow(5, $this->power - 1)) + $this->x - 1;
         $height = $width;
         $this->im = imagecreatetruecolor($width, $height);
         imagefill($this->im, 0, 0, 0xffffff);
@@ -87,6 +87,11 @@ class X5
 
             $this->y -= pow(5, $n) + ($margin * pow(5, $n - 1));
         }
+    }
+
+    private function _drawPowerChar()
+    {
+        //
     }
 
     public function dumpChars()

@@ -49,7 +49,7 @@ class X5
         } elseif(isset($this->specials[$key])) {
             $this->setColor(COLOR_RED);
             $this->glyph = $this->specials[$key];
-            $this->filename = str_replace('[code]', $key, $this->filename);
+            $this->filename = str_replace('[code]', strval($key), $this->filename);
         } elseif(in_array($key, $this->algorithmics)) {
             $this->algorithmic = true;
             $this->setColor(COLOR_BLUE);
@@ -219,7 +219,7 @@ class X5
     {
         $this->_createImage();
         $this->_drawChar($this->power);
-        //header('Content-Type: image/png');
+        header('Content-Type: image/png');
 
         imagepng($this->im);
         imagedestroy($this->im);

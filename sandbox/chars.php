@@ -1,8 +1,10 @@
 <?php
 
-require_once '../src/X5.php';
+require_once dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$x5 = new \Acj\X5\X5();
+use Acj\X5\X5;
+
+$x5 = new X5;
 
 $chars = $x5->dumpChars();
 

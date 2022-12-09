@@ -4,6 +4,7 @@
   "powers": "3",
   "ligatures": [
     "22",
+    "glider",
     "Hb",
     "LE",
     "tripletau"

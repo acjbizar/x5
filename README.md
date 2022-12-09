@@ -60,6 +60,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n1-u2637-t.png)
 ![](https://x5.acjs.net/images/x5-n1-u2665-t.png)
 ![](https://x5.acjs.net/images/x5-n1-22-t.png)
+![](https://x5.acjs.net/images/x5-n1-glider-t.png)
 ![](https://x5.acjs.net/images/x5-n1-Hb-t.png)
 ![](https://x5.acjs.net/images/x5-n1-LE-t.png)
 ![](https://x5.acjs.net/images/x5-n1-tripletau-t.png)
@@ -118,6 +119,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n2-u2637-t.png)
 ![](https://x5.acjs.net/images/x5-n2-u2665-t.png)
 ![](https://x5.acjs.net/images/x5-n2-22-t.png)
+![](https://x5.acjs.net/images/x5-n2-glider-t.png)
 ![](https://x5.acjs.net/images/x5-n2-Hb-t.png)
 ![](https://x5.acjs.net/images/x5-n2-LE-t.png)
 ![](https://x5.acjs.net/images/x5-n2-tripletau-t.png)
@@ -176,6 +178,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n3-u2637-t.png)
 ![](https://x5.acjs.net/images/x5-n3-u2665-t.png)
 ![](https://x5.acjs.net/images/x5-n3-22-t.png)
+![](https://x5.acjs.net/images/x5-n3-glider-t.png)
 ![](https://x5.acjs.net/images/x5-n3-Hb-t.png)
 ![](https://x5.acjs.net/images/x5-n3-LE-t.png)
 ![](https://x5.acjs.net/images/x5-n3-tripletau-t.png)
@@ -190,10 +193,3 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ```shell
 composer require acj/x5
 ```
-
-## Examples in the wild
-
-- [ACJ’s](https://acjs.net/)
-- [ADHDADHDADHD](https://adhdadhdadhd.com/)
-- [Alexander Christiaan Jacob](https://alexanderchristiaanjacob.com/)
-- [Artificially Intelligent Design Systems](https://artificiallyintelligentdesignsystems.com/)

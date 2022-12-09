@@ -2,7 +2,13 @@
 # ×5
 
 ×5 (pronounced Times Five) is a simple typeface, constructed from a 5 by 5 grid of squares. This concept is far from new: seasoned Web designers will remember [Kottke’s Silkscreen](https://kottke.org/plus/type/silkscreen/), but examples can even be found in Bauhaus-era tiles. What makes this version different/special, is that the grid is used recursively to construct more complex structures. These structures are self-similar, and behave like fractals in that sense.
-## (×5)^1
+
+## Sizes
+
+×5 does not work with font sizes in the traditional sense, but rather with exponents. ×5 being the smallest, and ×5<sup>2</sup> (pronounced Times Five Squared) being the next size in line.
+
+In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> myself, because the exponential growth makes this impractical for multiple reasons.
+### ×5<sup>1</sup>
 
 ![](https://x5.acjs.net/images/x5-n1-u0021-t.png)
 ![](https://x5.acjs.net/images/x5-n1-u0023-t.png)
@@ -60,7 +66,7 @@
 ![](https://x5.acjs.net/images/x5-n1-n-t.png)
 ![](https://x5.acjs.net/images/x5-n1-random-t.png)
 
-## (×5)^2
+### ×5<sup>2</sup>
 
 ![](https://x5.acjs.net/images/x5-n2-u0021-t.png)
 ![](https://x5.acjs.net/images/x5-n2-u0023-t.png)
@@ -118,7 +124,7 @@
 ![](https://x5.acjs.net/images/x5-n2-n-t.png)
 ![](https://x5.acjs.net/images/x5-n2-random-t.png)
 
-## (×5)^3
+### ×5<sup>3</sup>
 
 ![](https://x5.acjs.net/images/x5-n3-u0021-t.png)
 ![](https://x5.acjs.net/images/x5-n3-u0023-t.png)
@@ -175,3 +181,19 @@
 ![](https://x5.acjs.net/images/x5-n3-tripletau-t.png)
 ![](https://x5.acjs.net/images/x5-n3-n-t.png)
 ![](https://x5.acjs.net/images/x5-n3-random-t.png)
+
+
+## Installation
+
+×5 can be installed using [Composer](https://getcomposer.org/).
+
+```shell
+composer require acj/x5
+```
+
+## Examples in the wild
+
+- [ACJ’s](https://acjs.net/)
+- [ADHDADHDADHD](https://adhdadhdadhd.com/)
+- [Alexander Christiaan Jacob](https://alexanderchristiaanjacob.com/)
+- [Artificially Intelligent Design Systems](https://artificiallyintelligentdesignsystems.com/)

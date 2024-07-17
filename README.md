@@ -70,6 +70,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n1-tripletau-t.png)
 ![](https://x5.acjs.net/images/x5-n1-n-t.png)
 ![](https://x5.acjs.net/images/x5-n1-random-t.png)
+![](https://x5.acjs.net/images/x5-n1-squared-circle-t.png)
 
 ### ×5<sup>2</sup>
 
@@ -133,6 +134,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n2-tripletau-t.png)
 ![](https://x5.acjs.net/images/x5-n2-n-t.png)
 ![](https://x5.acjs.net/images/x5-n2-random-t.png)
+![](https://x5.acjs.net/images/x5-n2-squared-circle-t.png)
 
 ### ×5<sup>3</sup>
 
@@ -196,6 +198,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n3-tripletau-t.png)
 ![](https://x5.acjs.net/images/x5-n3-n-t.png)
 ![](https://x5.acjs.net/images/x5-n3-random-t.png)
+![](https://x5.acjs.net/images/x5-n3-squared-circle-t.png)
 
 
 ## Installation
@@ -208,4 +211,4 @@ composer require acj/x5
 
 ## Website
 
-This font has its own microsite at [`x5.acjs.net`](https://x5.acjs.net/).
+This font has its own microsite at [`x5.acjs.net`](https://x5.acjs.net/). This has its own codebase at [`gitlab.com/acjs/x5.acjs.net`](https://gitlab.com/acjs/x5.acjs.net) (private).

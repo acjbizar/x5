@@ -18,7 +18,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random'];
+    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random', 'squared-circle'];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -55,6 +55,8 @@ class X5
             $this->setColor(COLOR_BLUE);
             $this->randomGlyph = $this->_populateRandomGlyph();
             $this->filename = str_replace('[code]', $key, $this->filename);
+        } else {
+            die('Not sure if this should be possible.');
         }
     }
 
@@ -89,6 +91,17 @@ class X5
             switch($this->key) {
                 case 'n':
                     $l = $this->chars[mb_ord(strval($n))];
+                    break;
+                case 'squared-circle':
+                    $m = $n % 3;
+
+                    $glyphs = [
+                        array(0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,0,0),
+                        array(0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0),
+                        array(1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1),
+                    ];
+
+                    $l = $glyphs[$m];
                     break;
                 default:
                     $l = $this->randomGlyph;

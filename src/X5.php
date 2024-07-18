@@ -18,7 +18,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random', 'squared-circle'];
+    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'x5'];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -99,6 +99,17 @@ class X5
                         array(0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,0,0),
                         array(0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0),
                         array(1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1),
+                    ];
+
+                    $l = $glyphs[$m];
+                    break;
+                case 'x5':
+                    $m = ($this->power - $n) % 3;
+
+                    $glyphs = [
+                        $this->chars[0x58], // X
+                        $this->chars[0x35], // 5
+                        $this->chars[0x4E], // N
                     ];
 
                     $l = $glyphs[$m];

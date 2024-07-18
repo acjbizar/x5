@@ -74,6 +74,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n1-n-t.png)
 ![](https://x5.acjs.net/images/x5-n1-random-t.png)
 ![](https://x5.acjs.net/images/x5-n1-squared-circle-t.png)
+![](https://x5.acjs.net/images/x5-n1-x5-t.png)
 
 ### ×5<sup>2</sup>
 
@@ -141,6 +142,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n2-n-t.png)
 ![](https://x5.acjs.net/images/x5-n2-random-t.png)
 ![](https://x5.acjs.net/images/x5-n2-squared-circle-t.png)
+![](https://x5.acjs.net/images/x5-n2-x5-t.png)
 
 ### ×5<sup>3</sup>
 
@@ -208,6 +210,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![](https://x5.acjs.net/images/x5-n3-n-t.png)
 ![](https://x5.acjs.net/images/x5-n3-random-t.png)
 ![](https://x5.acjs.net/images/x5-n3-squared-circle-t.png)
+![](https://x5.acjs.net/images/x5-n3-x5-t.png)
 
 
 ## Installation

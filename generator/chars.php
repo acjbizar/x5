@@ -8,11 +8,15 @@ $chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY
 
 for($i = 1; $i <= 5; $i++) {
     //foreach ($chars as $key => $value) {
-        $x5 = new \Acj\X5\X5(0x2e);
+        $x5 = new \Acj\X5\X5(0x3F);
         $x5->setPower($i);
 
         if(isset($_GET['save'])) {
             $x5->save();
+        } else {
+            echo 'Not saving: ';
+            echo $x5->filename;
+            echo "\r\n";
         }
     //}
 }

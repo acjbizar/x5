@@ -17,5 +17,3 @@ if(isset($_GET['save'])) {
     $x5->setPower($power);
     $x5->parse();
 }
-
-

@@ -267,6 +267,15 @@ class X5
     {
         $this->_createImage();
         $this->_drawChar($this->power);
+
+        // Prevent caching for characters that may be different every time.
+        if($this->key === 'custom' || $this->key === 'random')
+        {
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
+        }
+
         header('Content-Type: image/png');
 
         imagepng($this->im);

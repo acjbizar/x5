@@ -31,7 +31,7 @@ class X5
     private int $color = 0x0;
     private mixed $key;
     private array $glyph;
-    private mixed $input = [1,1,1,1,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,1,1,1,1];
+    private mixed $input = [1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,0,1,1];
     private array $randomGlyph;
     private bool $transparent = true;
     public string $filename = 'x5-n[power]-[code][t].png';
@@ -269,7 +269,7 @@ class X5
         $this->_drawChar($this->power);
 
         // Prevent caching for characters that may be different every time.
-        if($this->key === 'custom' || $this->key === 'random')
+        if($this->key === 'r' || $this->key === 'rand' || $this->key === 'random')
         {
             header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
             header("Cache-Control: post-check=0, pre-check=0", false);

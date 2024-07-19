@@ -1,1 +1,7 @@
-![{{ code }}](https://x5.acjs.net/images/x5-n{{ power }}-{{ char }}-t.png)
+{% apply spaceless %}
+{% if power < 4 %}
+![{{ char }}](https://x5.acjs.net/images/x5-n{{ power }}-{{ char }}-t.png)
+{% else %}
+[{{ char }}](https://x5.acjs.net/images/x5-n{{ power }}-{{ char }}-t.png)
+{% endif %}
+{% endapply %}

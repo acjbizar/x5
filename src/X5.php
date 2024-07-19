@@ -18,7 +18,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'x5'];
+    private array $algorithmics = ['custom', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'x5'];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -31,6 +31,7 @@ class X5
     private int $color = 0x0;
     private mixed $key;
     private array $glyph;
+    private mixed $input = [1,1,1,1,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,1,1,1,1];
     private array $randomGlyph;
     private bool $transparent = true;
     public string $filename = 'x5-n[power]-[code][t].png';
@@ -89,6 +90,9 @@ class X5
 
         if($this->algorithmic) {
             switch($this->key) {
+                case 'custom':
+                    $l = $this->getInput();
+                    break;
                 case 'n':
                     $l = $this->chars[mb_ord(strval($n))];
                     break;
@@ -219,6 +223,11 @@ class X5
         return $this->glyph;
     }
 
+    public function getInput(): mixed
+    {
+        return $this->input;
+    }
+
     public function getPower(): int
     {
         return $this->power;
@@ -232,6 +241,21 @@ class X5
     public function setColor($color): void
     {
         $this->color = $color;
+    }
+
+    public function setInput($input): void
+    {
+        if(is_string($input))
+        {
+            $input = str_split($input);
+        }
+
+        // Convert values to integers, so we can process them faster later on.
+        $input = array_map('intval', $input);
+
+        foreach($this->input as $key => $value) {
+            $this->input[$key] = !empty($input[$key]) ? 1 : 0;
+        }
     }
 
     public function setPower(int $power): void

@@ -29,6 +29,15 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 composer require acj/x5
 ```
 
+## Usage
+
+```php
+$x5 = new \Acj\X5\X5('custom');
+$x5->setInput('1111110001101011000111111');
+$x5->setPower(3);
+$x5->parse();
+```
+
 ## Website
 
 This font has its own microsite at [`x5.acjs.net`](https://x5.acjs.net/). This has its own codebase at [`gitlab.com/acjs/x5.acjs.net`](https://gitlab.com/acjs/x5.acjs.net) (private).

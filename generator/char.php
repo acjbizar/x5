@@ -6,7 +6,7 @@ require_once '../src/X5.php';
 
 $chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'chars.php';
 
-$key = 0x2C;
+$key = 0x5F;
 
 if(isset($_GET['save'])) {
 

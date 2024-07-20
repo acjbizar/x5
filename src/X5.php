@@ -18,7 +18,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['custom', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'x5'];
+    private array $algorithmics = ['blinker', 'custom', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -90,6 +90,16 @@ class X5
 
         if($this->algorithmic) {
             switch($this->key) {
+                case 'blinker':
+                    $m = $n % 2;
+
+                    $glyphs = [
+                        array(0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0),
+                        array(0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0),
+                    ];
+
+                    $l = $glyphs[$m];
+                    break;
                 case 'custom':
                     $l = $this->getInput();
                     break;
@@ -103,6 +113,16 @@ class X5
                         array(0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,0,0),
                         array(0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0),
                         array(1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1),
+                    ];
+
+                    $l = $glyphs[$m];
+                    break;
+                case 'toad':
+                    $m = $n % 2;
+
+                    $glyphs = [
+                        array(0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0),
+                        array(0,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0)
                     ];
 
                     $l = $glyphs[$m];

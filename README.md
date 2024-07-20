@@ -94,10 +94,13 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![LE](https://x5.acjs.net/images/x5-n1-LE-t.png)
 ![notdef](https://x5.acjs.net/images/x5-n1-notdef-t.png)
 ![tripletau](https://x5.acjs.net/images/x5-n1-tripletau-t.png)
+![x5](https://x5.acjs.net/images/x5-n1-x5-t.png)
+![blinker](https://x5.acjs.net/images/x5-n1-blinker-t.png)
+![toad](https://x5.acjs.net/images/x5-n1-toad-t.png)
+![squared-circle](https://x5.acjs.net/images/x5-n1-squared-circle-t.png)
 ![n](https://x5.acjs.net/images/x5-n1-n-t.png)
 ![random](https://x5.acjs.net/images/x5-n1-random-t.png)
-![squared-circle](https://x5.acjs.net/images/x5-n1-squared-circle-t.png)
-![x5](https://x5.acjs.net/images/x5-n1-x5-t.png)
+![custom](https://x5.acjs.net/images/x5-n1-custom-t.png)
 
 ### ×5<sup>2</sup>
 
@@ -185,10 +188,13 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![LE](https://x5.acjs.net/images/x5-n2-LE-t.png)
 ![notdef](https://x5.acjs.net/images/x5-n2-notdef-t.png)
 ![tripletau](https://x5.acjs.net/images/x5-n2-tripletau-t.png)
+![x5](https://x5.acjs.net/images/x5-n2-x5-t.png)
+![blinker](https://x5.acjs.net/images/x5-n2-blinker-t.png)
+![toad](https://x5.acjs.net/images/x5-n2-toad-t.png)
+![squared-circle](https://x5.acjs.net/images/x5-n2-squared-circle-t.png)
 ![n](https://x5.acjs.net/images/x5-n2-n-t.png)
 ![random](https://x5.acjs.net/images/x5-n2-random-t.png)
-![squared-circle](https://x5.acjs.net/images/x5-n2-squared-circle-t.png)
-![x5](https://x5.acjs.net/images/x5-n2-x5-t.png)
+![custom](https://x5.acjs.net/images/x5-n2-custom-t.png)
 
 ### ×5<sup>3</sup>
 
@@ -276,10 +282,13 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![LE](https://x5.acjs.net/images/x5-n3-LE-t.png)
 ![notdef](https://x5.acjs.net/images/x5-n3-notdef-t.png)
 ![tripletau](https://x5.acjs.net/images/x5-n3-tripletau-t.png)
+![x5](https://x5.acjs.net/images/x5-n3-x5-t.png)
+![blinker](https://x5.acjs.net/images/x5-n3-blinker-t.png)
+![toad](https://x5.acjs.net/images/x5-n3-toad-t.png)
+![squared-circle](https://x5.acjs.net/images/x5-n3-squared-circle-t.png)
 ![n](https://x5.acjs.net/images/x5-n3-n-t.png)
 ![random](https://x5.acjs.net/images/x5-n3-random-t.png)
-![squared-circle](https://x5.acjs.net/images/x5-n3-squared-circle-t.png)
-![x5](https://x5.acjs.net/images/x5-n3-x5-t.png)
+![custom](https://x5.acjs.net/images/x5-n3-custom-t.png)
 
 ### ×5<sup>4</sup>
 
@@ -367,10 +376,13 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [LE](https://x5.acjs.net/images/x5-n4-LE-t.png)
 [notdef](https://x5.acjs.net/images/x5-n4-notdef-t.png)
 [tripletau](https://x5.acjs.net/images/x5-n4-tripletau-t.png)
+[x5](https://x5.acjs.net/images/x5-n4-x5-t.png)
+[blinker](https://x5.acjs.net/images/x5-n4-blinker-t.png)
+[toad](https://x5.acjs.net/images/x5-n4-toad-t.png)
+[squared-circle](https://x5.acjs.net/images/x5-n4-squared-circle-t.png)
 [n](https://x5.acjs.net/images/x5-n4-n-t.png)
 [random](https://x5.acjs.net/images/x5-n4-random-t.png)
-[squared-circle](https://x5.acjs.net/images/x5-n4-squared-circle-t.png)
-[x5](https://x5.acjs.net/images/x5-n4-x5-t.png)
+[custom](https://x5.acjs.net/images/x5-n4-custom-t.png)
 
 ### ×5<sup>5</sup>
 
@@ -458,10 +470,13 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [LE](https://x5.acjs.net/images/x5-n5-LE-t.png)
 [notdef](https://x5.acjs.net/images/x5-n5-notdef-t.png)
 [tripletau](https://x5.acjs.net/images/x5-n5-tripletau-t.png)
+[x5](https://x5.acjs.net/images/x5-n5-x5-t.png)
+[blinker](https://x5.acjs.net/images/x5-n5-blinker-t.png)
+[toad](https://x5.acjs.net/images/x5-n5-toad-t.png)
+[squared-circle](https://x5.acjs.net/images/x5-n5-squared-circle-t.png)
 [n](https://x5.acjs.net/images/x5-n5-n-t.png)
 [random](https://x5.acjs.net/images/x5-n5-random-t.png)
-[squared-circle](https://x5.acjs.net/images/x5-n5-squared-circle-t.png)
-[x5](https://x5.acjs.net/images/x5-n5-x5-t.png)
+[custom](https://x5.acjs.net/images/x5-n5-custom-t.png)
 
 
 ## Installation
@@ -470,6 +485,15 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 
 ```shell
 composer require acj/x5
+```
+
+## Usage
+
+```php
+$x5 = new \Acj\X5\X5('custom');
+$x5->setInput('1111110001101011000111111');
+$x5->setPower(3);
+$x5->parse();
 ```
 
 ## Website

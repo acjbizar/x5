@@ -12,9 +12,12 @@
     "tripletau"
   ],
   "algorithmic": [
+    "x5",
+    "blinker",
+    "toad",
+    "squared-circle",
     "n",
     "random",
-    "squared-circle",
-    "x5"
+    "custom"
   ]
 }

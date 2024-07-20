@@ -18,7 +18,8 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['blinker', 'custom', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
+    private array $algorithmics = ['blinker', 'custom', 'identicon', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
+    private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
     private int $x = 9;
@@ -102,6 +103,9 @@ class X5
                     break;
                 case 'custom':
                     $l = $this->getInput();
+                    break;
+                case 'identicon':
+                    $l = $this->getIdentifier();
                     break;
                 case 'n':
                     $l = $this->chars[mb_ord(strval($n))];
@@ -243,6 +247,11 @@ class X5
         return $this->glyph;
     }
 
+    public function getIdentifier(): mixed
+    {
+        return $this->identifier;
+    }
+
     public function getInput(): mixed
     {
         return $this->input;
@@ -258,9 +267,37 @@ class X5
         return $this->specials[0x53] ?? false;
     }
 
+    public function hexToGlyph($hex): array
+    {
+        $glyph;
+
+        for ($i = 0; $i < strlen($hex); $i++) {
+            if(!empty($hex[$i]) && hexdec($hex[$i]) >= 8) {
+                $glyph[] = 1;
+            } else {
+                $glyph[] = 0;
+            }
+        }
+
+        return $glyph;
+    }
+
     public function setColor($color): void
     {
         $this->color = $color;
+    }
+
+    public function setIdentifier(mixed $identifier): void
+    {
+        if(!empty($identifier)) {
+            $hash = md5($identifier);
+            $color = substr($hash, 0, 6);
+            $separator = substr($hash, 6, 1);
+            $char = substr($hash, 7, 25);
+
+            $this->identifier = $this->hexToGlyph($char);
+            $this->setColor(hexdec($color));
+        }
     }
 
     public function setInput($input): void

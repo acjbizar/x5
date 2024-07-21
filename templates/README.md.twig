@@ -3,6 +3,10 @@
 
 {{ name}} (pronounced Times Five) is a simple typeface, constructed from a 5 by 5 grid of squares. This concept is far from new: seasoned Web designers will remember [Kottke’s Silkscreen](https://kottke.org/plus/type/silkscreen/), but examples can even be found in Bauhaus-era tiles. What makes this version different/special, is that the grid is used recursively to construct more complex structures. These structures are self-similar, and behave like fractals in that sense.
 
+Unicode characters: {{ chars|length }}
+Non-standard characters: {{ algorithmic|length }}
+Algorithmic characters: {{ ligatures|length }}
+
 ## Sizes
 
 {{ name}} does not work with font sizes in the traditional sense, but rather with exponents. ×5 being the smallest, and ×5<sup>2</sup> (pronounced Times Five Squared) being the next size in line.
@@ -32,6 +36,22 @@ composer require acj/x5
 ## Usage
 
 ```php
+//
+$x5 = new \Acj\X5\X5('A');
+$x5->setPower(3);
+$x5->parse();
+```
+
+```php
+// Render an Identicon based on a string, like a username of email address.
+$x5 = new \Acj\X5\X5('identicon');
+$x5->setIdentifier('username');
+$x5->setPower(3);
+$x5->parse();
+```
+
+```php
+// Render a custom glyph based on a binary string, where every 0 represents an empty block.
 $x5 = new \Acj\X5\X5('custom');
 $x5->setInput('1111110001101011000111111');
 $x5->setPower(3);

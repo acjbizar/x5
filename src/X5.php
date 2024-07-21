@@ -35,7 +35,8 @@ class X5
     private mixed $input = [1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,0,1,1];
     private array $randomGlyph;
     private bool $transparent = true;
-    public string $filename = 'x5-n[power]-[code][t].png';
+    public string $extension = 'png';
+    public string $filename = 'x5-n[power]-[code][t].[extension]';
 
     public function __construct($key = 'random')
     {
@@ -287,6 +288,11 @@ class X5
         $this->color = $color;
     }
 
+    public function setExtension($extension): void
+    {
+        $this->extension = $extension;
+    }
+
     public function setIdentifier(mixed $identifier): void
     {
         if(!empty($identifier)) {
@@ -335,6 +341,18 @@ class X5
 
         header('Content-Type: image/png');
 
+        switch($this->extension):
+            case 'avif':
+                imageavif($this->im);
+                break;
+            case 'gif':
+                imagegif($this->im);
+                break;
+            case 'png':
+            default:
+                imagepng($this->im);
+        endswitch;
+
         imagepng($this->im);
         imagedestroy($this->im);
     }
@@ -346,10 +364,21 @@ class X5
         $path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR;
 
         if(empty($filename)) {
-            $filename = str_replace('[power]', strval($this->power), $this->filename);
+            $filename = str_replace(['[power]', '[extension]'], [strval($this->power), $this->extension], $this->filename);
         }
 
-        imagepng($this->im, $path . $filename);
+        switch($this->extension):
+            case 'avif':
+                imageavif($this->im,$path . $filename);
+                break;
+            case 'gif':
+                imagegif($this->im, $path. $filename);
+                break;
+            case 'png':
+            default:
+                imagepng($this->im,$path . $filename);
+        endswitch;
+
         imagedestroy($this->im);
     }
 }

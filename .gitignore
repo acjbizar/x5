@@ -3,5 +3,5 @@
 /node_modules/
 /vendor/
 
-/*.avif
-/*.bmp
+/**/*.avif
+/**/*.bmp

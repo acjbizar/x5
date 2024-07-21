@@ -285,6 +285,11 @@ class X5
 
     public function setColor($color): void
     {
+        // Turn format "#FFFFFF" into 0xFFFFFF.
+        if(is_string($color)) {
+            $color = hexdec(ltrim($color, '#'));
+        }
+
         $this->color = $color;
     }
 

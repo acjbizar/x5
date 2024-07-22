@@ -5,7 +5,7 @@
 
 | Characters | Amount |
 | --- | --- |
-| Unicode | 97 |
+| Unicode | 100 |
 | Non-standard | 8 |
 | Algorithmic | 8 |
 
@@ -84,7 +84,9 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007e](https://x5.acjs.net/images/x5-n1-u007e-t.png)
 ![u00b7](https://x5.acjs.net/images/x5-n1-u00b7-t.png)
 ![u00f7](https://x5.acjs.net/images/x5-n1-u00f7-t.png)
+![u2026](https://x5.acjs.net/images/x5-n1-u2026-t.png)
 ![u221e](https://x5.acjs.net/images/x5-n1-u221e-t.png)
+![u22ee](https://x5.acjs.net/images/x5-n1-u22ee-t.png)
 ![u2302](https://x5.acjs.net/images/x5-n1-u2302-t.png)
 ![u25a0](https://x5.acjs.net/images/x5-n1-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n1-u25a1-t.png)
@@ -101,6 +103,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25e3](https://x5.acjs.net/images/x5-n1-u25e3-t.png)
 ![u25e4](https://x5.acjs.net/images/x5-n1-u25e4-t.png)
 ![u25e5](https://x5.acjs.net/images/x5-n1-u25e5-t.png)
+![u25fb](https://x5.acjs.net/images/x5-n1-u25fb-t.png)
 ![u2609](https://x5.acjs.net/images/x5-n1-u2609-t.png)
 ![u2630](https://x5.acjs.net/images/x5-n1-u2630-t.png)
 ![u2631](https://x5.acjs.net/images/x5-n1-u2631-t.png)
@@ -200,7 +203,9 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007e](https://x5.acjs.net/images/x5-n2-u007e-t.png)
 ![u00b7](https://x5.acjs.net/images/x5-n2-u00b7-t.png)
 ![u00f7](https://x5.acjs.net/images/x5-n2-u00f7-t.png)
+![u2026](https://x5.acjs.net/images/x5-n2-u2026-t.png)
 ![u221e](https://x5.acjs.net/images/x5-n2-u221e-t.png)
+![u22ee](https://x5.acjs.net/images/x5-n2-u22ee-t.png)
 ![u2302](https://x5.acjs.net/images/x5-n2-u2302-t.png)
 ![u25a0](https://x5.acjs.net/images/x5-n2-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n2-u25a1-t.png)
@@ -217,6 +222,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25e3](https://x5.acjs.net/images/x5-n2-u25e3-t.png)
 ![u25e4](https://x5.acjs.net/images/x5-n2-u25e4-t.png)
 ![u25e5](https://x5.acjs.net/images/x5-n2-u25e5-t.png)
+![u25fb](https://x5.acjs.net/images/x5-n2-u25fb-t.png)
 ![u2609](https://x5.acjs.net/images/x5-n2-u2609-t.png)
 ![u2630](https://x5.acjs.net/images/x5-n2-u2630-t.png)
 ![u2631](https://x5.acjs.net/images/x5-n2-u2631-t.png)
@@ -316,7 +322,9 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007e](https://x5.acjs.net/images/x5-n3-u007e-t.png)
 ![u00b7](https://x5.acjs.net/images/x5-n3-u00b7-t.png)
 ![u00f7](https://x5.acjs.net/images/x5-n3-u00f7-t.png)
+![u2026](https://x5.acjs.net/images/x5-n3-u2026-t.png)
 ![u221e](https://x5.acjs.net/images/x5-n3-u221e-t.png)
+![u22ee](https://x5.acjs.net/images/x5-n3-u22ee-t.png)
 ![u2302](https://x5.acjs.net/images/x5-n3-u2302-t.png)
 ![u25a0](https://x5.acjs.net/images/x5-n3-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n3-u25a1-t.png)
@@ -333,6 +341,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25e3](https://x5.acjs.net/images/x5-n3-u25e3-t.png)
 ![u25e4](https://x5.acjs.net/images/x5-n3-u25e4-t.png)
 ![u25e5](https://x5.acjs.net/images/x5-n3-u25e5-t.png)
+![u25fb](https://x5.acjs.net/images/x5-n3-u25fb-t.png)
 ![u2609](https://x5.acjs.net/images/x5-n3-u2609-t.png)
 ![u2630](https://x5.acjs.net/images/x5-n3-u2630-t.png)
 ![u2631](https://x5.acjs.net/images/x5-n3-u2631-t.png)
@@ -432,7 +441,9 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u007e](https://x5.acjs.net/images/x5-n4-u007e-t.png)
 [u00b7](https://x5.acjs.net/images/x5-n4-u00b7-t.png)
 [u00f7](https://x5.acjs.net/images/x5-n4-u00f7-t.png)
+[u2026](https://x5.acjs.net/images/x5-n4-u2026-t.png)
 [u221e](https://x5.acjs.net/images/x5-n4-u221e-t.png)
+[u22ee](https://x5.acjs.net/images/x5-n4-u22ee-t.png)
 [u2302](https://x5.acjs.net/images/x5-n4-u2302-t.png)
 [u25a0](https://x5.acjs.net/images/x5-n4-u25a0-t.png)
 [u25a1](https://x5.acjs.net/images/x5-n4-u25a1-t.png)
@@ -449,6 +460,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u25e3](https://x5.acjs.net/images/x5-n4-u25e3-t.png)
 [u25e4](https://x5.acjs.net/images/x5-n4-u25e4-t.png)
 [u25e5](https://x5.acjs.net/images/x5-n4-u25e5-t.png)
+[u25fb](https://x5.acjs.net/images/x5-n4-u25fb-t.png)
 [u2609](https://x5.acjs.net/images/x5-n4-u2609-t.png)
 [u2630](https://x5.acjs.net/images/x5-n4-u2630-t.png)
 [u2631](https://x5.acjs.net/images/x5-n4-u2631-t.png)
@@ -548,7 +560,9 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u007e](https://x5.acjs.net/images/x5-n5-u007e-t.png)
 [u00b7](https://x5.acjs.net/images/x5-n5-u00b7-t.png)
 [u00f7](https://x5.acjs.net/images/x5-n5-u00f7-t.png)
+[u2026](https://x5.acjs.net/images/x5-n5-u2026-t.png)
 [u221e](https://x5.acjs.net/images/x5-n5-u221e-t.png)
+[u22ee](https://x5.acjs.net/images/x5-n5-u22ee-t.png)
 [u2302](https://x5.acjs.net/images/x5-n5-u2302-t.png)
 [u25a0](https://x5.acjs.net/images/x5-n5-u25a0-t.png)
 [u25a1](https://x5.acjs.net/images/x5-n5-u25a1-t.png)
@@ -565,6 +579,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u25e3](https://x5.acjs.net/images/x5-n5-u25e3-t.png)
 [u25e4](https://x5.acjs.net/images/x5-n5-u25e4-t.png)
 [u25e5](https://x5.acjs.net/images/x5-n5-u25e5-t.png)
+[u25fb](https://x5.acjs.net/images/x5-n5-u25fb-t.png)
 [u2609](https://x5.acjs.net/images/x5-n5-u2609-t.png)
 [u2630](https://x5.acjs.net/images/x5-n5-u2630-t.png)
 [u2631](https://x5.acjs.net/images/x5-n5-u2631-t.png)

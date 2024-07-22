@@ -5,7 +5,7 @@
 
 | Characters | Amount |
 | --- | --- |
-| Unicode | 100 |
+| Unicode | 101 |
 | Non-standard | 8 |
 | Algorithmic | 8 |
 
@@ -91,6 +91,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25a0](https://x5.acjs.net/images/x5-n1-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n1-u25a1-t.png)
 ![u25b2](https://x5.acjs.net/images/x5-n1-u25b2-t.png)
+![u25b3](https://x5.acjs.net/images/x5-n1-u25b3-t.png)
 ![u25b6](https://x5.acjs.net/images/x5-n1-u25b6-t.png)
 ![u25b7](https://x5.acjs.net/images/x5-n1-u25b7-t.png)
 ![u25bc](https://x5.acjs.net/images/x5-n1-u25bc-t.png)
@@ -210,6 +211,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25a0](https://x5.acjs.net/images/x5-n2-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n2-u25a1-t.png)
 ![u25b2](https://x5.acjs.net/images/x5-n2-u25b2-t.png)
+![u25b3](https://x5.acjs.net/images/x5-n2-u25b3-t.png)
 ![u25b6](https://x5.acjs.net/images/x5-n2-u25b6-t.png)
 ![u25b7](https://x5.acjs.net/images/x5-n2-u25b7-t.png)
 ![u25bc](https://x5.acjs.net/images/x5-n2-u25bc-t.png)
@@ -329,6 +331,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u25a0](https://x5.acjs.net/images/x5-n3-u25a0-t.png)
 ![u25a1](https://x5.acjs.net/images/x5-n3-u25a1-t.png)
 ![u25b2](https://x5.acjs.net/images/x5-n3-u25b2-t.png)
+![u25b3](https://x5.acjs.net/images/x5-n3-u25b3-t.png)
 ![u25b6](https://x5.acjs.net/images/x5-n3-u25b6-t.png)
 ![u25b7](https://x5.acjs.net/images/x5-n3-u25b7-t.png)
 ![u25bc](https://x5.acjs.net/images/x5-n3-u25bc-t.png)
@@ -448,6 +451,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u25a0](https://x5.acjs.net/images/x5-n4-u25a0-t.png)
 [u25a1](https://x5.acjs.net/images/x5-n4-u25a1-t.png)
 [u25b2](https://x5.acjs.net/images/x5-n4-u25b2-t.png)
+[u25b3](https://x5.acjs.net/images/x5-n4-u25b3-t.png)
 [u25b6](https://x5.acjs.net/images/x5-n4-u25b6-t.png)
 [u25b7](https://x5.acjs.net/images/x5-n4-u25b7-t.png)
 [u25bc](https://x5.acjs.net/images/x5-n4-u25bc-t.png)
@@ -567,6 +571,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u25a0](https://x5.acjs.net/images/x5-n5-u25a0-t.png)
 [u25a1](https://x5.acjs.net/images/x5-n5-u25a1-t.png)
 [u25b2](https://x5.acjs.net/images/x5-n5-u25b2-t.png)
+[u25b3](https://x5.acjs.net/images/x5-n5-u25b3-t.png)
 [u25b6](https://x5.acjs.net/images/x5-n5-u25b6-t.png)
 [u25b7](https://x5.acjs.net/images/x5-n5-u25b7-t.png)
 [u25bc](https://x5.acjs.net/images/x5-n5-u25bc-t.png)

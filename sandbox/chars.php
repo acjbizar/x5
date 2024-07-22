@@ -6,6 +6,6 @@ use Acj\X5\X5;
 
 $x5 = new X5;
 
-$chars = $x5->dumpChars();
+$chars = $x5->getCharsAsString();
 
 var_dump($chars);

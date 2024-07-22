@@ -243,6 +243,15 @@ class X5
         return $this->chars[$key] ?? false;
     }
 
+    public function getCharsAsString(): mixed
+    {
+        $keys = array_keys($this->chars);
+        $glyphs = array_map('mb_chr', $keys);
+        $str = implode('', $glyphs);
+
+        return $str;
+    }
+
     public function getGlyph(): mixed
     {
         return $this->glyph;
@@ -329,6 +338,8 @@ class X5
     public function setPower(int $power): void
     {
         $this->power = $power;
+
+        $this->filename = str_replace('[power]', strval($power), $this->filename);
     }
 
     public function parse(): void

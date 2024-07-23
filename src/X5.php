@@ -342,6 +342,11 @@ class X5
         $this->filename = str_replace('[power]', strval($power), $this->filename);
     }
 
+    public function setTransparent(bool $switch = TRUE): void
+    {
+        $this->transparent = $switch;
+    }
+
     public function parse(): void
     {
         $this->_createImage();

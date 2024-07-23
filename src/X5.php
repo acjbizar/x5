@@ -312,7 +312,7 @@ class X5
         if(!empty($identifier)) {
             $hash = md5($identifier);
             $color = substr($hash, 0, 6);
-            $separator = substr($hash, 6, 1);
+            $modifier = substr($hash, 6, 1);
             $char = substr($hash, 7, 25);
 
             $this->identifier = $this->hexToGlyph($char);

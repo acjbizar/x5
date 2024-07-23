@@ -650,28 +650,45 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [random](https://x5.acjs.net/images/x5-n5-random.png)
 
 
+## Markup
+
+The easiest way to use this typeface on a webpage is by including glyphs as images:
+
+```html
+<img alt="A" src="https://x5.acjs.net/images/x5-n<var>power</var>-<var>key</var>.png">
+```
+
+…where _power_ represents the number of iterations or size of the image as a number between 1 and 5, and _key_ represents the character to be rendered.
+This is either a Unicode codepoint prefixed with ``u``, or it is the name of one of the special characters.
+
+```html
+<img alt="A" src="https://x5.acjs.net/images/x5-n3-u0041.png">
+```
+
 ## Installation
 
-×5 can be installed using [Composer](https://getcomposer.org/).
+×5 can be installed using [Composer](https://getcomposer.org/):
 
 ```shell
 composer require acj/x5
 ```
 
+This makes all static image files available in the ``dist`` folder, and gives access to the `X5` class that can be used to generate characters.
+
 ## Usage
 
 ```php
-//
-$x5 = new \Acj\X5\X5('A');
-$x5->setPower(3);
+// Render a letter A, based on its Unicode codepoint.
+$x5 = new \Acj\X5\X5(0x41);
 $x5->parse();
 ```
 
 ```php
 // Render an Identicon based on a string, like a username of email address.
+$username = 'john-doe';
+
 $x5 = new \Acj\X5\X5('identicon');
-$x5->setIdentifier('username');
-$x5->setPower(3);
+$x5->setIdentifier($username);
 $x5->parse();
 ```
 
@@ -679,7 +696,6 @@ $x5->parse();
 // Render a custom glyph based on a binary string, where every 0 represents an empty block.
 $x5 = new \Acj\X5\X5('custom');
 $x5->setInput('1111110001101011000111111');
-$x5->setPower(3);
 $x5->parse();
 ```
 

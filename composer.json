@@ -1,6 +1,6 @@
 {
     "name": "acj/x5",
-    "description": "Typeface.",
+    "description": "Recursive pixel typeface.",
     "type": "library",
     "license": "proprietary",
     "autoload": {

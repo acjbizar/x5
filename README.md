@@ -1,7 +1,11 @@
 
 # ×5
 
-×5 (pronounced Times Five) is a simple typeface, constructed from a 5 by 5 grid of squares. This concept is far from new: seasoned Web designers will remember [Kottke’s Silkscreen](https://kottke.org/plus/type/silkscreen/), but examples can even be found in Bauhaus-era tiles. What makes this version different/special, is that the grid is used recursively to construct more complex structures. These structures are self-similar, and behave like fractals in that sense.
+×5 (pronounced Times Five) is a simple typeface, constructed from a 5 by 5 grid of squares.
+This concept is far from new: seasoned Web designers will remember [Kottke’s Silkscreen](https://kottke.org/plus/type/silkscreen/),
+but examples can even be found in Bauhaus-era tiles.
+What makes this version different/special, is that the grid is used recursively to construct more complex structures.
+These structures are self-similar, and behave like fractals in that sense.
 
 | Characters | Amount |
 | --- | --- |
@@ -658,10 +662,11 @@ The easiest way to use this typeface on a webpage is by including glyphs as imag
 <img alt="A" src="https://x5.acjs.net/images/x5-n<var>power</var>-<var>key</var>.png">
 ```
 
-…where _power_ represents the number of iterations or size of the image as a number between 1 and 5, and _key_ represents the character to be rendered.
+…where ``{power}`` represents the number of iterations or size of the image as a number between 1 and 5, and `{key}` represents the character to be rendered.
 This is either a Unicode codepoint prefixed with ``u``, or it is the name of one of the special characters.
 
 ```html
+<!-- Render a capital A at size/iteration 3. -->
 <img alt="A" src="https://x5.acjs.net/images/x5-n3-u0041.png">
 ```
 

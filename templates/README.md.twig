@@ -17,7 +17,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 
 {% for i in 1..powers %}
 ### {{ name }}<sup>{{ i }}</sup>
-{% for char in chars|split('') %}
+{% for char in chars|mb_split() %}
 {% set vars = {'char': 'u' ~ char|u, 'power': i} %}
 {%- include "_img.md.twig" with vars -%}
 {% endfor %}

@@ -17,6 +17,12 @@ gulp.task('templates', function() {
             extname: false,
             filters: [
                 {
+                    name: "mb_split",
+                    func: function (args) {
+                        return [...args];
+                    }
+                },
+                {
                     name: "u",
                     func: function (args) {
                         return args.codePointAt(0).toString(16).padStart(4, '0');

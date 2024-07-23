@@ -18,7 +18,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['blinker', 'custom', 'identicon', 'logo', 'n', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
+    private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
     private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
@@ -37,6 +37,7 @@ class X5
     private bool $transparent = true;
     public string $extension = 'png';
     public string $filename = 'x5-n[power]-[code][t].[extension]';
+    public int $value = 0;
 
     public function __construct($key = 'random')
     {
@@ -92,6 +93,12 @@ class X5
 
         if($this->algorithmic) {
             switch($this->key) {
+                case 'battery':
+                    $middle = intval($this->getValue() > 25);
+                    $high = intval($this->getValue() > 75);
+
+                    $l = [0,0,0,0,0,1,1,1,1,0,1,$middle,$high,1,1,1,1,1,1,0,0,0,0,0,0];
+                    break;
                 case 'blinker':
                     $m = $n % 2;
 
@@ -110,6 +117,14 @@ class X5
                     break;
                 case 'n':
                     $l = $this->chars[mb_ord(strval($n))];
+                    break;
+                case 'network':
+                    $middle = intval($this->getValue() > 25);
+                    $high = intval($this->getValue() > 75);
+
+                    $l = [0,0,0,0,$high,0,0,0,0,$high,0,0,$middle,0,$high,0,0,$middle,0,$high,1,0,$middle,0,$high];
+                    break;
+
                     break;
                 case 'squared-circle':
                     $m = $n % 3;
@@ -277,6 +292,11 @@ class X5
         return $this->specials[0x53] ?? false;
     }
 
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+
     public function hexToGlyph($hex): array
     {
         $glyph;
@@ -345,6 +365,11 @@ class X5
     public function setTransparent(bool $switch = TRUE): void
     {
         $this->transparent = $switch;
+    }
+
+    public function setValue(int $value): void
+    {
+        $this->value = $value;
     }
 
     public function parse(): void

@@ -11,7 +11,7 @@ These structures are self-similar, and behave like fractals in that sense.
 | --- | --- |
 | Unicode | 109 |
 | Non-standard | 8 |
-| Algorithmic | 8 |
+| Algorithmic | 10 |
 
 ## Sizes
 
@@ -141,6 +141,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![toad](https://x5.acjs.net/images/x5-n1-toad.png)
 ![squared-circle](https://x5.acjs.net/images/x5-n1-squared-circle.png)
 ![n](https://x5.acjs.net/images/x5-n1-n.png)
+![network](https://x5.acjs.net/images/x5-n1-network.png)
+![battery](https://x5.acjs.net/images/x5-n1-battery.png)
 ![identicon](https://x5.acjs.net/images/x5-n1-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n1-custom.png)
 ![random](https://x5.acjs.net/images/x5-n1-random.png)
@@ -268,6 +270,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![toad](https://x5.acjs.net/images/x5-n2-toad.png)
 ![squared-circle](https://x5.acjs.net/images/x5-n2-squared-circle.png)
 ![n](https://x5.acjs.net/images/x5-n2-n.png)
+![network](https://x5.acjs.net/images/x5-n2-network.png)
+![battery](https://x5.acjs.net/images/x5-n2-battery.png)
 ![identicon](https://x5.acjs.net/images/x5-n2-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n2-custom.png)
 ![random](https://x5.acjs.net/images/x5-n2-random.png)
@@ -395,6 +399,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![toad](https://x5.acjs.net/images/x5-n3-toad.png)
 ![squared-circle](https://x5.acjs.net/images/x5-n3-squared-circle.png)
 ![n](https://x5.acjs.net/images/x5-n3-n.png)
+![network](https://x5.acjs.net/images/x5-n3-network.png)
+![battery](https://x5.acjs.net/images/x5-n3-battery.png)
 ![identicon](https://x5.acjs.net/images/x5-n3-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n3-custom.png)
 ![random](https://x5.acjs.net/images/x5-n3-random.png)
@@ -522,6 +528,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [toad](https://x5.acjs.net/images/x5-n4-toad.png)
 [squared-circle](https://x5.acjs.net/images/x5-n4-squared-circle.png)
 [n](https://x5.acjs.net/images/x5-n4-n.png)
+[network](https://x5.acjs.net/images/x5-n4-network.png)
+[battery](https://x5.acjs.net/images/x5-n4-battery.png)
 [identicon](https://x5.acjs.net/images/x5-n4-identicon.png)
 [custom](https://x5.acjs.net/images/x5-n4-custom.png)
 [random](https://x5.acjs.net/images/x5-n4-random.png)
@@ -649,6 +657,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [toad](https://x5.acjs.net/images/x5-n5-toad.png)
 [squared-circle](https://x5.acjs.net/images/x5-n5-squared-circle.png)
 [n](https://x5.acjs.net/images/x5-n5-n.png)
+[network](https://x5.acjs.net/images/x5-n5-network.png)
+[battery](https://x5.acjs.net/images/x5-n5-battery.png)
 [identicon](https://x5.acjs.net/images/x5-n5-identicon.png)
 [custom](https://x5.acjs.net/images/x5-n5-custom.png)
 [random](https://x5.acjs.net/images/x5-n5-random.png)

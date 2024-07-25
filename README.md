@@ -9,7 +9,7 @@ These structures are self-similar, and behave like fractals in that sense.
 
 | Characters | Amount |
 | --- | --- |
-| Unicode | 112 |
+| Unicode | 111 |
 | Non-standard | 9 |
 | Algorithmic | 10 |
 

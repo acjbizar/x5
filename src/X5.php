@@ -34,7 +34,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'x5'];
+    private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'wifi', 'x5'];
     private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
     private int $power = DEFAULT_POWER;
@@ -163,6 +163,14 @@ class X5
                     ];
 
                     $l = $glyphs[$m];
+                    break;
+                case 'wifi':
+                    $middle = intval($this->getValue() > 25);
+                    $high = intval($this->getValue() > 75);
+
+                    $l = [$high,$high,$high,$high,$high,0,0,0,0,0,0,$middle,$middle,$middle,0,0,0,0,0,0,0,0,1,0,0];
+                    break;
+
                     break;
                 case 'x5':
                     $m = ($this->power - $n) % 3;

@@ -7,6 +7,22 @@ use GdImage;
 
 const MIN_POWER = 1;
 const MAX_POWER = 5;
+const MODIFIER_NONE = 0x0;
+const MODIFIER_BORDERLESS = 0x1;
+const MODIFIER_STRIPES = 0x2;
+const MODIFIER_LINES = 0x3;
+const MODIFIER_SQUARES = 0x4;
+const MODIFIER_CIRCLES = 0x5;
+const MODIFIER_6 = 0x6;
+const MODIFIER_7 = 0x7;
+const MODIFIER_8 = 0x8;
+const MODIFIER_9 = 0x9;
+const MODIFIER_A = 0xA;
+const MODIFIER_B = 0xB;
+const MODIFIER_C = 0xC;
+const MODIFIER_D = 0xD;
+const MODIFIER_E = 0xE;
+const MODIFIER_F = 0xF;
 const DEFAULT_POWER = 3;
 const COLOR_RED = 0xff0000;
 const COLOR_BLUE = 0x0000ff;
@@ -38,6 +54,7 @@ class X5
     public string $extension = 'png';
     public string $filename = 'x5-n[power]-[code][t].[extension]';
     public int $value = 0;
+    public int $modifier = MODIFIER_NONE;
 
     public function __construct($key = 'random')
     {
@@ -214,12 +231,16 @@ class X5
                     }
                     else
                     {
-                        /*
-                        $random = imagecolorallocatealpha($img, 0, mt_rand(0, 255), 0, 63);
-                        //imagefilledrectangle($img, $this->x, $this->y + pow(5, $n), $this->x + pow(5, $n), $this->y, $random);
-                        imagefilledellipse($img, $this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, $this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random);
-                        imageellipse($img, $this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, $this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random);
-                        */
+                        switch($this->modifier) {
+                            case MODIFIER_SQUARES:
+                                $random = imagecolorallocatealpha($this->im, 0, mt_rand(0, 255), 0, 63);
+                                imagefilledrectangle($this->im, $this->x - 1, $this->y - 1, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2) - 2), $random);
+                                //imagefilledellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
+                                //imageellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
+                                break;
+                            default:
+                                // Skip.
+                        }
                     }
 
                     ++$i;
@@ -280,6 +301,11 @@ class X5
     public function getInput(): mixed
     {
         return $this->input;
+    }
+
+    public function getModifier(): int
+    {
+        return $this->modifier;
     }
 
     public function getPower(): int
@@ -352,6 +378,15 @@ class X5
 
         foreach($this->input as $key => $value) {
             $this->input[$key] = !empty($input[$key]) ? 1 : 0;
+        }
+    }
+
+    public function setModifier($modifier): void
+    {
+        $this->modifier = $modifier;
+
+        if($modifier === MODIFIER_BORDERLESS) {
+            $this->borders = false;
         }
     }
 

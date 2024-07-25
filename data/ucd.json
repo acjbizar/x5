@@ -1,0 +1,442 @@
+{
+    "32": {
+        "name": "SPACE",
+        "block": "ASCII"
+    },
+    "33": {
+        "name": "EXCLAMATION MARK",
+        "block": "ASCII"
+    },
+    "34": {
+        "name": "QUOTATION MARK",
+        "block": "ASCII"
+    },
+    "35": {
+        "name": "NUMBER SIGN",
+        "block": "ASCII"
+    },
+    "36": {
+        "name": "DOLLAR SIGN",
+        "block": "ASCII"
+    },
+    "37": {
+        "name": "PERCENT SIGN",
+        "block": "ASCII"
+    },
+    "39": {
+        "name": "APOSTROPHE",
+        "block": "ASCII"
+    },
+    "40": {
+        "name": "LEFT PARENTHESIS",
+        "block": "ASCII"
+    },
+    "41": {
+        "name": "RIGHT PARENTHESIS",
+        "block": "ASCII"
+    },
+    "43": {
+        "name": "PLUS SIGN",
+        "block": "ASCII"
+    },
+    "44": {
+        "name": "COMMA",
+        "block": "ASCII"
+    },
+    "45": {
+        "name": "HYPHEN-MINUS",
+        "block": "ASCII"
+    },
+    "46": {
+        "name": "FULL STOP",
+        "block": "ASCII"
+    },
+    "47": {
+        "name": "SOLIDUS",
+        "block": "ASCII"
+    },
+    "48": {
+        "name": "DIGIT ZERO",
+        "block": "ASCII"
+    },
+    "49": {
+        "name": "DIGIT ONE",
+        "block": "ASCII"
+    },
+    "50": {
+        "name": "DIGIT TWO",
+        "block": "ASCII"
+    },
+    "51": {
+        "name": "DIGIT THREE",
+        "block": "ASCII"
+    },
+    "52": {
+        "name": "DIGIT FOUR",
+        "block": "ASCII"
+    },
+    "53": {
+        "name": "DIGIT FIVE",
+        "block": "ASCII"
+    },
+    "54": {
+        "name": "DIGIT SIX",
+        "block": "ASCII"
+    },
+    "55": {
+        "name": "DIGIT SEVEN",
+        "block": "ASCII"
+    },
+    "56": {
+        "name": "DIGIT EIGHT",
+        "block": "ASCII"
+    },
+    "57": {
+        "name": "DIGIT NINE",
+        "block": "ASCII"
+    },
+    "58": {
+        "name": "COLON",
+        "block": "ASCII"
+    },
+    "59": {
+        "name": "SEMICOLON",
+        "block": "ASCII"
+    },
+    "60": {
+        "name": "LESS-THAN SIGN",
+        "block": "ASCII"
+    },
+    "61": {
+        "name": "EQUALS SIGN",
+        "block": "ASCII"
+    },
+    "62": {
+        "name": "GREATER-THAN SIGN",
+        "block": "ASCII"
+    },
+    "63": {
+        "name": "QUESTION MARK",
+        "block": "ASCII"
+    },
+    "64": {
+        "name": "COMMERCIAL AT",
+        "block": "ASCII"
+    },
+    "65": {
+        "name": "LATIN CAPITAL LETTER A",
+        "block": "ASCII"
+    },
+    "66": {
+        "name": "LATIN CAPITAL LETTER B",
+        "block": "ASCII"
+    },
+    "67": {
+        "name": "LATIN CAPITAL LETTER C",
+        "block": "ASCII"
+    },
+    "68": {
+        "name": "LATIN CAPITAL LETTER D",
+        "block": "ASCII"
+    },
+    "69": {
+        "name": "LATIN CAPITAL LETTER E",
+        "block": "ASCII"
+    },
+    "70": {
+        "name": "LATIN CAPITAL LETTER F",
+        "block": "ASCII"
+    },
+    "71": {
+        "name": "LATIN CAPITAL LETTER G",
+        "block": "ASCII"
+    },
+    "72": {
+        "name": "LATIN CAPITAL LETTER H",
+        "block": "ASCII"
+    },
+    "73": {
+        "name": "LATIN CAPITAL LETTER I",
+        "block": "ASCII"
+    },
+    "74": {
+        "name": "LATIN CAPITAL LETTER J",
+        "block": "ASCII"
+    },
+    "75": {
+        "name": "LATIN CAPITAL LETTER K",
+        "block": "ASCII"
+    },
+    "76": {
+        "name": "LATIN CAPITAL LETTER L",
+        "block": "ASCII"
+    },
+    "77": {
+        "name": "LATIN CAPITAL LETTER M",
+        "block": "ASCII"
+    },
+    "78": {
+        "name": "LATIN CAPITAL LETTER N",
+        "block": "ASCII"
+    },
+    "79": {
+        "name": "LATIN CAPITAL LETTER O",
+        "block": "ASCII"
+    },
+    "80": {
+        "name": "LATIN CAPITAL LETTER P",
+        "block": "ASCII"
+    },
+    "81": {
+        "name": "LATIN CAPITAL LETTER Q",
+        "block": "ASCII"
+    },
+    "82": {
+        "name": "LATIN CAPITAL LETTER R",
+        "block": "ASCII"
+    },
+    "83": {
+        "name": "LATIN CAPITAL LETTER S",
+        "block": "ASCII"
+    },
+    "84": {
+        "name": "LATIN CAPITAL LETTER T",
+        "block": "ASCII"
+    },
+    "85": {
+        "name": "LATIN CAPITAL LETTER U",
+        "block": "ASCII"
+    },
+    "86": {
+        "name": "LATIN CAPITAL LETTER V",
+        "block": "ASCII"
+    },
+    "87": {
+        "name": "LATIN CAPITAL LETTER W",
+        "block": "ASCII"
+    },
+    "88": {
+        "name": "LATIN CAPITAL LETTER X",
+        "block": "ASCII"
+    },
+    "89": {
+        "name": "LATIN CAPITAL LETTER Y",
+        "block": "ASCII"
+    },
+    "90": {
+        "name": "LATIN CAPITAL LETTER Z",
+        "block": "ASCII"
+    },
+    "91": {
+        "name": "LEFT SQUARE BRACKET",
+        "block": "ASCII"
+    },
+    "92": {
+        "name": "REVERSE SOLIDUS",
+        "block": "ASCII"
+    },
+    "93": {
+        "name": "RIGHT SQUARE BRACKET",
+        "block": "ASCII"
+    },
+    "94": {
+        "name": "CIRCUMFLEX ACCENT",
+        "block": "ASCII"
+    },
+    "95": {
+        "name": "LOW LINE",
+        "block": "ASCII"
+    },
+    "123": {
+        "name": "LEFT CURLY BRACKET",
+        "block": "ASCII"
+    },
+    "124": {
+        "name": "VERTICAL LINE",
+        "block": "ASCII"
+    },
+    "125": {
+        "name": "RIGHT CURLY BRACKET",
+        "block": "ASCII"
+    },
+    "126": {
+        "name": "TILDE",
+        "block": "ASCII"
+    },
+    "183": {
+        "name": "MIDDLE DOT",
+        "block": "Latin_1_Sup"
+    },
+    "247": {
+        "name": "DIVISION SIGN",
+        "block": "Latin_1_Sup"
+    },
+    "8230": {
+        "name": "HORIZONTAL ELLIPSIS",
+        "block": "Punctuation"
+    },
+    "8756": {
+        "name": "THEREFORE",
+        "block": "Math_Operators"
+    },
+    "8757": {
+        "name": "BECAUSE",
+        "block": "Math_Operators"
+    },
+    "8734": {
+        "name": "INFINITY",
+        "block": "Math_Operators"
+    },
+    "8942": {
+        "name": "VERTICAL ELLIPSIS",
+        "block": "Math_Operators"
+    },
+    "8962": {
+        "name": "HOUSE",
+        "block": "Misc_Technical"
+    },
+    "9632": {
+        "name": "BLACK SQUARE",
+        "block": "Geometric_Shapes"
+    },
+    "9633": {
+        "name": "WHITE SQUARE",
+        "block": "Geometric_Shapes"
+    },
+    "9644": {
+        "name": "BLACK RECTANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9645": {
+        "name": "WHITE RECTANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9646": {
+        "name": "BLACK VERTICAL RECTANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9647": {
+        "name": "WHITE VERTICAL RECTANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9650": {
+        "name": "BLACK UP-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9651": {
+        "name": "WHITE UP-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9652": {
+        "name": "BLACK UP-POINTING SMALL TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9654": {
+        "name": "BLACK RIGHT-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9655": {
+        "name": "WHITE RIGHT-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9660": {
+        "name": "BLACK DOWN-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9661": {
+        "name": "WHITE DOWN-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9664": {
+        "name": "BLACK LEFT-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9665": {
+        "name": "WHITE LEFT-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9670": {
+        "name": "BLACK DIAMOND",
+        "block": "Geometric_Shapes"
+    },
+    "9671": {
+        "name": "WHITE DIAMOND",
+        "block": "Geometric_Shapes"
+    },
+    "9698": {
+        "name": "BLACK LOWER RIGHT TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9699": {
+        "name": "BLACK LOWER LEFT TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9700": {
+        "name": "BLACK UPPER LEFT TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9701": {
+        "name": "BLACK UPPER RIGHT TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9707": {
+        "name": "WHITE SQUARE WITH VERTICAL BISECTING LINE",
+        "block": "Geometric_Shapes"
+    },
+    "9723": {
+        "name": "WHITE MEDIUM SQUARE",
+        "block": "Geometric_Shapes"
+    },
+    "9737": {
+        "name": "SUN",
+        "block": "Misc_Symbols"
+    },
+    "9776": {
+        "name": "TRIGRAM FOR HEAVEN",
+        "block": "Misc_Symbols"
+    },
+    "9777": {
+        "name": "TRIGRAM FOR LAKE",
+        "block": "Misc_Symbols"
+    },
+    "9778": {
+        "name": "TRIGRAM FOR FIRE",
+        "block": "Misc_Symbols"
+    },
+    "9779": {
+        "name": "TRIGRAM FOR THUNDER",
+        "block": "Misc_Symbols"
+    },
+    "9780": {
+        "name": "TRIGRAM FOR WIND",
+        "block": "Misc_Symbols"
+    },
+    "9781": {
+        "name": "TRIGRAM FOR WATER",
+        "block": "Misc_Symbols"
+    },
+    "9782": {
+        "name": "TRIGRAM FOR MOUNTAIN",
+        "block": "Misc_Symbols"
+    },
+    "9783": {
+        "name": "TRIGRAM FOR EARTH",
+        "block": "Misc_Symbols"
+    },
+    "9825": {
+        "name": "WHITE HEART SUIT",
+        "block": "Misc_Symbols"
+    },
+    "9829": {
+        "name": "BLACK HEART SUIT",
+        "block": "Misc_Symbols"
+    },
+    "10013": {
+        "name": "LATIN CROSS",
+        "block": "Dingbats"
+    },
+    "78033": {
+        "name": "EGYPTIAN HIEROGLYPH D067H",
+        "block": "Egyptian_Hieroglyphs"
+    }
+}

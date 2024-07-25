@@ -6,8 +6,10 @@ require_once '../vendor/autoload.php';
 use UCD\Database;
 use UCD\Unicode\Codepoint;
 
+$source = json_decode(file_get_contents(dirname(__FILE__, 2) . '/data/set.json'), true);
+
 $database = Database::fromDisk();
-$string = ' !"#$%\'()+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_{|}~·÷…∴∵∞⋮⌂■□▬▭▮▯▲△▴▶▷▼▽◀◁◆◇◢◣◤◥◫◻☉☰☱☲☳☴☵☶☷♡♥✝𓃑';
+$string = $source['chars'];
 $codepoints = Codepoint\Collection::fromUTF8($string);
 $assigned = $database->getByCodepoints($codepoints);
 

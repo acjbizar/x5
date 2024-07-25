@@ -275,6 +275,10 @@
         "name": "HORIZONTAL ELLIPSIS",
         "block": "Punctuation"
     },
+    "8383": {
+        "name": "BITCOIN SIGN",
+        "block": "Currency_Symbols"
+    },
     "8756": {
         "name": "THEREFORE",
         "block": "Math_Operators"

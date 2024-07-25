@@ -455,6 +455,9 @@ class X5
             case 'gif':
                 imagegif($this->im, $path. $filename);
                 break;
+            case 'webp':
+                imagewebp($this->im, $path. $filename);
+                break;
             case 'png':
             default:
                 imagepng($this->im,$path . $filename);

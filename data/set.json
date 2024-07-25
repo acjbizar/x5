@@ -1,17 +1,19 @@
 {
   "name": "×5",
-  "chars": " !\"#$%'()+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_{|}~·÷…₿∴∵∞⋮⌂■□▬▭▮▯▲△▴▶▷▼▽◀◁◆◇◢◣◤◥◫◻☉☰☱☲☳☴☵☶☷♡♥✝\uD80C\uDCD1",
+  "chars": " !\"#$%'()+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_{|}~·÷…₿∴∵∞⋮⌂⏏■□▬▭▮▯▲△▴▶▷▼▽◀◁◆◇◢◣◤◥◫◻☉☰☱☲☳☴☵☶☷♡♥✝\uD80C\uDCD1",
   "powers": "5",
   "ligatures": [
     "22",
     "ACJ",
     "AF",
+    "code",
     "feed",
     "glider",
     "Hb",
     "LE",
     "notdef",
-    "tripletau"
+    "tripletau",
+    "uni"
   ],
   "algorithmic": [
     "x5",
@@ -23,6 +25,7 @@
     "battery",
     "identicon",
     "custom",
-    "random"
+    "random",
+    "wifi"
   ]
 }

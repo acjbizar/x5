@@ -299,6 +299,10 @@
         "name": "HOUSE",
         "block": "Misc_Technical"
     },
+    "9167": {
+        "name": "EJECT SYMBOL",
+        "block": "Misc_Technical"
+    },
     "9632": {
         "name": "BLACK SQUARE",
         "block": "Geometric_Shapes"

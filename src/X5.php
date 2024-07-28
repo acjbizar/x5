@@ -24,6 +24,7 @@ const MODIFIER_D = 0xD;
 const MODIFIER_E = 0xE;
 const MODIFIER_F = 0xF;
 const DEFAULT_POWER = 3;
+const DEFAULT_VALUE = 100;
 const COLOR_RED = 0xff0000;
 const COLOR_BLUE = 0x0000ff;
 const COLOR_BLACK = 0x000000;
@@ -53,7 +54,7 @@ class X5
     private bool $transparent = true;
     public string $extension = 'png';
     public string $filename = 'x5-n[power]-[code][t].[extension]';
-    public int $value = 0;
+    public int $value = DEFAULT_VALUE;
     public int $modifier = MODIFIER_NONE;
 
     public function __construct($key = 'random')

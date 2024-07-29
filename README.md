@@ -9,7 +9,7 @@ These structures are self-similar, and behave like fractals in that sense.
 
 | Characters | Amount |
 | --- | --- |
-| Unicode | 112 |
+| Unicode | 114 |
 | Non-standard | 11 |
 | Algorithmic | 11 |
 
@@ -86,6 +86,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007c](https://x5.acjs.net/images/x5-n1-u007c.png)
 ![u007d](https://x5.acjs.net/images/x5-n1-u007d.png)
 ![u007e](https://x5.acjs.net/images/x5-n1-u007e.png)
+![u00b0](https://x5.acjs.net/images/x5-n1-u00b0.png)
+![u00b1](https://x5.acjs.net/images/x5-n1-u00b1.png)
 ![u00b7](https://x5.acjs.net/images/x5-n1-u00b7.png)
 ![u00f7](https://x5.acjs.net/images/x5-n1-u00f7.png)
 ![u2026](https://x5.acjs.net/images/x5-n1-u2026.png)
@@ -223,6 +225,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007c](https://x5.acjs.net/images/x5-n2-u007c.png)
 ![u007d](https://x5.acjs.net/images/x5-n2-u007d.png)
 ![u007e](https://x5.acjs.net/images/x5-n2-u007e.png)
+![u00b0](https://x5.acjs.net/images/x5-n2-u00b0.png)
+![u00b1](https://x5.acjs.net/images/x5-n2-u00b1.png)
 ![u00b7](https://x5.acjs.net/images/x5-n2-u00b7.png)
 ![u00f7](https://x5.acjs.net/images/x5-n2-u00f7.png)
 ![u2026](https://x5.acjs.net/images/x5-n2-u2026.png)
@@ -360,6 +364,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![u007c](https://x5.acjs.net/images/x5-n3-u007c.png)
 ![u007d](https://x5.acjs.net/images/x5-n3-u007d.png)
 ![u007e](https://x5.acjs.net/images/x5-n3-u007e.png)
+![u00b0](https://x5.acjs.net/images/x5-n3-u00b0.png)
+![u00b1](https://x5.acjs.net/images/x5-n3-u00b1.png)
 ![u00b7](https://x5.acjs.net/images/x5-n3-u00b7.png)
 ![u00f7](https://x5.acjs.net/images/x5-n3-u00f7.png)
 ![u2026](https://x5.acjs.net/images/x5-n3-u2026.png)
@@ -497,6 +503,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u007c](https://x5.acjs.net/images/x5-n4-u007c.png)
 [u007d](https://x5.acjs.net/images/x5-n4-u007d.png)
 [u007e](https://x5.acjs.net/images/x5-n4-u007e.png)
+[u00b0](https://x5.acjs.net/images/x5-n4-u00b0.png)
+[u00b1](https://x5.acjs.net/images/x5-n4-u00b1.png)
 [u00b7](https://x5.acjs.net/images/x5-n4-u00b7.png)
 [u00f7](https://x5.acjs.net/images/x5-n4-u00f7.png)
 [u2026](https://x5.acjs.net/images/x5-n4-u2026.png)
@@ -634,6 +642,8 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [u007c](https://x5.acjs.net/images/x5-n5-u007c.png)
 [u007d](https://x5.acjs.net/images/x5-n5-u007d.png)
 [u007e](https://x5.acjs.net/images/x5-n5-u007e.png)
+[u00b0](https://x5.acjs.net/images/x5-n5-u00b0.png)
+[u00b1](https://x5.acjs.net/images/x5-n5-u00b1.png)
 [u00b7](https://x5.acjs.net/images/x5-n5-u00b7.png)
 [u00f7](https://x5.acjs.net/images/x5-n5-u00f7.png)
 [u2026](https://x5.acjs.net/images/x5-n5-u2026.png)

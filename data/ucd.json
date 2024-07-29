@@ -263,6 +263,14 @@
         "name": "TILDE",
         "block": "ASCII"
     },
+    "176": {
+        "name": "DEGREE SIGN",
+        "block": "Latin_1_Sup"
+    },
+    "177": {
+        "name": "PLUS-MINUS SIGN",
+        "block": "Latin_1_Sup"
+    },
     "183": {
         "name": "MIDDLE DOT",
         "block": "Latin_1_Sup"

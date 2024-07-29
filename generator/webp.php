@@ -2,6 +2,8 @@
 
 require_once '../src/X5.php';
 
+// Don't bother with this. The results are somehow larger than their PNG equivalents.
+
 $key = 'notdef';
 
 if(isset($_GET['save'])) {

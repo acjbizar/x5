@@ -311,6 +311,14 @@
         "name": "EJECT SYMBOL",
         "block": "Misc_Technical"
     },
+    "9208": {
+        "name": "DOUBLE VERTICAL BAR",
+        "block": "Misc_Technical"
+    },
+    "9211": {
+        "name": "POWER SYMBOL",
+        "block": "Misc_Technical"
+    },
     "9632": {
         "name": "BLACK SQUARE",
         "block": "Geometric_Shapes"

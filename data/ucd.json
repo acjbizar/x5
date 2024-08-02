@@ -327,6 +327,10 @@
         "name": "WHITE SQUARE",
         "block": "Geometric_Shapes"
     },
+    "9379": {
+        "name": "PARENTHESIZED LATIN SMALL LETTER H",
+        "block": "Enclosed_Alphanum"
+    },
     "9644": {
         "name": "BLACK RECTANGLE",
         "block": "Geometric_Shapes"
@@ -369,6 +373,22 @@
     },
     "9661": {
         "name": "WHITE DOWN-POINTING TRIANGLE",
+        "block": "Geometric_Shapes"
+    },
+    "9712": {
+        "name": "WHITE SQUARE WITH UPPER LEFT QUADRANT",
+        "block": "Geometric_Shapes"
+    },
+    "9713": {
+        "name": "WHITE SQUARE WITH LOWER LEFT QUADRANT",
+        "block": "Geometric_Shapes"
+    },
+    "9714": {
+        "name": "WHITE SQUARE WITH LOWER RIGHT QUADRANT",
+        "block": "Geometric_Shapes"
+    },
+    "9715": {
+        "name": "WHITE SQUARE WITH UPPER RIGHT QUADRANT",
         "block": "Geometric_Shapes"
     },
     "9664": {

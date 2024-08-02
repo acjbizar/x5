@@ -1,31 +1,31 @@
 {
-  "name": "×5",
-  "chars": " !\"#$%'()+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_{|}~°±·÷…₿∴∵∞⋮⌂⏏⏸⏻■□▬▭▮▯▲△▴▶▷▼▽◀◁◆◇◢◣◤◥◫◻☉☰☱☲☳☴☵☶☷♡♥✝\uD80C\uDCD1",
-  "powers": "5",
-  "ligatures": [
-    "22",
-    "ACJ",
-    "AF",
-    "code",
-    "feed",
-    "glider",
-    "Hb",
-    "LE",
-    "notdef",
-    "tripletau",
-    "uni"
-  ],
-  "algorithmic": [
-    "x5",
-    "blinker",
-    "toad",
-    "squared-circle",
-    "n",
-    "network",
-    "battery",
-    "identicon",
-    "custom",
-    "random",
-    "wifi"
-  ]
+    "name": "\u00d75",
+    "chars": " !\"#$%'()+,-.\/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_{|}~\u00b0\u00b1\u00b7\u00f7\u2021\u2026\u20bf\u2234\u2235\u221e\u22ee\u2302\u23cf\u23f8\u23fb\u25a0\u25a1\u24a3\u25ac\u25ad\u25ae\u25af\u25b2\u25b3\u25b4\u25b6\u25b7\u25bc\u25bd\u25f0\u25f1\u25f2\u25f3\u25c0\u25c1\u25c6\u25c7\u25e2\u25e3\u25e4\u25e5\u25eb\u25fb\u2609\u2630\u2631\u2632\u2633\u2634\u2635\u2636\u2637\u2661\u2665\u271d\ud80c\udcd1",
+    "powers": "5",
+    "ligatures": [
+        "22",
+        "ACJ",
+        "AF",
+        "code",
+        "feed",
+        "glider",
+        "Hb",
+        "LE",
+        "notdef",
+        "tripletau",
+        "uni"
+    ],
+    "algorithmic": [
+        "x5",
+        "blinker",
+        "toad",
+        "squared-circle",
+        "n",
+        "network",
+        "battery",
+        "identicon",
+        "custom",
+        "random",
+        "wifi"
+    ]
 }

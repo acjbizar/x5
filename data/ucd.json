@@ -279,6 +279,10 @@
         "name": "DIVISION SIGN",
         "block": "Latin_1_Sup"
     },
+    "8225": {
+        "name": "DOUBLE DAGGER",
+        "block": "Punctuation"
+    },
     "8230": {
         "name": "HORIZONTAL ELLIPSIS",
         "block": "Punctuation"

@@ -27,5 +27,13 @@
         "custom",
         "random",
         "wifi"
+    ],
+    "dynamic": [
+        "network",
+        "battery",
+        "identicon",
+        "custom",
+        "random",
+        "wifi"
     ]
 }

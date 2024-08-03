@@ -11,7 +11,7 @@ $static = array_diff($set['algorithmic'], $set['dynamic']);
 
 //var_dump($static);exit;
 
-for($i = 1; $i <= 3; $i++) {
+for($i = 1; $i <= 5; $i++) {
     foreach ($static as $key => $value) {
         $x5 = new \Acj\X5\X5Vector($value);
         $x5->setPower($i);

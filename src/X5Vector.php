@@ -147,7 +147,7 @@ class X5Vector extends X5
     public function save($filename = null): void
     {
         $this->_createImage();
-        $this->_drawChar($this->power);
+        $this->_drawChar(1);
         $path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR;
 
         if(empty($filename)) {

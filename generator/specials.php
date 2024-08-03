@@ -7,7 +7,7 @@ require_once '../src/X5Vector.php';
 
 $specials = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'specials.php';
 
-for($i = 1; $i <= 4; $i++) {
+for($i = 1; $i <= 5; $i++) {
     foreach ($specials as $key => $value) {
         $x5 = new \Acj\X5\X5Vector($key);
         $x5->setPower($i);

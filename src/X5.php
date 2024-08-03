@@ -271,6 +271,7 @@ class X5
 
                     break;
                 case 'x5':
+                    // Should work differently for SVG, because we reverse the order of n.
                     $m = ($this->power - $n) % 3;
 
                     $glyphs = [

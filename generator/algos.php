@@ -9,6 +9,8 @@ $json = file_get_contents(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . 
 $set = json_decode($json, true);
 $static = array_diff($set['algorithmic'], $set['dynamic']);
 
+//var_dump($static);exit;
+
 for($i = 1; $i <= 3; $i++) {
     foreach ($static as $key => $value) {
         $x5 = new \Acj\X5\X5Vector($value);

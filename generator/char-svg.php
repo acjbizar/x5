@@ -9,7 +9,7 @@ require_once '../src/X5Vector.php';
 
 $chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'chars.php';
 
-$key = 0x25A0;
+$key = 0x0041;
 
 if(isset($_GET['save'])) {
 
@@ -25,6 +25,6 @@ if(isset($_GET['save'])) {
 
     $x5 = new \Acj\X5\X5Vector($key);
     $x5->setPower($power);
-    $x5->setTransparent(false);
+    $x5->setTransparent(true);
     $x5->parse();
 }

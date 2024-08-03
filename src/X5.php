@@ -39,14 +39,14 @@ class X5
     private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
     protected int $power = DEFAULT_POWER;
-    private int $x = 9;
-    private int $y = 9;
-    private int $width = 512;
-    private int $height = 512;
-    private int $margin = 3;
-    private bool $borders = true;
-    private int $bgcolor = 0xffffff;
-    private int $color = 0x0;
+    protected int $x = 9;
+    protected int $y = 9;
+    protected int $width = 512;
+    protected int $height = 512;
+    protected int $margin = 3;
+    protected bool $borders = true;
+    protected int $bgcolor = 0xffffff;
+    protected int $color = 0x0;
     protected mixed $key;
     private array $glyph;
     private mixed $input = [1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,0,1,1];
@@ -204,7 +204,7 @@ class X5
         imagefilledrectangle($this->im, $x, $y, $x + $width - 1, $y + $height - 1, $color);
     }
 
-    private function _populateGlyph($n = 1): array
+    protected function _populateGlyph($n = 1): array
     {
         if($this->algorithmic) {
             switch($this->key) {

@@ -38,7 +38,7 @@ class X5
     private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'wifi', 'x5'];
     private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
-    private int $power = DEFAULT_POWER;
+    protected int $power = DEFAULT_POWER;
     private int $x = 9;
     private int $y = 9;
     private int $width = 512;
@@ -47,7 +47,7 @@ class X5
     private bool $borders = true;
     private int $bgcolor = 0xffffff;
     private int $color = 0x0;
-    private mixed $key;
+    protected mixed $key;
     private array $glyph;
     private mixed $input = [1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,0,1,1];
     private array $randomGlyph;
@@ -104,11 +104,108 @@ class X5
 
     }
 
-    private function _drawChar($n = 1): void
+    protected function _drawChar($n = 1): void
     {
         $i = 0;
         $margin = $this->margin;
+        $l = $this->_populateGlyph($n);
 
+        if($n === 1) {
+            for($row = 1; $row <= 5; ++$row)
+            {
+                for($col = 1; $col <= 5; ++$col)
+                {
+                    if(isset($l[$i]) && $l[$i] === 1)
+                    {
+                        $this->_drawRectangle($this->x, $this->y, 1, 1, $this->color);
+                    }
+
+                    ++$i;
+                    $this->x += 1;
+                }
+
+                $this->x -= 5;
+                $this->y += 1;
+            }
+
+            $this->y -= 5;
+            //$this->x += $margin;
+        } else {
+            for($row = 1; $row <= 5; ++$row)
+            {
+                for($col = 1; $col <= 5; ++$col)
+                {
+                    if(isset($l[$i]) && $l[$i] === 1)
+                    {
+                        if($this->borders) {
+                            $border_length = pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+
+                            // Left border.
+                            if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
+                                //imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                                $this->_drawRectangle($this->x - 2, $this->y - 2, 1, $border_length + 1, $this->color);
+                            }
+
+                            // Right border.
+                            if($col === 5 or (isset($l[$i + 1]) and $l[$i + 1] !== 1)) {
+                                //imagefilledrectangle($this->im, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                                $this->_drawRectangle($this->x - 2 + $border_length, $this->y - 2, 1, $border_length, $this->color);
+                            }
+
+                            // Top border.
+                            if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
+                                //imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->color);
+                                $this->_drawRectangle($this->x - 2, $this->y - 2, $border_length, 1, $this->color);
+                            }
+
+                            // Bottom border.
+                            if($row === 5 or (isset($l[$i + 5]) and $l[$i + 5] !== 1)) {
+                                //imagefilledrectangle($this->im, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
+                                $this->_drawRectangle($this->x - 2, $this->y - 2 + $border_length, $border_length + 1, 1, $this->color);
+                            }
+                        }
+
+                        $this->_drawChar($n - 1);
+                    }
+                    else
+                    {
+                        switch($this->modifier) {
+                            case MODIFIER_SQUARES:
+                                $random = imagecolorallocatealpha($this->im, 0, mt_rand(0, 255), 0, 63);
+                                imagefilledrectangle($this->im, $this->x - 1, $this->y - 1, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2) - 2), $random);
+                                //imagefilledellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
+                                //imageellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
+                                break;
+                            default:
+                                // Skip.
+                        }
+                    }
+
+                    ++$i;
+                    $this->x += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+                }
+
+                $this->x -= pow(5, $n) + ($margin * pow(5, $n - 1));
+                $this->y += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+            }
+
+            $this->y -= pow(5, $n) + ($margin * pow(5, $n - 1));
+        }
+    }
+
+    private function _drawPowerChar()
+    {
+        //
+    }
+
+    protected function _drawRectangle($x = 0, $y = 0, $width = 1, $height = 1, $color = 0x000000): void
+    {
+        //$color = imagecolorallocatealpha($this->im, 0, 0, 255, 64);
+        imagefilledrectangle($this->im, $x, $y, $x + $width - 1, $y + $height - 1, $color);
+    }
+
+    private function _populateGlyph($n = 1): array
+    {
         if($this->algorithmic) {
             switch($this->key) {
                 case 'battery':
@@ -191,82 +288,7 @@ class X5
             $l = $this->getGlyph();
         }
 
-        if($n === 1) {
-            for($row = 1; $row <= 5; ++$row)
-            {
-                for($col = 1; $col <= 5; ++$col)
-                {
-                    if(isset($l[$i]) && $l[$i] === 1)
-                    {
-                        imagefilledrectangle($this->im, $this->x, $this->y, $this->x, $this->y, $this->color);
-                    }
-
-                    ++$i;
-                    $this->x += 1;
-                }
-
-                $this->x -= 5;
-                $this->y += 1;
-            }
-
-            $this->y -= 5;
-            //$this->x += $margin;
-        } else {
-            for($row = 1; $row <= 5; ++$row)
-            {
-                for($col = 1; $col <= 5; ++$col)
-                {
-                    if(isset($l[$i]) && $l[$i] === 1)
-                    {
-                        if($this->borders) {
-                            if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
-                                imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
-                            }
-
-                            if($col === 5 or (isset($l[$i + 1]) and $l[$i + 1] !== 1)) {
-                                imagefilledrectangle($this->im, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
-                            }
-
-                            if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
-                                imagefilledrectangle($this->im, $this->x - 2, $this->y - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y - 2, $this->color);
-                            }
-
-                            if($row === 5 or (isset($l[$i + 5]) and $l[$i + 5] !== 1)) {
-                                imagefilledrectangle($this->im, $this->x - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->color);
-                            }
-                        }
-
-                        $this->_drawChar($n - 1);
-                    }
-                    else
-                    {
-                        switch($this->modifier) {
-                            case MODIFIER_SQUARES:
-                                $random = imagecolorallocatealpha($this->im, 0, mt_rand(0, 255), 0, 63);
-                                imagefilledrectangle($this->im, $this->x - 1, $this->y - 1, $this->x + pow(5, $n - 1) + ($margin * pow(5, $n - 2)) - 2, $this->y + pow(5, $n - 1) + ($margin * pow(5, $n - 2) - 2), $random);
-                                //imagefilledellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
-                                //imageellipse($this->im, intval($this->x + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2), intval($this->y + pow(5, $n - 1) / 2 + ($margin * pow(5, $n - 2)) / 2, pow(5, $n - 1)  + ($margin * pow(5, $n - 2)), pow(5, $n - 1) + ($margin * pow(5, $n - 2)), $random));
-                                break;
-                            default:
-                                // Skip.
-                        }
-                    }
-
-                    ++$i;
-                    $this->x += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
-                }
-
-                $this->x -= pow(5, $n) + ($margin * pow(5, $n - 1));
-                $this->y += pow(5, $n - 1) + ($margin * pow(5, $n - 2));
-            }
-
-            $this->y -= pow(5, $n) + ($margin * pow(5, $n - 1));
-        }
-    }
-
-    private function _drawPowerChar()
-    {
-        //
+        return $l;
     }
 
     private function _populateRandomGlyph(): array
@@ -281,6 +303,11 @@ class X5
     public function dumpChars()
     {
         return $this->chars;
+    }
+
+    public function getBgcolor(): mixed
+    {
+        return $this->bgcolor;
     }
 
     public function getChar($key): mixed
@@ -312,6 +339,11 @@ class X5
         return $this->input;
     }
 
+    public function getMargin(): int
+    {
+        return $this->margin;
+    }
+
     public function getModifier(): int
     {
         return $this->modifier;
@@ -332,9 +364,19 @@ class X5
         return $this->value;
     }
 
+    public function getX(): int
+    {
+        return $this->x;
+    }
+
+    public function getY(): int
+    {
+        return $this->y;
+    }
+
     public function hexToGlyph($hex): array
     {
-        $glyph;
+        $glyph = [];
 
         for ($i = 0; $i < strlen($hex); $i++) {
             if(!empty($hex[$i]) && hexdec($hex[$i]) >= 8) {
@@ -345,6 +387,11 @@ class X5
         }
 
         return $glyph;
+    }
+
+    public function isTransparent(): bool
+    {
+        return $this->transparent;
     }
 
     public function setColor($color): void

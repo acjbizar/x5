@@ -16,7 +16,8 @@
     ],
     "require": {
         "ext-gd": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "meyfa/php-svg": "^0.16.0"
     },
     "require-dev": {
         "nick-jones/php-ucd": "^3.1"

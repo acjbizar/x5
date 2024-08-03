@@ -5,6 +5,7 @@ namespace Acj\X5;
 
 use SVG\Nodes\Shapes\SVGRect;
 use SVG\Nodes\Structures\SVGGroup;
+use SVG\Nodes\Structures\SVGSymbol;
 use SVG\Nodes\Structures\SVGUse;
 use SVG\SVG;
 use SVG\Writing\SVGWriter;
@@ -38,7 +39,7 @@ class X5Vector extends X5
         $l = $this->_populateGlyph($n);
 
         if($n === 1) {
-            $g = (new SVGGroup())->setAttribute('id', 'n1');
+            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', 'n1') : (new SVGSymbol())->setAttribute('id', 'n1');
 
             for($row = 1; $row <= 5; ++$row)
             {
@@ -64,7 +65,7 @@ class X5Vector extends X5
 
             $this->_drawChar($n + 1);
         } elseif($n <= $this->power) {
-            $g = (new SVGGroup())->setAttribute('id', 'n' . $n)->setAttribute('transform', 'translate(-9,-9)');
+            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', 'n' . $n)->setAttribute('transform', 'translate(-' . (9 * ($n - 1)) . ',-' . (9 * ($n - 1)) . ')') : (new SVGSymbol())->setAttribute('id', 'n' . $n);
 
             for($row = 1; $row <= 5; ++$row)
             {

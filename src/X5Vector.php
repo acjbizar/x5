@@ -73,6 +73,30 @@ class X5Vector extends X5
                 {
                     if(isset($l[$i]) && $l[$i] === 1)
                     {
+                        if($this->borders) {
+                            $border_length = pow(5, $n - 1) + ($margin * pow(5, $n - 2));
+
+                            // Left border.
+                            if($col === 1 or (isset($l[$i - 1]) and $l[$i - 1] !== 1)) {
+                                $g->addChild((new SVGRect($this->x- 2 + 9 * ($n - 1), $this->y - 2 + 9 * ($n - 1), 1, $border_length + 1)));
+                            }
+
+                            // Right border.
+                            if($col === 5 or (isset($l[$i + 1]) and $l[$i + 1] !== 1)) {
+                                $g->addChild(new SVGRect($this->x - 2 + 9 * ($n - 1) + $border_length, $this->y - 2 + 9 * ($n - 1), 1, $border_length));
+                            }
+
+                            // Top border.
+                            if($row === 1 or (isset($l[$i - 5]) and $l[$i - 5] !== 1)) {
+                                $g->addChild(new SVGRect($this->x - 2 + 9 * ($n - 1), $this->y - 2 + 9 * ($n - 1), $border_length, 1));
+                            }
+
+                            // Bottom border.
+                            if($row === 5 or (isset($l[$i + 5]) and $l[$i + 5] !== 1)) {
+                                $g->addChild(new SVGRect($this->x - 2 + 9 * ($n - 1), $this->y - 2 + 9 * ($n - 1) + $border_length, $border_length + 1, 1));
+                            }
+                        }
+
                         //$this->_drawChar($n + 1);
                         $g->addChild((new SVGUse())->setAttribute('href', '#n' . ($n - 1))->setAttribute('x', $this->x)->setAttribute('y', $this->y));
                     }

@@ -31,7 +31,8 @@ class X5Vector extends X5
 
     protected function _drawRectangle($x = 0, $y = 0, $width = 1, $height = 1, $color = 0x000000): void
     {
-        $this->doc->addChild( (new SVGRect($x, $y, $width, $height))->setAttribute('fill', '#' . str_pad(dechex($color), 6, '0', STR_PAD_LEFT)) );
+        //$this->doc->addChild( (new SVGRect($x, $y, $width, $height))->setAttribute('fill', '#' . str_pad(dechex($color), 6, '0', STR_PAD_LEFT)) );
+        $this->doc->addChild( (new SVGRect($x, $y, $width, $height)) );
     }
 
     public function parse(): void

@@ -64,7 +64,7 @@ class X5Vector extends X5
 
             $this->_drawChar($n + 1);
         } elseif($n <= $this->power) {
-            $g = (new SVGGroup())->setAttribute('id', 'n' . $n);
+            $g = (new SVGGroup())->setAttribute('id', 'n' . $n)->setAttribute('transform', 'translate(-9,-9)');
 
             for($row = 1; $row <= 5; ++$row)
             {

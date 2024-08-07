@@ -12,7 +12,7 @@
         "Hb",
         "LE",
         "notdef",
-        "tripletau",
+        "TH",
         "uni"
     ],
     "algorithmic": [
@@ -26,6 +26,7 @@
         "identicon",
         "custom",
         "random",
+        "tripletau",
         "wifi"
     ],
     "dynamic": [

@@ -35,7 +35,7 @@ class X5
     private array $chars;
     private array $specials;
     private bool $algorithmic = false;
-    private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'wifi', 'x5'];
+    private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'tripletau', 'wifi', 'x5'];
     private array $identifier = [1,1,1,1,1,1,1,0,1,1,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0];
     private GdImage $im;
     protected int $power = DEFAULT_POWER;
@@ -261,6 +261,18 @@ class X5
                     ];
 
                     $l = $glyphs[$m];
+                    break;
+                case 'tripletau':
+                    // T-over-H > (triangle > circle > square)repeat
+                    $m = $n % 3;
+
+                    $glyphs = [
+                        array(0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0),// Circle
+                        array(1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1),// Square
+                        array(0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,0,0),// Triangle
+                    ];
+
+                    $l = $n === 1 ? [0,1,1,1,0,0,0,1,0,0,1,0,1,0,1,1,1,1,1,1,1,0,0,0,1] : $glyphs[$m];
                     break;
                 case 'wifi':
                     $middle = intval($this->getValue() > 25);

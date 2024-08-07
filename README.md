@@ -11,7 +11,7 @@ These structures are self-similar, and behave like fractals in that sense.
 | --- | --- |
 | Unicode | 122 |
 | Non-standard | 11 |
-| Algorithmic | 11 |
+| Algorithmic | 12 |
 
 ## Sizes
 
@@ -151,7 +151,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![Hb](https://x5.acjs.net/images/x5-n1-Hb.png)
 ![LE](https://x5.acjs.net/images/x5-n1-LE.png)
 ![notdef](https://x5.acjs.net/images/x5-n1-notdef.png)
-![tripletau](https://x5.acjs.net/images/x5-n1-tripletau.png)
+![TH](https://x5.acjs.net/images/x5-n1-TH.png)
 ![uni](https://x5.acjs.net/images/x5-n1-uni.png)
 ![x5](https://x5.acjs.net/images/x5-n1-x5.png)
 ![blinker](https://x5.acjs.net/images/x5-n1-blinker.png)
@@ -163,6 +163,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![identicon](https://x5.acjs.net/images/x5-n1-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n1-custom.png)
 ![random](https://x5.acjs.net/images/x5-n1-random.png)
+![tripletau](https://x5.acjs.net/images/x5-n1-tripletau.png)
 ![wifi](https://x5.acjs.net/images/x5-n1-wifi.png)
 
 ### ×5<sup>2</sup>
@@ -298,7 +299,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![Hb](https://x5.acjs.net/images/x5-n2-Hb.png)
 ![LE](https://x5.acjs.net/images/x5-n2-LE.png)
 ![notdef](https://x5.acjs.net/images/x5-n2-notdef.png)
-![tripletau](https://x5.acjs.net/images/x5-n2-tripletau.png)
+![TH](https://x5.acjs.net/images/x5-n2-TH.png)
 ![uni](https://x5.acjs.net/images/x5-n2-uni.png)
 ![x5](https://x5.acjs.net/images/x5-n2-x5.png)
 ![blinker](https://x5.acjs.net/images/x5-n2-blinker.png)
@@ -310,6 +311,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![identicon](https://x5.acjs.net/images/x5-n2-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n2-custom.png)
 ![random](https://x5.acjs.net/images/x5-n2-random.png)
+![tripletau](https://x5.acjs.net/images/x5-n2-tripletau.png)
 ![wifi](https://x5.acjs.net/images/x5-n2-wifi.png)
 
 ### ×5<sup>3</sup>
@@ -445,7 +447,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![Hb](https://x5.acjs.net/images/x5-n3-Hb.png)
 ![LE](https://x5.acjs.net/images/x5-n3-LE.png)
 ![notdef](https://x5.acjs.net/images/x5-n3-notdef.png)
-![tripletau](https://x5.acjs.net/images/x5-n3-tripletau.png)
+![TH](https://x5.acjs.net/images/x5-n3-TH.png)
 ![uni](https://x5.acjs.net/images/x5-n3-uni.png)
 ![x5](https://x5.acjs.net/images/x5-n3-x5.png)
 ![blinker](https://x5.acjs.net/images/x5-n3-blinker.png)
@@ -457,6 +459,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![identicon](https://x5.acjs.net/images/x5-n3-identicon.png)
 ![custom](https://x5.acjs.net/images/x5-n3-custom.png)
 ![random](https://x5.acjs.net/images/x5-n3-random.png)
+![tripletau](https://x5.acjs.net/images/x5-n3-tripletau.png)
 ![wifi](https://x5.acjs.net/images/x5-n3-wifi.png)
 
 ### ×5<sup>4</sup>
@@ -592,7 +595,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [Hb](https://x5.acjs.net/images/x5-n4-Hb.png)
 [LE](https://x5.acjs.net/images/x5-n4-LE.png)
 [notdef](https://x5.acjs.net/images/x5-n4-notdef.png)
-[tripletau](https://x5.acjs.net/images/x5-n4-tripletau.png)
+[TH](https://x5.acjs.net/images/x5-n4-TH.png)
 [uni](https://x5.acjs.net/images/x5-n4-uni.png)
 [x5](https://x5.acjs.net/images/x5-n4-x5.png)
 [blinker](https://x5.acjs.net/images/x5-n4-blinker.png)
@@ -604,6 +607,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [identicon](https://x5.acjs.net/images/x5-n4-identicon.png)
 [custom](https://x5.acjs.net/images/x5-n4-custom.png)
 [random](https://x5.acjs.net/images/x5-n4-random.png)
+[tripletau](https://x5.acjs.net/images/x5-n4-tripletau.png)
 [wifi](https://x5.acjs.net/images/x5-n4-wifi.png)
 
 ### ×5<sup>5</sup>
@@ -739,7 +743,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [Hb](https://x5.acjs.net/images/x5-n5-Hb.png)
 [LE](https://x5.acjs.net/images/x5-n5-LE.png)
 [notdef](https://x5.acjs.net/images/x5-n5-notdef.png)
-[tripletau](https://x5.acjs.net/images/x5-n5-tripletau.png)
+[TH](https://x5.acjs.net/images/x5-n5-TH.png)
 [uni](https://x5.acjs.net/images/x5-n5-uni.png)
 [x5](https://x5.acjs.net/images/x5-n5-x5.png)
 [blinker](https://x5.acjs.net/images/x5-n5-blinker.png)
@@ -751,6 +755,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [identicon](https://x5.acjs.net/images/x5-n5-identicon.png)
 [custom](https://x5.acjs.net/images/x5-n5-custom.png)
 [random](https://x5.acjs.net/images/x5-n5-random.png)
+[tripletau](https://x5.acjs.net/images/x5-n5-tripletau.png)
 [wifi](https://x5.acjs.net/images/x5-n5-wifi.png)
 
 

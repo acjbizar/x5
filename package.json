@@ -22,6 +22,7 @@
   "devDependencies": {
     "gulp": "*",
     "gulp-data": "*",
+    "gulp-iconfont": "^12.0.0",
     "gulp-twig": "*"
   }
 }

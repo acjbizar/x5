@@ -318,9 +318,16 @@ class X5
         return $this->chars;
     }
 
-    public function getBgcolor(): mixed
+    public function getBgcolor($format = 'int'): mixed
     {
-        return $this->bgcolor;
+        switch($format):
+            case 'hex':
+                return '#' . str_pad(dechex($this->bgcolor), 6, '0', STR_PAD_LEFT);
+                break;
+            case 'int':
+            default:
+                return $this->bgcolor;
+        endswitch;
     }
 
     public function getChar($key): mixed

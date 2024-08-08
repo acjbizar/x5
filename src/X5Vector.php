@@ -34,6 +34,7 @@ class X5Vector extends X5
 
         $this->im = new SVG($width, $height);
         $this->doc = $this->im->getDocument();
+        if(!empty($this->color)) $this->doc->setAttribute('fill', $this->getColor('hex'));
 
         if($this->isTransparent()) {
             $this->filename = str_replace('[t]', '-t', $this->filename);
@@ -48,9 +49,11 @@ class X5Vector extends X5
         $i = 0;
         $margin = $this->margin;
         $l = $this->_populateGlyph($n);
+        $id = 'n' . $this->power . '-' . $n;
+        $href = '#n' . $this->power . '-' . ($n - 1);
 
         if($n === 1) {
-            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', 'n1') : (new SVGSymbol())->setAttribute('id', 'n1');
+            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', $id) : (new SVGSymbol())->setAttribute('id', $id);
 
             for($row = 1; $row <= 5; ++$row)
             {
@@ -76,7 +79,7 @@ class X5Vector extends X5
 
             $this->_drawChar($n + 1);
         } elseif($n <= $this->power) {
-            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', 'n' . $n)->setAttribute('transform', 'translate(-' . (9 * ($n - 1)) . ',-' . (9 * ($n - 1)) . ')') : (new SVGSymbol())->setAttribute('id', 'n' . $n);
+            $g = $n == $this->power ? (new SVGGroup())->setAttribute('id', $id)->setAttribute('transform', 'translate(-' . (9 * ($n - 1)) . ',-' . (9 * ($n - 1)) . ')') : (new SVGSymbol())->setAttribute('id', $id);
 
             for($row = 1; $row <= 5; ++$row)
             {
@@ -109,7 +112,7 @@ class X5Vector extends X5
                         }
 
                         //$this->_drawChar($n + 1);
-                        $g->addChild((new SVGUse())->setAttribute('href', '#n' . ($n - 1))->setAttribute('x', $this->x)->setAttribute('y', $this->y));
+                        $g->addChild((new SVGUse())->setAttribute('href', $href)->setAttribute('x', $this->x)->setAttribute('y', $this->y));
                     }
 
                     ++$i;

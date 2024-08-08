@@ -134,6 +134,25 @@ class X5Vector extends X5
         $this->doc->addChild( (new SVGRect($x, $y, $width, $height)) );
     }
 
+    protected function _populateGlyph($n = 1): array
+    {
+        switch($this->key):
+            case 'x5':
+                $m = ($this->power - $n + 1) % 3;
+
+                $glyphs = [
+                    $this->chars[0x4E], // N
+                    $this->chars[0x58], // X
+                    $this->chars[0x35], // 5
+                ];
+
+                return $glyphs[$m];
+                break;
+            default:
+                return parent::_populateGlyph($n);
+        endswitch;
+    }
+
     public function parse(): void
     {
         $this->_createImage();

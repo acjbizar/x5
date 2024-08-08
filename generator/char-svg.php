@@ -9,7 +9,7 @@ require_once '../src/X5Vector.php';
 
 $chars = include dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'chars.php';
 
-$key = 'TH';
+$key = 'x5';
 
 if(isset($_GET['save'])) {
 

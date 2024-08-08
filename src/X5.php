@@ -32,7 +32,7 @@ const COLOR_WHITE = 0xffffff;
 
 class X5
 {
-    private array $chars;
+    protected array $chars;
     private array $specials;
     private bool $algorithmic = false;
     private array $algorithmics = ['battery', 'blinker', 'custom', 'identicon', 'logo', 'n', 'network', 'r', 'rand', 'random', 'squared-circle', 'toad', 'tripletau', 'wifi', 'x5'];

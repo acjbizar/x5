@@ -16,6 +16,17 @@ class X5Vector extends X5
     public string $extension = 'svg';
     private SVG $im;
 
+    public function __toString(): string
+    {
+        $this->_createImage();
+        $this->_drawChar(1);
+
+        $writer = new SVGWriter(false);
+        $writer->writeNode($this->doc);
+
+        return $writer->getString();
+    }
+
     protected function _createImage(): void
     {
         $width = pow(5, $this->getPower()) + ($this->getMargin() * pow(5, $this->getPower() - 1)) + $this->getX() - 1;

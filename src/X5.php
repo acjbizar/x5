@@ -54,6 +54,7 @@ class X5
     private bool $transparent = true;
     public string $extension = 'png';
     public string $filename = 'x5-n[power]-[code][t].[extension]';
+    public string $path;
     public int $value = DEFAULT_VALUE;
     public int $modifier = MODIFIER_NONE;
 
@@ -80,6 +81,8 @@ class X5
         } else {
             die('Not sure if this should be possible.');
         }
+
+        $this->path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR;
     }
 
     private function _createImage(): void
@@ -495,6 +498,16 @@ class X5
         $this->value = $value;
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path = ''): void
+    {
+        $this->path = $path;
+    }
+
     public function parse(): void
     {
         $this->_createImage();
@@ -530,7 +543,6 @@ class X5
     {
         $this->_createImage();
         $this->_drawChar($this->power);
-        $path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR;
 
         if(empty($filename)) {
             $filename = str_replace(['[power]', '[extension]'], [strval($this->power), $this->extension], $this->filename);
@@ -538,17 +550,17 @@ class X5
 
         switch($this->extension):
             case 'avif':
-                imageavif($this->im,$path . $filename);
+                imageavif($this->im,$this->path . $filename);
                 break;
             case 'gif':
-                imagegif($this->im, $path. $filename);
+                imagegif($this->im, $this->path. $filename);
                 break;
             case 'webp':
-                imagewebp($this->im, $path. $filename);
+                imagewebp($this->im, $this->path. $filename);
                 break;
             case 'png':
             default:
-                imagepng($this->im,$path . $filename);
+                imagepng($this->im,$this->path . $filename);
         endswitch;
 
         imagedestroy($this->im);

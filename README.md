@@ -10,7 +10,7 @@ These structures are self-similar, and behave like fractals in that sense.
 | Characters | Amount |
 | --- | --- |
 | Unicode | 122 |
-| Non-standard | 11 |
+| Non-standard | 12 |
 | Algorithmic | 12 |
 
 ## Sizes
@@ -146,6 +146,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![ACJ](https://x5.acjs.net/images/x5-n1-ACJ.png)
 ![AF](https://x5.acjs.net/images/x5-n1-AF.png)
 ![code](https://x5.acjs.net/images/x5-n1-code.png)
+![plusplus](https://x5.acjs.net/images/x5-n1-plusplus.png)
 ![feed](https://x5.acjs.net/images/x5-n1-feed.png)
 ![glider](https://x5.acjs.net/images/x5-n1-glider.png)
 ![Hb](https://x5.acjs.net/images/x5-n1-Hb.png)
@@ -294,6 +295,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![ACJ](https://x5.acjs.net/images/x5-n2-ACJ.png)
 ![AF](https://x5.acjs.net/images/x5-n2-AF.png)
 ![code](https://x5.acjs.net/images/x5-n2-code.png)
+![plusplus](https://x5.acjs.net/images/x5-n2-plusplus.png)
 ![feed](https://x5.acjs.net/images/x5-n2-feed.png)
 ![glider](https://x5.acjs.net/images/x5-n2-glider.png)
 ![Hb](https://x5.acjs.net/images/x5-n2-Hb.png)
@@ -442,6 +444,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 ![ACJ](https://x5.acjs.net/images/x5-n3-ACJ.png)
 ![AF](https://x5.acjs.net/images/x5-n3-AF.png)
 ![code](https://x5.acjs.net/images/x5-n3-code.png)
+![plusplus](https://x5.acjs.net/images/x5-n3-plusplus.png)
 ![feed](https://x5.acjs.net/images/x5-n3-feed.png)
 ![glider](https://x5.acjs.net/images/x5-n3-glider.png)
 ![Hb](https://x5.acjs.net/images/x5-n3-Hb.png)
@@ -590,6 +593,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [ACJ](https://x5.acjs.net/images/x5-n4-ACJ.png)
 [AF](https://x5.acjs.net/images/x5-n4-AF.png)
 [code](https://x5.acjs.net/images/x5-n4-code.png)
+[plusplus](https://x5.acjs.net/images/x5-n4-plusplus.png)
 [feed](https://x5.acjs.net/images/x5-n4-feed.png)
 [glider](https://x5.acjs.net/images/x5-n4-glider.png)
 [Hb](https://x5.acjs.net/images/x5-n4-Hb.png)
@@ -738,6 +742,7 @@ In theory there is no upper bound, but I have never gone beyond ×5<sup>6</sup> 
 [ACJ](https://x5.acjs.net/images/x5-n5-ACJ.png)
 [AF](https://x5.acjs.net/images/x5-n5-AF.png)
 [code](https://x5.acjs.net/images/x5-n5-code.png)
+[plusplus](https://x5.acjs.net/images/x5-n5-plusplus.png)
 [feed](https://x5.acjs.net/images/x5-n5-feed.png)
 [glider](https://x5.acjs.net/images/x5-n5-glider.png)
 [Hb](https://x5.acjs.net/images/x5-n5-Hb.png)

@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>x5 – letter sample</title>
+
+    <style>
+        :root{
+            --fontSize: 96px;
+            --lineHeight: 1.1;
+            --trackingEm: 0;
+            --opsz: 16;
+            --rvrn: 1;              /* 0/1 */
+            --useManualOpsz: 1;     /* 0/1 (auto = 0) */
+            --invert: 0;            /* 0/1 */
+        }
+
+        @font-face {
+            font-family: "x5";
+            src:
+                    url("../dist/fonts/x5.woff2") format("woff2"),
+                    url("../dist/fonts/x5.woff") format("woff"),
+                    url("../dist/fonts/x5.ttf") format("truetype");
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body{
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+            background: color-mix(in srgb, #fff 100%, #000 calc(var(--invert) * 100%));
+            color: color-mix(in srgb, #111 100%, #eee calc(var(--invert) * 100%));
+        }
+
+        .wrap{
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            min-height: 100%;
+        }
+
+        .panel{
+            padding: 18px;
+            border-right: 1px solid color-mix(in srgb, #000 10%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #fafafa 100%, #0d0d0d calc(var(--invert) * 100%));
+        }
+
+        h1{
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .muted{ opacity: .75; font-size: 12px; line-height: 1.35; }
+
+        .ctrl{
+            margin: 14px 0;
+            padding: 12px;
+            border: 1px solid color-mix(in srgb, #000 10%, #fff calc(var(--invert) * 100%));
+            border-radius: 12px;
+            background: color-mix(in srgb, #fff 100%, #111 calc(var(--invert) * 100%));
+        }
+        .ctrl .row{
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        label{ font-size: 13px; font-weight: 650; }
+        .val{ font-variant-numeric: tabular-nums; font-size: 12px; opacity: .85; }
+
+        input[type="range"]{ width: 100%; }
+        input[type="checkbox"]{ transform: translateY(1px); }
+
+        .btnrow{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        button{
+            appearance: none;
+            border: 1px solid color-mix(in srgb, #000 14%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #f3f3f3 100%, #1a1a1a calc(var(--invert) * 100%));
+            color: inherit;
+            padding: 8px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 650;
+            font-size: 12px;
+        }
+        button:hover{ filter: brightness(0.98); }
+        button:active{ transform: translateY(1px); }
+
+        .main{
+            padding: 18px;
+            min-width: 0;
+        }
+
+        .topbar{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .tabs{
+            display: inline-flex;
+            border: 1px solid color-mix(in srgb, #000 14%, #fff calc(var(--invert) * 100%));
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .tab{
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+            background: transparent;
+        }
+        .tab.active{
+            background: color-mix(in srgb, #e9e9e9 100%, #222 calc(var(--invert) * 100%));
+        }
+
+        .search{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search input{
+            width: min(520px, 55vw);
+            padding: 9px 10px;
+            border-radius: 12px;
+            border: 1px solid color-mix(in srgb, #000 14%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #fff 100%, #111 calc(var(--invert) * 100%));
+            color: inherit;
+            outline: none;
+            font-size: 13px;
+        }
+
+        /* Sample text */
+        .sample{
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid color-mix(in srgb, #000 12%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #fff 100%, #0f0f0f calc(var(--invert) * 100%));
+        }
+        .render{
+            font-family: "x5", monospace;
+            font-size: var(--fontSize);
+            line-height: var(--lineHeight);
+            letter-spacing: var(--trackingEm);
+            white-space: pre-wrap;
+            word-break: break-word;
+
+            /* Drive opsz + snapping */
+            font-variation-settings: "opsz" var(--opsz);
+            font-feature-settings: "rvrn" var(--rvrn);
+        }
+
+        textarea{
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid color-mix(in srgb, #000 14%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #fff 100%, #111 calc(var(--invert) * 100%));
+            color: inherit;
+            outline: none;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            line-height: 1.35;
+            margin-top: 10px;
+        }
+
+        /* Grid view */
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        .cell{
+            border: 1px solid color-mix(in srgb, #000 12%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #fff 100%, #101010 calc(var(--invert) * 100%));
+            border-radius: 14px;
+            padding: 10px 10px 8px 10px;
+            min-height: 120px;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            gap: 8px;
+            overflow: hidden;
+        }
+        .glyph{
+            display: grid;
+            place-items: center;
+            font-family: "x5", monospace;
+            font-size: calc(var(--fontSize) * 0.9);
+            line-height: 1;
+            letter-spacing: 0;
+            font-variation-settings: "opsz" var(--opsz);
+            font-feature-settings: "rvrn" var(--rvrn);
+        }
+        .meta{
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 11px;
+            opacity: .85;
+            font-variant-numeric: tabular-nums;
+        }
+        .chip{
+            font-size: 10px;
+            font-weight: 750;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid color-mix(in srgb, #000 14%, #fff calc(var(--invert) * 100%));
+            background: color-mix(in srgb, #f5f5f5 100%, #1a1a1a calc(var(--invert) * 100%));
+            opacity: .9;
+            white-space: nowrap;
+        }
+
+        .hidden{ display:none !important; }
+
+        @media (max-width: 980px){
+            .wrap{ grid-template-columns: 1fr; }
+            .panel{ border-right: none; border-bottom: 1px solid color-mix(in srgb, #000 10%, #fff calc(var(--invert) * 100%)); }
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <aside class="panel">
+        <h1>x5 – letter sample</h1>
+        <div class="muted">
+            Controls drive <code>font-size</code>, <code>opsz</code>, and the <code>rvrn</code> substitutions (your “power snap”).<br/>
+            Font files are loaded from <code>../dist/fonts/x5.*</code>.
+        </div>
+
+        <div class="ctrl">
+            <div class="row">
+                <label for="fontSize">Font size</label>
+                <div class="val"><span id="fontSizeVal"></span>px</div>
+            </div>
+            <input id="fontSize" type="range" min="8" max="256" step="1" value="96" />
+        </div>
+
+        <div class="ctrl">
+            <div class="row">
+                <label for="opsz">opsz (Optical Size)</label>
+                <div class="val"><span id="opszVal"></span></div>
+            </div>
+            <input id="opsz" type="range" min="8" max="144" step="1" value="16" />
+            <div class="row" style="margin-top:10px;">
+                <label style="font-weight:650; font-size:12px;">
+                    <input id="autoOpsz" type="checkbox" />
+                    Auto opsz = font size
+                </label>
+                <div class="val">Snap: n1 ≤ 24, n2 ≤ 64, else n3</div>
+            </div>
+        </div>
+
+        <div class="ctrl">
+            <div class="row">
+                <label for="lineHeight">Line height</label>
+                <div class="val"><span id="lineHeightVal"></span></div>
+            </div>
+            <input id="lineHeight" type="range" min="0.70" max="2.00" step="0.01" value="1.10" />
+
+            <div class="row" style="margin-top:12px;">
+                <label for="tracking">Tracking</label>
+                <div class="val"><span id="trackingVal"></span>em</div>
+            </div>
+            <input id="tracking" type="range" min="-0.10" max="0.50" step="0.005" value="0" />
+        </div>
+
+        <div class="ctrl">
+            <div class="row">
+                <label>OpenType features</label>
+                <div class="val"></div>
+            </div>
+            <label style="display:flex; gap:10px; align-items:center; font-size:12px; font-weight:650;">
+                <input id="rvrn" type="checkbox" checked />
+                Enable rvrn (required variation alternates)
+            </label>
+
+            <div class="row" style="margin-top:10px;">
+                <label>Theme</label>
+                <div class="val"></div>
+            </div>
+            <label style="display:flex; gap:10px; align-items:center; font-size:12px; font-weight:650;">
+                <input id="invert" type="checkbox" />
+                Invert (dark)
+            </label>
+
+            <div class="btnrow">
+                <button id="copyAll" type="button">Copy all characters</button>
+                <button id="reset" type="button">Reset</button>
+            </div>
+        </div>
+
+        <div class="muted">
+            Tip: if fonts don’t load when opening as a file, run a local server (e.g. <code>python -m http.server</code>) and open the served URL.
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="topbar">
+            <div class="tabs" role="tablist" aria-label="View">
+                <div class="tab active" id="tabText" role="tab" aria-selected="true" tabindex="0">Text</div>
+                <div class="tab" id="tabGrid" role="tab" aria-selected="false" tabindex="0">Grid</div>
+            </div>
+
+            <div class="search">
+                <input id="filter" type="text" placeholder="Filter (type a character, U+XXXX, or hex like 25A0)" aria-label="Filter characters" />
+            </div>
+        </div>
+
+        <!-- Text view -->
+        <section id="viewText">
+            <div class="sample">
+                <div id="sampleRender" class="render"></div>
+                <textarea id="customText" spellcheck="false"></textarea>
+            </div>
+        </section>
+
+        <!-- Grid view -->
+        <section id="viewGrid" class="hidden">
+            <div id="grid" class="grid"></div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Your JSON-escaped character list (copied verbatim)
+    const CHARS_JSON = `{"chars": " !\\"#$%'()+,-.\\/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_{|}~\\u00b0\\u00b1\\u00b7\\u00f7\\u2021\\u2026\\u20bf\\u2234\\u2235\\u221e\\u22ee\\u2302\\u23cf\\u23f8\\u23fb\\u25a0\\u25a1\\u24a3\\u25ac\\u25ad\\u25ae\\u25af\\u25b2\\u25b3\\u25b4\\u25b6\\u25b7\\u25bc\\u25bd\\u25f0\\u25f1\\u25f2\\u25f3\\u25c0\\u25c1\\u25c6\\u25c7\\u25e2\\u25e3\\u25e4\\u25e5\\u25eb\\u25fb\\u2609\\u2630\\u2631\\u2632\\u2633\\u2634\\u2635\\u2636\\u2637\\u2661\\u2665\\u271d\\ud80c\\udcd1"}`;
+
+    const chars = (() => {
+        const s = JSON.parse(CHARS_JSON).chars;
+        // preserve order, remove duplicates
+        const seen = new Set();
+        const out = [];
+        for (const ch of s) {
+            if (!seen.has(ch)) { seen.add(ch); out.push(ch); }
+        }
+        return out;
+    })();
+
+    const SNAP1 = 24;
+    const SNAP2 = 64;
+
+    const $ = (id) => document.getElementById(id);
+
+    const fontSize = $("fontSize");
+    const opsz = $("opsz");
+    const autoOpsz = $("autoOpsz");
+    const lineHeight = $("lineHeight");
+    const tracking = $("tracking");
+    const rvrn = $("rvrn");
+    const invert = $("invert");
+
+    const fontSizeVal = $("fontSizeVal");
+    const opszVal = $("opszVal");
+    const lineHeightVal = $("lineHeightVal");
+    const trackingVal = $("trackingVal");
+
+    const filter = $("filter");
+    const sampleRender = $("sampleRender");
+    const customText = $("customText");
+    const grid = $("grid");
+
+    const tabText = $("tabText");
+    const tabGrid = $("tabGrid");
+    const viewText = $("viewText");
+    const viewGrid = $("viewGrid");
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function currentPower(opszValue){
+        if (opszValue <= SNAP1) return 1;
+        if (opszValue <= SNAP2) return 2;
+        return 3;
+    }
+
+    function setVar(name, value){
+        document.documentElement.style.setProperty(name, value);
+    }
+
+    function updateUI(){
+        const fs = Number(fontSize.value);
+        const lh = Number(lineHeight.value);
+        const tr = Number(tracking.value);
+
+        let o = Number(opsz.value);
+        if (autoOpsz.checked){
+            o = clamp(fs, Number(opsz.min), Number(opsz.max));
+            opsz.value = String(o);
+        }
+
+        setVar("--fontSize", fs + "px");
+        setVar("--lineHeight", lh);
+        setVar("--trackingEm", tr + "em");
+        setVar("--opsz", o);
+        setVar("--rvrn", rvrn.checked ? 1 : 0);
+        setVar("--invert", invert.checked ? 1 : 0);
+
+        fontSizeVal.textContent = fs;
+        opszVal.textContent = o + " (→ n" + currentPower(o) + ")";
+        lineHeightVal.textContent = lh.toFixed(2);
+        trackingVal.textContent = tr.toFixed(3);
+
+        // disable opsz slider when auto
+        opsz.disabled = autoOpsz.checked;
+
+        renderText();
+        renderGrid();
+    }
+
+    function printableLabel(ch){
+        if (ch === " ") return "SPACE";
+        if (ch === "\n") return "LF";
+        if (ch === "\t") return "TAB";
+        return ch;
+    }
+
+    function codepointHex(ch){
+        const cp = ch.codePointAt(0);
+        return "U+" + cp.toString(16).toUpperCase().padStart(cp <= 0xFFFF ? 4 : 5, "0");
+    }
+
+    function renderText(){
+        const all = chars.join("");
+        sampleRender.textContent = customText.value.trim().length ? customText.value : all;
+
+        // Default textarea content (only once)
+        if (!customText.dataset.inited){
+            customText.value =
+                "All characters (in order):\n" +
+                all +
+                "\n\nTry typing here. The preview above updates live.\n";
+            customText.dataset.inited = "1";
+            sampleRender.textContent = all;
+        }
+    }
+
+    function normalizeFilter(q){
+        return (q || "").trim();
+    }
+
+    function matchFilter(ch, q){
+        if (!q) return true;
+
+        // If user typed an actual character (including emoji), match direct
+        if (q.length === 1 || (q.length === 2 && q.codePointAt(0) > 0xFFFF)){
+            return ch === q;
+        }
+
+        const Q = q.toUpperCase().replace(/^U\+/, "");
+        const cp = ch.codePointAt(0);
+        const hex = cp.toString(16).toUpperCase();
+
+        // Support "U+25A0" or "25A0" or partial hex
+        if (/^[0-9A-F]+$/.test(Q)){
+            return hex.includes(Q);
+        }
+
+        return false;
+    }
+
+    function renderGrid(){
+        if (viewGrid.classList.contains("hidden")) return;
+
+        const q = normalizeFilter(filter.value);
+        const o = Number(opsz.value);
+        const p = currentPower(o);
+
+        grid.innerHTML = "";
+
+        for (const ch of chars){
+            if (!matchFilter(ch, q)) continue;
+
+            const cell = document.createElement("div");
+            cell.className = "cell";
+
+            const glyph = document.createElement("div");
+            glyph.className = "glyph";
+            // Keep real glyph (space becomes NBSP so you can see something)
+            glyph.textContent = (ch === " ") ? "\u00A0" : ch;
+
+            const meta = document.createElement("div");
+            meta.className = "meta";
+
+            const left = document.createElement("div");
+            left.textContent = printableLabel(ch) + " · " + codepointHex(ch);
+
+            const chip = document.createElement("div");
+            chip.className = "chip";
+            chip.textContent = "n" + p;
+
+            meta.appendChild(left);
+            meta.appendChild(chip);
+
+            cell.appendChild(glyph);
+            cell.appendChild(meta);
+
+            // Click to copy this single character
+            cell.title = "Click to copy: " + printableLabel(ch) + " (" + codepointHex(ch) + ")";
+            cell.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(ch);
+                } catch (e) {
+                    // fallback
+                    const ta = document.createElement("textarea");
+                    ta.value = ch;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand("copy");
+                    ta.remove();
+                }
+            });
+
+            grid.appendChild(cell);
+        }
+    }
+
+    function setTab(which){
+        const isText = which === "text";
+        tabText.classList.toggle("active", isText);
+        tabGrid.classList.toggle("active", !isText);
+        tabText.setAttribute("aria-selected", isText ? "true" : "false");
+        tabGrid.setAttribute("aria-selected", !isText ? "true" : "false");
+        viewText.classList.toggle("hidden", !isText);
+        viewGrid.classList.toggle("hidden", isText);
+        renderGrid();
+    }
+
+    // Events
+    [fontSize, opsz, lineHeight, tracking, autoOpsz, rvrn, invert].forEach(el => {
+        el.addEventListener("input", updateUI);
+        el.addEventListener("change", updateUI);
+    });
+
+    customText.addEventListener("input", () => {
+        sampleRender.textContent = customText.value;
+    });
+
+    filter.addEventListener("input", () => {
+        if (!viewGrid.classList.contains("hidden")) renderGrid();
+    });
+
+    tabText.addEventListener("click", () => setTab("text"));
+    tabGrid.addEventListener("click", () => setTab("grid"));
+
+    $("copyAll").addEventListener("click", async () => {
+        const all = chars.join("");
+        try {
+            await navigator.clipboard.writeText(all);
+        } catch (e) {
+            const ta = document.createElement("textarea");
+            ta.value = all;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+        }
+    });
+
+    $("reset").addEventListener("click", () => {
+        fontSize.value = 96;
+        opsz.value = 16;
+        autoOpsz.checked = false;
+        lineHeight.value = 1.10;
+        tracking.value = 0;
+        rvrn.checked = true;
+        invert.checked = false;
+        filter.value = "";
+        updateUI();
+        customText.dataset.inited = "";
+        renderText();
+    });
+
+    // Init
+    updateUI();
+</script>
+</body>
+</html>

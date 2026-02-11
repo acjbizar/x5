@@ -1,6 +1,9 @@
 
 # TODO
 
-- [ ] Add font testing interface.
 - [ ] Add fonts to CDN.
 - [ ] Add stylesheet for fonts.
+
+## Done
+
+- [x] Add font testing interface.

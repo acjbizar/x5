@@ -3,26 +3,17 @@
 """
 tools/generate-font.py
 
-Build an x5 variable font that "snaps" between discrete powers (n1..n3) by
-using an `opsz` axis + GSUB FeatureVariations with the `rvrn` feature.
+Build x5 variable font that "snaps" between discrete powers (n1..n3) by using:
+- fvar axis: opsz
+- GSUB FeatureVariations (rvrn) to substitute base glyphs with p2/p3 glyphs
 
-Input SVGs (per glyph per power):
+Input SVGs (rect + symbol + use only):
   dist/x5-n{power}-u{codepoint}.svg
-
-Example:
-  dist/x5-n1-u0041.svg   (U+0041 'A', power 1)
-  dist/x5-n2-u0041.svg
-  dist/x5-n3-u0041.svg
 
 Outputs:
   dist/fonts/x5.ttf
-  dist/fonts/x5.woff2   (if brotli is available)
-  dist/fonts/x5.woff    (optional)
-
-Notes:
-- Base glyphs are power 1; powers 2 and 3 are alternates substituted via rvrn.
-- Snapping thresholds are controlled by SNAP_OPSZ_MAX_P1 and SNAP_OPSZ_MAX_P2.
-- You can tweak OPSZ_MIN/DEFAULT/MAX and snap points to taste.
+  dist/fonts/x5.woff2 (if brotli available)
+  dist/fonts/x5.woff  (optional)
 
 Run:
   python tools/generate-font.py
@@ -33,20 +24,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import re
 import sys
+import unicodedata
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
-import tempfile
-import xml.etree.ElementTree as ET
 
 from fontTools.fontBuilder import FontBuilder
-from fontTools.misc.transform import Transform
-from fontTools.pens.cu2quPen import Cu2QuPen
-from fontTools.pens.roundingPen import RoundingPen
-from fontTools.pens.ttGlyphPen import TTGlyphPen
-from fontTools.svgLib.path import SVGPath
 from fontTools.ttLib import TTFont
+from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.varLib.featureVars import addFeatureVariations
 
 
@@ -56,27 +45,22 @@ CHARS_JSON = r"""
 """.strip()
 
 
-# --- Font / axis defaults ---
+# --- Font naming / metrics ---
 FAMILY_NAME = "x5"
 STYLE_NAME = "Regular"
 POSTSCRIPT_NAME = "x5-Regular"
 
 UPM = 1000
 
-# We use opsz as the driver for "which power should display".
+# opsz axis range
 OPSZ_MIN = 8.0
 OPSZ_DEFAULT = 16.0
 OPSZ_MAX = 144.0
 
-# Snap thresholds in *opsz user units*:
-# - power 1: opsz <= SNAP_OPSZ_MAX_P1
-# - power 2: SNAP_OPSZ_MAX_P1 < opsz <= SNAP_OPSZ_MAX_P2
-# - power 3: opsz > SNAP_OPSZ_MAX_P2
+# Snap thresholds (opsz user units):
+# n1 <= 24, n2 <= 64, else n3
 SNAP_OPSZ_MAX_P1 = 24.0
 SNAP_OPSZ_MAX_P2 = 64.0
-
-# Cubic->quadratic conversion error tolerance (in font units)
-CU2QU_MAX_ERR = 0.5
 
 
 @dataclass(frozen=True)
@@ -88,14 +72,25 @@ class Axis:
     name: str
 
 
+# ---------------------------
+# Utilities
+# ---------------------------
+
 def project_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
+def fix_surrogates(s: str) -> str:
+    """
+    Python's json can yield surrogate pairs as two code units (e.g. \\ud80c\\udcd1).
+    Convert them into real non-BMP characters.
+    """
+    return s.encode("utf-16-le", "surrogatepass").decode("utf-16-le")
+
+
 def decode_chars(json_blob: str) -> List[str]:
     obj = json.loads(json_blob)
-    s = obj["chars"]
-    # Preserve order, but remove duplicates if any
+    s = fix_surrogates(obj["chars"])
     seen = set()
     out = []
     for ch in s:
@@ -115,18 +110,14 @@ def glyph_name_for_codepoint(cp: int) -> str:
 
 def find_svg_for_codepoint(dist_dir: Path, power: int, cp: int) -> Optional[Path]:
     """
-    Try multiple filename variants for robustness:
+    Tries several hex paddings/cases to match your filename scheme:
       dist/x5-n{power}-u{hex}.svg
-    where {hex} might be padded/unpadded, lower/upper.
     """
     candidates: List[str] = []
-    # padded forms (common)
     if cp <= 0xFFFF:
         candidates += [f"{cp:04x}", f"{cp:04X}"]
     else:
-        # common widths for >BMP
         candidates += [f"{cp:05x}", f"{cp:05X}", f"{cp:06x}", f"{cp:06X}"]
-    # unpadded forms
     candidates += [f"{cp:x}", f"{cp:X}"]
 
     for hx in candidates:
@@ -134,52 +125,42 @@ def find_svg_for_codepoint(dist_dir: Path, power: int, cp: int) -> Optional[Path
         if p.exists():
             return p
 
-    # last resort: scan for any matching suffix
     prefix = f"x5-n{power}-u"
     cp_hex_upper = f"{cp:X}"
     cp_hex_lower = f"{cp:x}"
     for p in dist_dir.glob(f"{prefix}*.svg"):
-        stem = p.stem  # e.g. x5-n1-u0041
+        stem = p.stem
         if stem.startswith(prefix):
-            tail = stem[len(prefix) :]
+            tail = stem[len(prefix):]
             if tail in (cp_hex_upper, cp_hex_lower) or tail.upper() == cp_hex_upper or tail.lower() == cp_hex_lower:
                 return p
 
     return None
 
 
-def parse_viewbox(svg_path: Path) -> Tuple[float, float, float, float]:
-    svg = SVGPath(str(svg_path))
-    root = svg.root
-    vb = root.get("viewBox")
-    if vb:
-        parts = vb.replace(",", " ").split()
-        if len(parts) == 4:
-            minx, miny, w, h = map(float, parts)
-            return minx, miny, w, h
-
-    # fallback to width/height attributes
-    w_attr = root.get("width")
-    h_attr = root.get("height")
-    try:
-        w = float(w_attr) if w_attr else float(UPM)
-        h = float(h_attr) if h_attr else float(UPM)
-    except Exception:
-        w, h = float(UPM), float(UPM)
-    return 0.0, 0.0, w, h
-
-def _local_tag(tag: str) -> str:
-    # Handles namespaced tags like "{http://www.w3.org/2000/svg}rect"
+def local_tag(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
 
 
-def _parse_svg_length(val: Optional[str]) -> Optional[float]:
+def svg_ns_uri(tag: str) -> Optional[str]:
+    if tag.startswith("{") and "}" in tag:
+        return tag[1:].split("}", 1)[0]
+    return None
+
+
+def qname(ns: Optional[str], local: str) -> str:
+    return f"{{{ns}}}{local}" if ns else local
+
+
+def parse_svg_length(val: Optional[str]) -> Optional[float]:
+    """
+    Parses numeric SVG lengths like '12', '12px'. Returns None for '%' or missing/invalid.
+    """
     if not val:
         return None
     v = val.strip()
     if not v or v.endswith("%"):
         return None
-    # strip common unit suffixes that break float()
     for suf in ("px", "pt", "pc", "mm", "cm", "in", "em", "ex"):
         if v.endswith(suf):
             v = v[:-len(suf)].strip()
@@ -190,7 +171,7 @@ def _parse_svg_length(val: Optional[str]) -> Optional[float]:
         return None
 
 
-def _get_viewbox_from_root(root: ET.Element, fallback_upm: int) -> Tuple[float, float, float, float]:
+def parse_viewbox(root: ET.Element, fallback_upm: int) -> Tuple[float, float, float, float]:
     vb = root.get("viewBox")
     if vb:
         parts = vb.replace(",", " ").split()
@@ -200,132 +181,290 @@ def _get_viewbox_from_root(root: ET.Element, fallback_upm: int) -> Tuple[float, 
                 return minx, miny, w, h
             except Exception:
                 pass
-
-    # fallback to width/height attrs
-    w = _parse_svg_length(root.get("width")) or float(fallback_upm)
-    h = _parse_svg_length(root.get("height")) or float(fallback_upm)
+    w = parse_svg_length(root.get("width")) or float(fallback_upm)
+    h = parse_svg_length(root.get("height")) or float(fallback_upm)
     return 0.0, 0.0, w, h
 
 
-def _is_whiteish_fill(el: ET.Element) -> bool:
+# ---------------------------
+# 2D Affine transforms
+# Represented as (a,b,c,d,e,f) for:
+# x' = a*x + c*y + e
+# y' = b*x + d*y + f
+# ---------------------------
+
+Affine = Tuple[float, float, float, float, float, float]
+
+IDENT: Affine = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+
+def mul(T1: Affine, T2: Affine) -> Affine:
+    a1,b1,c1,d1,e1,f1 = T1
+    a2,b2,c2,d2,e2,f2 = T2
+    # T = T1 ∘ T2  (apply T2 then T1)
+    return (
+        a1*a2 + c1*b2,
+        b1*a2 + d1*b2,
+        a1*c2 + c1*d2,
+        b1*c2 + d1*d2,
+        a1*e2 + c1*f2 + e1,
+        b1*e2 + d1*f2 + f1
+    )
+
+def apply(T: Affine, x: float, y: float) -> Tuple[float, float]:
+    a,b,c,d,e,f = T
+    return (a*x + c*y + e, b*x + d*y + f)
+
+def translate(tx: float, ty: float) -> Affine:
+    return (1.0, 0.0, 0.0, 1.0, tx, ty)
+
+def scale(sx: float, sy: float) -> Affine:
+    return (sx, 0.0, 0.0, sy, 0.0, 0.0)
+
+
+_transform_cmd = re.compile(r"([a-zA-Z]+)\s*\(([^)]*)\)")
+
+def parse_transform_attr(s: Optional[str]) -> Affine:
+    """
+    Minimal SVG transform parser: translate, scale, matrix.
+    (Enough for rect+symbol+use based grids.)
+    """
+    if not s:
+        return IDENT
+    s = s.strip()
+    if not s:
+        return IDENT
+
+    T = IDENT
+    for m in _transform_cmd.finditer(s):
+        name = m.group(1).strip().lower()
+        nums = re.split(r"[,\s]+", m.group(2).strip())
+        nums = [n for n in nums if n]
+        vals: List[float] = []
+        for n in nums:
+            try:
+                vals.append(float(n))
+            except Exception:
+                vals.append(0.0)
+
+        if name == "translate":
+            tx = vals[0] if len(vals) > 0 else 0.0
+            ty = vals[1] if len(vals) > 1 else 0.0
+            T = mul(T, translate(tx, ty))
+        elif name == "scale":
+            sx = vals[0] if len(vals) > 0 else 1.0
+            sy = vals[1] if len(vals) > 1 else sx
+            T = mul(T, scale(sx, sy))
+        elif name == "matrix" and len(vals) >= 6:
+            a,b,c,d,e,f = vals[:6]
+            T = mul(T, (a,b,c,d,e,f))
+        else:
+            # rotate/skew not expected in your restricted SVG set; ignore safely
+            continue
+
+    return T
+
+
+# ---------------------------
+# SVG rect extraction with symbol/use expansion
+# ---------------------------
+
+def is_whiteish_fill(el: ET.Element) -> bool:
     fill = (el.get("fill") or "").strip().lower()
     style = (el.get("style") or "").strip().lower()
-
     white_literals = {"white", "#fff", "#ffffff", "rgb(255,255,255)", "rgb(255, 255, 255)"}
     if fill in white_literals:
         return True
-
-    # style="fill:#fff; ..." etc.
     for token in ("fill:#fff", "fill:#ffffff", "fill:white", "fill:rgb(255,255,255)", "fill: rgb(255,255,255)"):
         if token in style:
             return True
-
     return False
 
 
-def sanitize_svg_for_fonttools(svg_path: Path, fallback_upm: int) -> Path:
-    """
-    Returns a path to a sanitized SVG file suitable for fontTools.svgLib.path.SVGPath.
-    - Removes <rect> elements with % sizes (fontTools can't parse them as floats)
-    - Removes full-canvas white background rects
-    - Normalizes root width/height if set to %
-    """
-    data = svg_path.read_bytes()
-
-    try:
-        root = ET.fromstring(data)
-    except Exception:
-        # If parsing fails, just return original path; let upstream error if any.
-        return svg_path
-
-    vb_minx, vb_miny, vb_w, vb_h = _get_viewbox_from_root(root, fallback_upm)
-
-    # Normalize root width/height if percentage (optional but prevents similar issues)
-    for dim, vb_dim in (("width", vb_w), ("height", vb_h)):
-        v = (root.get(dim) or "").strip()
-        if v.endswith("%"):
-            root.set(dim, str(vb_dim))
-
-    # Remove problematic/background rects
-    def rect_is_background(rect: ET.Element) -> bool:
-        w_raw = (rect.get("width") or "").strip()
-        h_raw = (rect.get("height") or "").strip()
-
-        # If percent sizes: remove (this is your error case)
-        if "%" in w_raw or "%" in h_raw:
-            return True
-
-        # Remove full-canvas white rects too (even if numeric)
-        w = _parse_svg_length(w_raw)
-        h = _parse_svg_length(h_raw)
-        if w is None or h is None:
-            return False
-
-        x = _parse_svg_length(rect.get("x")) or 0.0
-        y = _parse_svg_length(rect.get("y")) or 0.0
-
-        full_canvas = (abs(x - 0.0) < 1e-6) and (abs(y - 0.0) < 1e-6) and (abs(w - vb_w) < 1e-3) and (abs(h - vb_h) < 1e-3)
-        if full_canvas and _is_whiteish_fill(rect):
-            return True
-
-        return False
-
-    # ElementTree has no parent pointers; remove by iterating parents
-    for parent in root.iter():
-        children = list(parent)
-        for child in children:
-            if _local_tag(child.tag) == "rect" and rect_is_background(child):
-                parent.remove(child)
-
-    # Write sanitized temp SVG
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".svg")
-    tmp_path = Path(tmp.name)
-    tmp.close()
-    tmp_path.write_bytes(ET.tostring(root, encoding="utf-8"))
-    return tmp_path
+def is_invisible_rect(el: ET.Element) -> bool:
+    # skip rects that are non-glyph: fill="none" or opacity 0
+    fill = (el.get("fill") or "").strip().lower()
+    if fill == "none":
+        return True
+    op = parse_svg_length(el.get("opacity"))
+    if op is not None and op <= 0.0:
+        return True
+    fop = parse_svg_length(el.get("fill-opacity"))
+    if fop is not None and fop <= 0.0:
+        return True
+    style = (el.get("style") or "").strip().lower()
+    if "fill:none" in style:
+        return True
+    if "opacity:0" in style or "opacity: 0" in style:
+        return True
+    return False
 
 
-def svg_to_ttglyph(svg_path: Path, upm: int) -> object:
-    """
-    Convert an SVG into a TrueType glyf TTGlyph:
-    - scales to fit a UPM×UPM square (preserving aspect ratio)
-    - centers within that square
-    - flips Y (SVG down -> font up)
-    - converts cubics -> quadratics
-    - rounds to integer coords
-    """
-def svg_to_ttglyph(svg_path: Path, upm: int) -> object:
-    minx, miny, w, h = parse_viewbox(svg_path)
+def get_href(el: ET.Element) -> Optional[str]:
+    # both href and xlink:href
+    return el.get("href") or el.get("{http://www.w3.org/1999/xlink}href")
 
-    s = upm / max(w, h) if max(w, h) > 0 else 1.0
-    xoff = (upm - (w * s)) / 2.0
-    yoff = (upm - (h * s)) / 2.0
-    e = xoff - (minx * s)
-    f = yoff + ((h + miny) * s)
-    transform = Transform(s, 0, 0, -s, e, f)
 
-    sanitized = sanitize_svg_for_fonttools(svg_path, upm)
-    try:
-        svg = SVGPath(str(sanitized), transform=transform)
+Rect = Tuple[float, float, float, float]  # (x0,y0,x1,y1) in SVG coordinate space (after expansion transforms)
 
-        base_pen = TTGlyphPen(None)
-        rounding_pen = RoundingPen(base_pen)
-        quad_pen = Cu2QuPen(rounding_pen, max_err=CU2QU_MAX_ERR, all_quadratic=True)
 
-        svg.draw(quad_pen)
-        return base_pen.glyph()
-    finally:
-        # Clean up temp file (only if we created one)
-        if sanitized != svg_path:
+def build_id_index(root: ET.Element) -> Dict[str, ET.Element]:
+    idx: Dict[str, ET.Element] = {}
+    for el in root.iter():
+        _id = el.get("id")
+        if _id:
+            idx[_id] = el
+    return idx
+
+
+def symbol_viewbox(sym: ET.Element, fallback: Tuple[float, float, float, float]) -> Tuple[float, float, float, float]:
+    vb = sym.get("viewBox")
+    if vb:
+        parts = vb.replace(",", " ").split()
+        if len(parts) == 4:
             try:
-                sanitized.unlink(missing_ok=True)
+                return tuple(map(float, parts))  # type: ignore
             except Exception:
                 pass
+    # fallback to symbol width/height if present, else fallback passed in
+    w = parse_svg_length(sym.get("width"))
+    h = parse_svg_length(sym.get("height"))
+    if w is not None and h is not None:
+        return (0.0, 0.0, float(w), float(h))
+    return fallback
 
+
+def collect_rects_from_element(
+    el: ET.Element,
+    id_index: Dict[str, ET.Element],
+    root_viewbox: Tuple[float, float, float, float],
+    T: Affine,
+    out: List[Rect],
+    depth: int = 0
+) -> None:
+    """
+    Recursively collect rects, expanding <use> and applying transforms.
+    Assumes only rect/symbol/use/g/defs-ish structure.
+    """
+    if depth > 50:
+        return
+
+    tag = local_tag(el.tag)
+
+    # Apply element transform if present
+    T_el = mul(T, parse_transform_attr(el.get("transform")))
+
+    if tag == "rect":
+        w_raw = (el.get("width") or "").strip()
+        h_raw = (el.get("height") or "").strip()
+
+        # skip problematic percent rects (your white background)
+        if "%" in w_raw or "%" in h_raw:
+            return
+
+        if is_invisible_rect(el):
+            return
+
+        w = parse_svg_length(w_raw)
+        h = parse_svg_length(h_raw)
+        if w is None or h is None or w <= 0 or h <= 0:
+            return
+
+        x = parse_svg_length(el.get("x")) or 0.0
+        y = parse_svg_length(el.get("y")) or 0.0
+
+        # Ignore full-canvas white background rects
+        minx, miny, vbw, vbh = root_viewbox
+        if is_whiteish_fill(el):
+            if abs(x - minx) < 1e-6 and abs(y - miny) < 1e-6 and abs(w - vbw) < 1e-6 and abs(h - vbh) < 1e-6:
+                return
+
+        # Transform all 4 corners (still OK for translate/scale/matrix)
+        p1 = apply(T_el, x, y)
+        p2 = apply(T_el, x + w, y)
+        p3 = apply(T_el, x + w, y + h)
+        p4 = apply(T_el, x, y + h)
+
+        xs = [p1[0], p2[0], p3[0], p4[0]]
+        ys = [p1[1], p2[1], p3[1], p4[1]]
+        x0, x1 = min(xs), max(xs)
+        y0, y1 = min(ys), max(ys)
+
+        # Degenerate?
+        if (x1 - x0) <= 0 or (y1 - y0) <= 0:
+            return
+
+        out.append((x0, y0, x1, y1))
+        return
+
+    if tag == "use":
+        href = get_href(el)
+        if not href or not href.startswith("#"):
+            return
+        ref_id = href[1:]
+        ref = id_index.get(ref_id)
+        if ref is None:
+            return
+
+        # <use> implicit x/y translation
+        ux = parse_svg_length(el.get("x")) or 0.0
+        uy = parse_svg_length(el.get("y")) or 0.0
+
+        T_use = mul(T_el, translate(ux, uy))
+
+        # width/height matter when referencing <symbol> (viewport mapping)
+        if local_tag(ref.tag) == "symbol":
+            sym_vb = symbol_viewbox(ref, root_viewbox)
+            sminx, sminy, svbw, svbh = sym_vb
+
+            use_w = parse_svg_length(el.get("width"))
+            use_h = parse_svg_length(el.get("height"))
+            if use_w is None:
+                use_w = svbw
+            if use_h is None:
+                use_h = svbh
+
+            sx = (use_w / svbw) if svbw else 1.0
+            sy = (use_h / svbh) if svbh else 1.0
+
+            # Map symbol viewBox to the <use> viewport:
+            # translate(-minx,-miny) then scale(sx,sy)
+            T_sym_map = mul(T_use, scale(sx, sy))
+            T_sym_map = mul(T_sym_map, translate(-sminx, -sminy))
+
+            # Recurse into symbol children
+            for ch in list(ref):
+                collect_rects_from_element(ch, id_index, root_viewbox, T_sym_map, out, depth + 1)
+        else:
+            # Referencing e.g. a <g> or <rect> by id
+            collect_rects_from_element(ref, id_index, root_viewbox, T_use, out, depth + 1)
+
+        return
+
+    # Skip defs/symbol definitions when traversing normally (they’re reached via <use>)
+    if tag in ("defs", "symbol"):
+        return
+
+    # Recurse through children
+    for ch in list(el):
+        collect_rects_from_element(ch, id_index, root_viewbox, T_el, out, depth + 1)
+
+
+def svg_rects(svg_path: Path, fallback_upm: int) -> Tuple[Tuple[float, float, float, float], List[Rect]]:
+    root = ET.fromstring(svg_path.read_bytes())
+    vb = parse_viewbox(root, fallback_upm)
+    idx = build_id_index(root)
+
+    rects: List[Rect] = []
+    collect_rects_from_element(root, idx, vb, IDENT, rects)
+    return vb, rects
+
+
+# ---------------------------
+# SVG rects -> TrueType glyph
+# ---------------------------
 
 def build_notdef_glyph(upm: int) -> object:
     pen = TTGlyphPen(None)
-    # Simple box with a smaller inner box
     m = upm * 0.08
     M = upm * 0.92
     pen.moveTo((m, m))
@@ -343,6 +482,59 @@ def build_notdef_glyph(upm: int) -> object:
     return pen.glyph()
 
 
+def rects_to_ttglyph(
+    viewbox: Tuple[float, float, float, float],
+    rects: List[Rect],
+    upm: int
+) -> object:
+    minx, miny, w, h = viewbox
+    if w <= 0 or h <= 0:
+        return TTGlyphPen(None).glyph()
+
+    # Global mapping: fit max(w,h) into UPM, center, and flip Y
+    s = upm / max(w, h)
+    xoff = (upm - (w * s)) / 2.0
+    yoff = (upm - (h * s)) / 2.0
+
+    def map_point(x: float, y: float) -> Tuple[int, int]:
+        # x' = s*(x - minx) + xoff
+        # y' = -s*(y - miny) + (yoff + h*s)
+        xf = s * (x - minx) + xoff
+        yf = -s * (y - miny) + (yoff + h * s)
+        return (int(round(xf)), int(round(yf)))
+
+    pen = TTGlyphPen(None)
+
+    # Add one contour per rect (your system is rect-only so this is faithful)
+    for (x0, y0, x1, y1) in rects:
+        # ensure order
+        if x1 < x0:
+            x0, x1 = x1, x0
+        if y1 < y0:
+            y0, y1 = y1, y0
+
+        p0 = map_point(x0, y0)
+        p1 = map_point(x1, y0)
+        p2 = map_point(x1, y1)
+        p3 = map_point(x0, y1)
+
+        # Skip degenerate after rounding
+        if p0[0] == p1[0] or p0[1] == p3[1]:
+            continue
+
+        pen.moveTo(p0)
+        pen.lineTo(p1)
+        pen.lineTo(p2)
+        pen.lineTo(p3)
+        pen.closePath()
+
+    return pen.glyph()
+
+
+# ---------------------------
+# Feature-variation snapping (opsz -> rvrn)
+# ---------------------------
+
 def normalize_value(v: float, axis_min: float, axis_default: float, axis_max: float) -> float:
     # OpenType normalized coords: min=-1, default=0, max=+1
     if v == axis_default:
@@ -354,9 +546,13 @@ def normalize_value(v: float, axis_min: float, axis_default: float, axis_max: fl
     return (v - axis_default) / denom if denom else 1.0
 
 
-def clamp01(x: float) -> float:
+def clamp_norm(x: float) -> float:
     return -1.0 if x < -1.0 else (1.0 if x > 1.0 else x)
 
+
+# ---------------------------
+# Main
+# ---------------------------
 
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser()
@@ -365,7 +561,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--style", default=STYLE_NAME)
     ap.add_argument("--postscript", default=POSTSCRIPT_NAME)
     ap.add_argument("--upm", type=int, default=UPM)
-    ap.add_argument("--dist-dir", default="dist", help="Directory containing x5-n{power}-u{codepoint}.svg")
+    ap.add_argument("--dist-dir", default="dist", help="Directory containing x5-n{power}-u{hex}.svg")
     ap.add_argument("--out-dir", default="dist/fonts", help="Output directory for font files")
     ap.add_argument("--powers", default="1,2,3", help="Comma list of powers to include (default 1,2,3)")
     args = ap.parse_args(argv)
@@ -374,9 +570,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     powers = [int(x.strip()) for x in args.powers.split(",") if x.strip()]
     if powers != sorted(powers) or powers[0] != 1:
         print("Error: powers must start at 1 and be sorted (e.g. 1,2,3).", file=sys.stderr)
-        return 2
-    if len(powers) < 1:
-        print("Error: need at least power 1.", file=sys.stderr)
         return 2
 
     root = project_root()
@@ -387,52 +580,46 @@ def main(argv: Optional[List[str]] = None) -> int:
     chars = decode_chars(CHARS_JSON)
     cps = sorted({ord(ch) for ch in chars})
 
-    # Build glyphs: base (p1) + alternates (.p2/.p3)
+    # Build glyph set:
+    # base glyphs are power 1
+    # alternates: .p2, .p3
     glyphs: Dict[str, object] = {}
     cmap: Dict[int, str] = {}
 
     glyph_order: List[str] = [".notdef"]
     glyphs[".notdef"] = build_notdef_glyph(args.upm)
 
-    # Base glyphs (power 1)
     missing: List[str] = []
     base_names: List[str] = []
 
+    def build_glyph_for(power: int, cp: int) -> object:
+        svg_path = find_svg_for_codepoint(dist_dir, power=power, cp=cp)
+        if not svg_path:
+            missing.append(f"power{power} U+{cp:04X} missing (expected dist/x5-n{power}-u*.svg)")
+            return TTGlyphPen(None).glyph()
+
+        vb, rects = svg_rects(svg_path, args.upm)
+        return rects_to_ttglyph(vb, rects, args.upm)
+
+    # Base glyphs (p1)
     for cp in cps:
         gname = glyph_name_for_codepoint(cp)
         base_names.append(gname)
         cmap[cp] = gname
-
-        svg_path = find_svg_for_codepoint(dist_dir, power=1, cp=cp)
-        if not svg_path:
-            missing.append(f"power1 U+{cp:04X} -> expected dist/x5-n1-u*.svg")
-            # still create an empty glyph so font builds
-            glyphs[gname] = TTGlyphPen(None).glyph()
-        else:
-            glyphs[gname] = svg_to_ttglyph(svg_path, args.upm)
+        glyphs[gname] = build_glyph_for(1, cp)
 
     glyph_order.extend(base_names)
 
-    # Alternate glyphs for p2/p3
-    alt_names_by_power: Dict[int, List[str]] = {}
+    # Alternate glyphs (p2/p3)
     for p in powers[1:]:
-        alt_names: List[str] = []
         for cp in cps:
             base = glyph_name_for_codepoint(cp)
             alt = f"{base}.p{p}"
-            alt_names.append(alt)
-
-            svg_path = find_svg_for_codepoint(dist_dir, power=p, cp=cp)
-            if not svg_path:
-                missing.append(f"power{p} U+{cp:04X} -> expected dist/x5-n{p}-u*.svg")
-                glyphs[alt] = TTGlyphPen(None).glyph()
-            else:
-                glyphs[alt] = svg_to_ttglyph(svg_path, args.upm)
-        alt_names_by_power[p] = alt_names
-        glyph_order.extend(alt_names)
+            glyph_order.append(alt)
+            glyphs[alt] = build_glyph_for(p, cp)
 
     if missing:
-        print("Warning: some SVGs were not found. The font will still be generated, but missing glyphs will be blank:")
+        print("Warning: some SVGs were not found. Missing glyphs will be blank:")
         for line in missing[:80]:
             print("  -", line)
         if len(missing) > 80:
@@ -444,11 +631,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     fb.setupCharacterMap(cmap)
     fb.setupGlyf(glyphs)
 
-    # Horizontal metrics: monospace (advanceWidth = UPM), but LSB must equal xMin for glyf
+    # Horizontal metrics: monospace square cell
     glyf_table = fb.font["glyf"]
     hmtx: Dict[str, Tuple[int, int]] = {}
     aw = args.upm
-
     for gn in glyph_order:
         g = glyf_table[gn]
         try:
@@ -481,7 +667,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     fb.setupPost()
     fb.setupMaxp()
 
-    # Add opsz axis (variable font container)
+    # fvar opsz axis (no gvar needed since we're using feature variations substitutions)
     axis = Axis("opsz", OPSZ_MIN, OPSZ_DEFAULT, OPSZ_MAX, "Optical Size")
     fb.setupFvar(
         axes=[(axis.tag, axis.min, axis.default, axis.max, axis.name)],
@@ -494,18 +680,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         ],
     )
 
-    # Add FeatureVariations substitutions for snapping (rvrn)
-    # Convert snap thresholds to normalized coords.
-    eps = 1e-3  # avoid overlap at boundaries
+    # Build rvrn substitutions by opsz ranges
+    eps = 1e-3  # avoid overlap at boundary
     p2_min_u = SNAP_OPSZ_MAX_P1
     p2_max_u = SNAP_OPSZ_MAX_P2 - eps
     p3_min_u = SNAP_OPSZ_MAX_P2
     p3_max_u = axis.max
 
-    p2_min = clamp01(normalize_value(p2_min_u, axis.min, axis.default, axis.max))
-    p2_max = clamp01(normalize_value(p2_max_u, axis.min, axis.default, axis.max))
-    p3_min = clamp01(normalize_value(p3_min_u, axis.min, axis.default, axis.max))
-    p3_max = clamp01(normalize_value(p3_max_u, axis.min, axis.default, axis.max))
+    p2_min = clamp_norm(normalize_value(p2_min_u, axis.min, axis.default, axis.max))
+    p2_max = clamp_norm(normalize_value(p2_max_u, axis.min, axis.default, axis.max))
+    p3_min = clamp_norm(normalize_value(p3_min_u, axis.min, axis.default, axis.max))
+    p3_max = clamp_norm(normalize_value(p3_max_u, axis.min, axis.default, axis.max))
 
     subs_p2: Dict[str, str] = {}
     subs_p3: Dict[str, str] = {}
@@ -524,11 +709,12 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     addFeatureVariations(fb.font, conditional_subs, featureTag="rvrn")
 
-    # Recalc bboxes after building everything
+    # fontTools version compatibility: recalcBBoxes may be a bool flag, not a method
     if callable(getattr(fb.font, "recalcBBoxes", None)):
         fb.font.recalcBBoxes()
     else:
         fb.font.recalcBBoxes = True
+    fb.font.recalcTimestamp = True
 
     # Write outputs
     ttf_path = out_dir / "x5.ttf"

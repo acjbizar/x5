@@ -37,6 +37,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
+import tempfile
+import xml.etree.ElementTree as ET
 
 from fontTools.fontBuilder import FontBuilder
 from fontTools.misc.transform import Transform
@@ -166,6 +168,122 @@ def parse_viewbox(svg_path: Path) -> Tuple[float, float, float, float]:
         w, h = float(UPM), float(UPM)
     return 0.0, 0.0, w, h
 
+def _local_tag(tag: str) -> str:
+    # Handles namespaced tags like "{http://www.w3.org/2000/svg}rect"
+    return tag.rsplit("}", 1)[-1]
+
+
+def _parse_svg_length(val: Optional[str]) -> Optional[float]:
+    if not val:
+        return None
+    v = val.strip()
+    if not v or v.endswith("%"):
+        return None
+    # strip common unit suffixes that break float()
+    for suf in ("px", "pt", "pc", "mm", "cm", "in", "em", "ex"):
+        if v.endswith(suf):
+            v = v[:-len(suf)].strip()
+            break
+    try:
+        return float(v)
+    except Exception:
+        return None
+
+
+def _get_viewbox_from_root(root: ET.Element, fallback_upm: int) -> Tuple[float, float, float, float]:
+    vb = root.get("viewBox")
+    if vb:
+        parts = vb.replace(",", " ").split()
+        if len(parts) == 4:
+            try:
+                minx, miny, w, h = map(float, parts)
+                return minx, miny, w, h
+            except Exception:
+                pass
+
+    # fallback to width/height attrs
+    w = _parse_svg_length(root.get("width")) or float(fallback_upm)
+    h = _parse_svg_length(root.get("height")) or float(fallback_upm)
+    return 0.0, 0.0, w, h
+
+
+def _is_whiteish_fill(el: ET.Element) -> bool:
+    fill = (el.get("fill") or "").strip().lower()
+    style = (el.get("style") or "").strip().lower()
+
+    white_literals = {"white", "#fff", "#ffffff", "rgb(255,255,255)", "rgb(255, 255, 255)"}
+    if fill in white_literals:
+        return True
+
+    # style="fill:#fff; ..." etc.
+    for token in ("fill:#fff", "fill:#ffffff", "fill:white", "fill:rgb(255,255,255)", "fill: rgb(255,255,255)"):
+        if token in style:
+            return True
+
+    return False
+
+
+def sanitize_svg_for_fonttools(svg_path: Path, fallback_upm: int) -> Path:
+    """
+    Returns a path to a sanitized SVG file suitable for fontTools.svgLib.path.SVGPath.
+    - Removes <rect> elements with % sizes (fontTools can't parse them as floats)
+    - Removes full-canvas white background rects
+    - Normalizes root width/height if set to %
+    """
+    data = svg_path.read_bytes()
+
+    try:
+        root = ET.fromstring(data)
+    except Exception:
+        # If parsing fails, just return original path; let upstream error if any.
+        return svg_path
+
+    vb_minx, vb_miny, vb_w, vb_h = _get_viewbox_from_root(root, fallback_upm)
+
+    # Normalize root width/height if percentage (optional but prevents similar issues)
+    for dim, vb_dim in (("width", vb_w), ("height", vb_h)):
+        v = (root.get(dim) or "").strip()
+        if v.endswith("%"):
+            root.set(dim, str(vb_dim))
+
+    # Remove problematic/background rects
+    def rect_is_background(rect: ET.Element) -> bool:
+        w_raw = (rect.get("width") or "").strip()
+        h_raw = (rect.get("height") or "").strip()
+
+        # If percent sizes: remove (this is your error case)
+        if "%" in w_raw or "%" in h_raw:
+            return True
+
+        # Remove full-canvas white rects too (even if numeric)
+        w = _parse_svg_length(w_raw)
+        h = _parse_svg_length(h_raw)
+        if w is None or h is None:
+            return False
+
+        x = _parse_svg_length(rect.get("x")) or 0.0
+        y = _parse_svg_length(rect.get("y")) or 0.0
+
+        full_canvas = (abs(x - 0.0) < 1e-6) and (abs(y - 0.0) < 1e-6) and (abs(w - vb_w) < 1e-3) and (abs(h - vb_h) < 1e-3)
+        if full_canvas and _is_whiteish_fill(rect):
+            return True
+
+        return False
+
+    # ElementTree has no parent pointers; remove by iterating parents
+    for parent in root.iter():
+        children = list(parent)
+        for child in children:
+            if _local_tag(child.tag) == "rect" and rect_is_background(child):
+                parent.remove(child)
+
+    # Write sanitized temp SVG
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".svg")
+    tmp_path = Path(tmp.name)
+    tmp.close()
+    tmp_path.write_bytes(ET.tostring(root, encoding="utf-8"))
+    return tmp_path
+
 
 def svg_to_ttglyph(svg_path: Path, upm: int) -> object:
     """
@@ -176,27 +294,33 @@ def svg_to_ttglyph(svg_path: Path, upm: int) -> object:
     - converts cubics -> quadratics
     - rounds to integer coords
     """
+def svg_to_ttglyph(svg_path: Path, upm: int) -> object:
     minx, miny, w, h = parse_viewbox(svg_path)
 
-    # scale to fit the larger dimension into the em square
     s = upm / max(w, h) if max(w, h) > 0 else 1.0
     xoff = (upm - (w * s)) / 2.0
     yoff = (upm - (h * s)) / 2.0
-
-    # x' =  s*x + e
-    # y' = -s*y + f
     e = xoff - (minx * s)
     f = yoff + ((h + miny) * s)
     transform = Transform(s, 0, 0, -s, e, f)
 
-    svg = SVGPath(str(svg_path), transform=transform)
+    sanitized = sanitize_svg_for_fonttools(svg_path, upm)
+    try:
+        svg = SVGPath(str(sanitized), transform=transform)
 
-    base_pen = TTGlyphPen(None)
-    rounding_pen = RoundingPen(base_pen)
-    quad_pen = Cu2QuPen(rounding_pen, max_err=CU2QU_MAX_ERR, all_quadratic=True)
+        base_pen = TTGlyphPen(None)
+        rounding_pen = RoundingPen(base_pen)
+        quad_pen = Cu2QuPen(rounding_pen, max_err=CU2QU_MAX_ERR, all_quadratic=True)
 
-    svg.draw(quad_pen)
-    return base_pen.glyph()
+        svg.draw(quad_pen)
+        return base_pen.glyph()
+    finally:
+        # Clean up temp file (only if we created one)
+        if sanitized != svg_path:
+            try:
+                sanitized.unlink(missing_ok=True)
+            except Exception:
+                pass
 
 
 def build_notdef_glyph(upm: int) -> object:
@@ -401,7 +525,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     addFeatureVariations(fb.font, conditional_subs, featureTag="rvrn")
 
     # Recalc bboxes after building everything
-    fb.font.recalcBBoxes()
+    if callable(getattr(fb.font, "recalcBBoxes", None)):
+        fb.font.recalcBBoxes()
+    else:
+        fb.font.recalcBBoxes = True
 
     # Write outputs
     ttf_path = out_dir / "x5.ttf"

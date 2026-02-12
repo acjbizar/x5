@@ -14,6 +14,7 @@ Outputs:
   dist/fonts/x5.ttf
   dist/fonts/x5.woff2 (if brotli available)
   dist/fonts/x5.woff  (optional)
+  dist/fonts/x5.css   (copied from src/style/main.css)
 
 Run:
   python tools/generate-font.py
@@ -140,16 +141,6 @@ def find_svg_for_codepoint(dist_dir: Path, power: int, cp: int) -> Optional[Path
 
 def local_tag(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
-
-
-def svg_ns_uri(tag: str) -> Optional[str]:
-    if tag.startswith("{") and "}" in tag:
-        return tag[1:].split("}", 1)[0]
-    return None
-
-
-def qname(ns: Optional[str], local: str) -> str:
-    return f"{{{ns}}}{local}" if ns else local
 
 
 def parse_svg_length(val: Optional[str]) -> Optional[float]:
@@ -389,7 +380,6 @@ def collect_rects_from_element(
         x0, x1 = min(xs), max(xs)
         y0, y1 = min(ys), max(ys)
 
-        # Degenerate?
         if (x1 - x0) <= 0 or (y1 - y0) <= 0:
             return
 
@@ -427,15 +417,13 @@ def collect_rects_from_element(
             sy = (use_h / svbh) if svbh else 1.0
 
             # Map symbol viewBox to the <use> viewport:
-            # translate(-minx,-miny) then scale(sx,sy)
+            # scale then translate(-minx,-miny)
             T_sym_map = mul(T_use, scale(sx, sy))
             T_sym_map = mul(T_sym_map, translate(-sminx, -sminy))
 
-            # Recurse into symbol children
             for ch in list(ref):
                 collect_rects_from_element(ch, id_index, root_viewbox, T_sym_map, out, depth + 1)
         else:
-            # Referencing e.g. a <g> or <rect> by id
             collect_rects_from_element(ref, id_index, root_viewbox, T_use, out, depth + 1)
 
         return
@@ -444,7 +432,6 @@ def collect_rects_from_element(
     if tag in ("defs", "symbol"):
         return
 
-    # Recurse through children
     for ch in list(el):
         collect_rects_from_element(ch, id_index, root_viewbox, T_el, out, depth + 1)
 
@@ -491,23 +478,19 @@ def rects_to_ttglyph(
     if w <= 0 or h <= 0:
         return TTGlyphPen(None).glyph()
 
-    # Global mapping: fit max(w,h) into UPM, center, and flip Y
+    # Fit max(w,h) into UPM, center, and flip Y
     s = upm / max(w, h)
     xoff = (upm - (w * s)) / 2.0
     yoff = (upm - (h * s)) / 2.0
 
     def map_point(x: float, y: float) -> Tuple[int, int]:
-        # x' = s*(x - minx) + xoff
-        # y' = -s*(y - miny) + (yoff + h*s)
         xf = s * (x - minx) + xoff
         yf = -s * (y - miny) + (yoff + h * s)
         return (int(round(xf)), int(round(yf)))
 
     pen = TTGlyphPen(None)
 
-    # Add one contour per rect (your system is rect-only so this is faithful)
     for (x0, y0, x1, y1) in rects:
-        # ensure order
         if x1 < x0:
             x0, x1 = x1, x0
         if y1 < y0:
@@ -518,7 +501,6 @@ def rects_to_ttglyph(
         p2 = map_point(x1, y1)
         p3 = map_point(x0, y1)
 
-        # Skip degenerate after rounding
         if p0[0] == p1[0] or p0[1] == p3[1]:
             continue
 
@@ -536,7 +518,6 @@ def rects_to_ttglyph(
 # ---------------------------
 
 def normalize_value(v: float, axis_min: float, axis_default: float, axis_max: float) -> float:
-    # OpenType normalized coords: min=-1, default=0, max=+1
     if v == axis_default:
         return 0.0
     if v < axis_default:
@@ -577,12 +558,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_dir = (root / args.out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # NEW: copy CSS from src/style/main.css -> dist/fonts/x5.css
+    src_css = (root / "src/style/main.css").resolve()
+    dst_css = (out_dir / "x5.css").resolve()
+    if src_css.exists():
+        dst_css.write_bytes(src_css.read_bytes())
+        print(f"Wrote {dst_css}")
+    else:
+        print(f"Warning: CSS source not found: {src_css}", file=sys.stderr)
+
     chars = decode_chars(CHARS_JSON)
     cps = sorted({ord(ch) for ch in chars})
 
-    # Build glyph set:
-    # base glyphs are power 1
-    # alternates: .p2, .p3
     glyphs: Dict[str, object] = {}
     cmap: Dict[int, str] = {}
 
@@ -597,11 +584,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         if not svg_path:
             missing.append(f"power{power} U+{cp:04X} missing (expected dist/x5-n{power}-u*.svg)")
             return TTGlyphPen(None).glyph()
-
         vb, rects = svg_rects(svg_path, args.upm)
         return rects_to_ttglyph(vb, rects, args.upm)
 
-    # Base glyphs (p1)
     for cp in cps:
         gname = glyph_name_for_codepoint(cp)
         base_names.append(gname)
@@ -610,7 +595,6 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     glyph_order.extend(base_names)
 
-    # Alternate glyphs (p2/p3)
     for p in powers[1:]:
         for cp in cps:
             base = glyph_name_for_codepoint(cp)
@@ -625,13 +609,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         if len(missing) > 80:
             print(f"  ... and {len(missing) - 80} more")
 
-    # Build font
     fb = FontBuilder(args.upm, isTTF=True)
     fb.setupGlyphOrder(glyph_order)
     fb.setupCharacterMap(cmap)
     fb.setupGlyf(glyphs)
 
-    # Horizontal metrics: monospace square cell
     glyf_table = fb.font["glyf"]
     hmtx: Dict[str, Tuple[int, int]] = {}
     aw = args.upm
@@ -667,7 +649,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     fb.setupPost()
     fb.setupMaxp()
 
-    # fvar opsz axis (no gvar needed since we're using feature variations substitutions)
     axis = Axis("opsz", OPSZ_MIN, OPSZ_DEFAULT, OPSZ_MAX, "Optical Size")
     fb.setupFvar(
         axes=[(axis.tag, axis.min, axis.default, axis.max, axis.name)],
@@ -680,8 +661,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         ],
     )
 
-    # Build rvrn substitutions by opsz ranges
-    eps = 1e-3  # avoid overlap at boundary
+    eps = 1e-3
     p2_min_u = SNAP_OPSZ_MAX_P1
     p2_max_u = SNAP_OPSZ_MAX_P2 - eps
     p3_min_u = SNAP_OPSZ_MAX_P2
@@ -709,14 +689,12 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     addFeatureVariations(fb.font, conditional_subs, featureTag="rvrn")
 
-    # fontTools version compatibility: recalcBBoxes may be a bool flag, not a method
     if callable(getattr(fb.font, "recalcBBoxes", None)):
         fb.font.recalcBBoxes()
     else:
         fb.font.recalcBBoxes = True
     fb.font.recalcTimestamp = True
 
-    # Write outputs
     ttf_path = out_dir / "x5.ttf"
     fb.font.save(str(ttf_path))
     print(f"Wrote {ttf_path}")

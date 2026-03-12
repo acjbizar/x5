@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>x5 — glyph designer</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --panel: #121723;
+      --panel2: #171e2c;
+      --panel3: #0f1420;
+      --text: #eef2f7;
+      --muted: #9aa7bc;
+      --border: rgba(255,255,255,.12);
+      --border-strong: rgba(255,255,255,.22);
+      --accent: #7dd3fc;
+      --accent-2: #c4b5fd;
+      --danger: #fca5a5;
+      --shadow: 0 16px 42px rgba(0,0,0,.35);
+      --radius: 16px;
+      --cell-off: #0d1320;
+      --cell-on: #eef2f7;
+      --cell-grid: rgba(255,255,255,.08);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b0d12 0%, #0e1320 100%);
+      color: var(--text);
+      font: 500 14px/1.45 var(--font);
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: 12px;
+      padding: .65rem .85rem;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease;
+    }
+
+    button:hover { border-color: var(--border-strong); }
+    button:active { transform: translateY(1px); }
+    button.primary {
+      background: linear-gradient(180deg, #22324b 0%, #1a2638 100%);
+      border-color: rgba(125,211,252,.35);
+    }
+    button.ghost { background: transparent; }
+    button.danger { border-color: rgba(252,165,165,.3); color: #ffd5d5; }
+
+    input, textarea, select {
+      width: 100%;
+      background: var(--panel3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: .75rem .85rem;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(125,211,252,.55);
+      box-shadow: 0 0 0 3px rgba(125,211,252,.12);
+    }
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+      gap: 20px;
+      padding: 20px;
+      min-height: 100%;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.02) 0%, rgba(255,255,255,.01) 100%), var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel > .section {
+      padding: 18px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .panel > .section:first-child { border-top: 0; }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 750;
+      letter-spacing: .01em;
+    }
+    h2 {
+      font-size: .98rem;
+      font-weight: 700;
+      margin-bottom: .8rem;
+    }
+    h3 {
+      font-size: .86rem;
+      font-weight: 700;
+      margin-bottom: .55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .subtle {
+      color: var(--muted);
+      font-size: .93rem;
+    }
+    .small { font-size: .85rem; color: var(--muted); }
+    .mono { font-family: var(--mono); }
+
+    .header-row,
+    .row,
+    .actions,
+    .chips,
+    .toolbar,
+    .meta-grid,
+    .preview-grid,
+    .source-actions,
+    .dataset-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .header-row { justify-content: space-between; }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .meta-grid .full { grid-column: 1 / -1; }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    label {
+      display: grid;
+      gap: .45rem;
+      font-weight: 650;
+    }
+
+    .stack { display: grid; gap: 12px; }
+    .stack-lg { display: grid; gap: 18px; }
+
+    .glyph-list-wrap {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--panel3);
+    }
+    .glyph-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 380px;
+      overflow: auto;
+    }
+    .glyph-list li + li { border-top: 1px solid rgba(255,255,255,.05); }
+    .glyph-item {
+      width: 100%;
+      padding: .8rem .9rem;
+      border: 0;
+      background: transparent;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      border-radius: 0;
+    }
+    .glyph-item:hover { background: rgba(255,255,255,.03); }
+    .glyph-item.is-selected { background: rgba(125,211,252,.12); }
+    .glyph-swatch {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #0b0f18;
+      border: 1px solid rgba(255,255,255,.08);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      overflow: hidden;
+    }
+    .glyph-meta {
+      min-width: 0;
+      display: grid;
+      gap: .1rem;
+    }
+    .glyph-title {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .glyph-subtitle {
+      color: var(--muted);
+      font-size: .84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .glyph-count {
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .editor-shell {
+      display: grid;
+      grid-template-columns: auto minmax(220px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .grid-editor {
+      width: min(100%, 380px);
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel3);
+      border: 1px solid var(--border);
+      user-select: none;
+      touch-action: none;
+    }
+    .grid-cell {
+      appearance: none;
+      border: 1px solid var(--cell-grid);
+      background: var(--cell-off);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      padding: 0;
+      aspect-ratio: 1;
+      font-size: 0;
+    }
+    .grid-cell[aria-pressed="true"] {
+      background: var(--cell-on);
+      border-color: rgba(255,255,255,.2);
+    }
+
+    .helper-box,
+    .preview-box {
+      background: var(--panel3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .helper-box code,
+    .status code {
+      font-family: var(--mono);
+      background: rgba(255,255,255,.04);
+      padding: .12rem .35rem;
+      border-radius: .45rem;
+    }
+
+    .preview-box canvas,
+    .preview-box svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+    .preview-box.canvas-box {
+      padding-bottom: 12px;
+    }
+
+    .status {
+      padding: .7rem .85rem;
+      border-radius: 12px;
+      background: rgba(125,211,252,.08);
+      border: 1px solid rgba(125,211,252,.18);
+      color: #d7f3ff;
+    }
+    .status.error {
+      background: rgba(252,165,165,.08);
+      border-color: rgba(252,165,165,.22);
+      color: #ffd7d7;
+    }
+
+    .output {
+      min-height: 140px;
+      white-space: pre;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    @media (max-width: 1180px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .editor-shell,
+      .preview-grid,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <aside class="panel" aria-label="Source and glyph list">
+      <section class="section stack-lg">
+        <div class="header-row">
+          <div class="stack" style="gap:4px">
+            <h1>x5 glyph designer</h1>
+            <p class="subtle">Load <span class="mono">data/chars.php</span>, edit the 5×5 cells, and preview the recursive x5 structure live.</p>
+          </div>
+          <span class="pill"><span id="glyphCount">0</span> glyphs</span>
+        </div>
+
+        <div class="stack">
+          <label for="sourceInput">PHP source</label>
+          <textarea id="sourceInput" spellcheck="false" placeholder="Paste data/chars.php here."></textarea>
+          <div class="source-actions">
+            <button class="primary" id="parseSourceBtn" type="button">Parse source</button>
+            <button id="loadExampleBtn" type="button">Load pasted example</button>
+            <button id="clearSourceBtn" type="button">Clear</button>
+            <input id="fileInput" type="file" accept=".php,.txt" style="max-width:240px">
+          </div>
+          <div id="status" class="status">Paste your x5 <code>chars.php</code> data and click <strong>Parse source</strong>.</div>
+        </div>
+      </section>
+
+      <section class="section stack">
+        <div class="row" style="justify-content:space-between;align-items:end">
+          <label style="flex:1 1 180px">
+            Search glyphs
+            <input id="searchInput" type="search" placeholder="Search by character, key, comment, or codepoint">
+          </label>
+          <label style="width:160px">
+            New glyph key
+            <input id="newGlyphKeyInput" type="text" placeholder="0x41 or A">
+          </label>
+          <button id="addGlyphBtn" type="button">New</button>
+        </div>
+
+        <div class="glyph-list-wrap">
+          <ul id="glyphList" class="glyph-list" aria-label="Glyph list"></ul>
+        </div>
+      </section>
+    </aside>
+
+    <section class="panel" aria-label="Glyph editor and previews">
+      <section class="section stack-lg">
+        <div class="meta-grid">
+          <label>
+            Glyph key
+            <input id="glyphKeyInput" type="text" placeholder="0x41">
+          </label>
+          <label>
+            Character preview
+            <input id="glyphCharInput" type="text" readonly>
+          </label>
+          <label class="full">
+            Comment / label
+            <input id="glyphCommentInput" type="text" placeholder="Latin Capital Letter A">
+          </label>
+        </div>
+
+        <div class="editor-shell">
+          <div class="grid-editor" id="gridEditor" role="group" aria-label="5 by 5 glyph grid"></div>
+
+          <div class="stack-lg">
+            <div class="helper-box stack">
+              <h2>Grid tools</h2>
+              <div class="actions">
+                <button id="clearGlyphBtn" type="button">Clear</button>
+                <button id="fillGlyphBtn" type="button">Fill</button>
+                <button id="invertGlyphBtn" type="button">Invert</button>
+              </div>
+              <div class="actions">
+                <button id="shiftUpBtn" type="button">Shift up</button>
+                <button id="shiftDownBtn" type="button">Shift down</button>
+                <button id="shiftLeftBtn" type="button">Shift left</button>
+                <button id="shiftRightBtn" type="button">Shift right</button>
+              </div>
+              <div class="actions">
+                <button id="mirrorHBtn" type="button">Mirror H</button>
+                <button id="mirrorVBtn" type="button">Mirror V</button>
+                <button id="rotateLeftBtn" type="button">Rotate ↺</button>
+                <button id="rotateRightBtn" type="button">Rotate ↻</button>
+              </div>
+            </div>
+
+            <div class="helper-box stack">
+              <h2>Glyph actions</h2>
+              <div class="actions">
+                <button class="primary" id="saveGlyphMetaBtn" type="button">Apply key/comment</button>
+                <button id="duplicateGlyphBtn" type="button">Duplicate</button>
+                <button class="danger" id="deleteGlyphBtn" type="button">Delete glyph</button>
+              </div>
+              <p class="small">Keys may be numeric codepoints like <code>0x41</code> or string keys for future ligatures. A single character like <code>A</code> is stored as its Unicode codepoint.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stack-lg">
+        <div class="preview-grid">
+          <div class="preview-box stack">
+            <div class="header-row">
+              <div class="stack" style="gap:4px">
+                <h2>Glyph preview</h2>
+                <p class="small">Direct 5×5 block rendering.</p>
+              </div>
+              <span class="pill"><span id="activeCellCount">0</span> active cells</span>
+            </div>
+            <div id="glyphSvgWrap"></div>
+          </div>
+
+          <div class="preview-box canvas-box stack">
+            <div class="header-row">
+              <div class="stack" style="gap:4px">
+                <h2>Recursive x5 preview</h2>
+                <p class="small">Each active cell expands into the glyph again.</p>
+              </div>
+              <label class="small" style="display:flex;align-items:center;gap:8px;font-weight:600;white-space:nowrap;">
+                Depth
+                <input id="recursiveDepthInput" type="range" min="0" max="3" step="1" value="2" style="width:120px">
+                <span id="recursiveDepthValue">2</span>
+              </label>
+            </div>
+            <canvas id="recursiveCanvas" width="625" height="625" aria-label="Recursive glyph preview"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stack-lg">
+        <div class="stack">
+          <div class="header-row">
+            <div class="stack" style="gap:4px">
+              <h2>Text preview</h2>
+              <p class="small">Uses the loaded dataset, not only the current glyph.</p>
+            </div>
+            <label class="small" style="display:flex;align-items:center;gap:8px;font-weight:600;white-space:nowrap;">
+              Scale
+              <input id="textScaleInput" type="range" min="6" max="24" step="1" value="12" style="width:120px">
+              <span id="textScaleValue">12</span>
+            </label>
+          </div>
+          <label>
+            Preview text
+            <input id="textPreviewInput" type="text" value="X5 TYPE" placeholder="Type preview text here">
+          </label>
+          <div class="preview-box">
+            <div id="textSvgWrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stack-lg">
+        <div class="stack">
+          <div class="header-row">
+            <div class="stack" style="gap:4px">
+              <h2>Export current glyph</h2>
+              <p class="small">PHP assignment for the selected glyph.</p>
+            </div>
+            <div class="dataset-actions">
+              <button id="copyGlyphBtn" type="button">Copy</button>
+            </div>
+          </div>
+          <textarea id="glyphExportOutput" class="output" readonly spellcheck="false"></textarea>
+        </div>
+
+        <div class="stack">
+          <div class="header-row">
+            <div class="stack" style="gap:4px">
+              <h2>Export full dataset</h2>
+              <p class="small">Sorted PHP output ready to save back to <span class="mono">data/chars.php</span>.</p>
+            </div>
+            <div class="dataset-actions">
+              <button id="copyDatasetBtn" type="button">Copy</button>
+              <button class="primary" id="downloadDatasetBtn" type="button">Download chars.php</button>
+            </div>
+          </div>
+          <textarea id="datasetExportOutput" class="output" readonly spellcheck="false"></textarea>
+          <p class="footer-note">The parser preserves comments as labels where possible. Arrays are normalized to 25 values so the editor stays consistent.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const GRID_SIZE = 5;
+      const CELL_COUNT = GRID_SIZE * GRID_SIZE;
+      const DEFAULT_SOURCE = `<?php
+ declare(strict_types=1);
+ 
+ $c = [];
+ 
+ $c[0x20] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];// Space (SP)
+ $c[0x21] = [0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0];// Exclamation Mark
+ $c[0x41] = [0,1,1,1,0,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1];// Latin Capital Letter A
+ $c[0x42] = [1,1,1,1,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,1,1,1,0];// Latin Capital Letter B
+ $c[0x58] = [1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1];// Latin Capital Letter X
+ $c[0x35] = [1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,1,0];// Digit Five
+ 
+ return $c;`;
+
+      const els = {
+        sourceInput: document.getElementById('sourceInput'),
+        parseSourceBtn: document.getElementById('parseSourceBtn'),
+        loadExampleBtn: document.getElementById('loadExampleBtn'),
+        clearSourceBtn: document.getElementById('clearSourceBtn'),
+        fileInput: document.getElementById('fileInput'),
+        status: document.getElementById('status'),
+        glyphCount: document.getElementById('glyphCount'),
+        glyphList: document.getElementById('glyphList'),
+        searchInput: document.getElementById('searchInput'),
+        newGlyphKeyInput: document.getElementById('newGlyphKeyInput'),
+        addGlyphBtn: document.getElementById('addGlyphBtn'),
+        glyphKeyInput: document.getElementById('glyphKeyInput'),
+        glyphCharInput: document.getElementById('glyphCharInput'),
+        glyphCommentInput: document.getElementById('glyphCommentInput'),
+        gridEditor: document.getElementById('gridEditor'),
+        clearGlyphBtn: document.getElementById('clearGlyphBtn'),
+        fillGlyphBtn: document.getElementById('fillGlyphBtn'),
+        invertGlyphBtn: document.getElementById('invertGlyphBtn'),
+        shiftUpBtn: document.getElementById('shiftUpBtn'),
+        shiftDownBtn: document.getElementById('shiftDownBtn'),
+        shiftLeftBtn: document.getElementById('shiftLeftBtn'),
+        shiftRightBtn: document.getElementById('shiftRightBtn'),
+        mirrorHBtn: document.getElementById('mirrorHBtn'),
+        mirrorVBtn: document.getElementById('mirrorVBtn'),
+        rotateLeftBtn: document.getElementById('rotateLeftBtn'),
+        rotateRightBtn: document.getElementById('rotateRightBtn'),
+        saveGlyphMetaBtn: document.getElementById('saveGlyphMetaBtn'),
+        duplicateGlyphBtn: document.getElementById('duplicateGlyphBtn'),
+        deleteGlyphBtn: document.getElementById('deleteGlyphBtn'),
+        glyphSvgWrap: document.getElementById('glyphSvgWrap'),
+        activeCellCount: document.getElementById('activeCellCount'),
+        recursiveCanvas: document.getElementById('recursiveCanvas'),
+        recursiveDepthInput: document.getElementById('recursiveDepthInput'),
+        recursiveDepthValue: document.getElementById('recursiveDepthValue'),
+        textPreviewInput: document.getElementById('textPreviewInput'),
+        textScaleInput: document.getElementById('textScaleInput'),
+        textScaleValue: document.getElementById('textScaleValue'),
+        textSvgWrap: document.getElementById('textSvgWrap'),
+        glyphExportOutput: document.getElementById('glyphExportOutput'),
+        datasetExportOutput: document.getElementById('datasetExportOutput'),
+        copyGlyphBtn: document.getElementById('copyGlyphBtn'),
+        copyDatasetBtn: document.getElementById('copyDatasetBtn'),
+        downloadDatasetBtn: document.getElementById('downloadDatasetBtn'),
+      };
+
+      const state = {
+        glyphs: [],
+        selectedId: null,
+        search: '',
+        dragValue: null,
+      };
+
+      function uid() {
+        return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      }
+
+      function normalizeCells(values) {
+        const out = new Array(CELL_COUNT).fill(0);
+        for (let i = 0; i < Math.min(values.length, CELL_COUNT); i += 1) {
+          out[i] = Number(values[i]) ? 1 : 0;
+        }
+        return out;
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      }
+
+      function escapePhpSingleQuoted(text) {
+        return String(text).replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+      }
+
+      function stripCommentLines(source) {
+        return source
+          .split(/\r?\n/)
+          .filter((line) => {
+            const t = line.trim();
+            return !(t.startsWith('#') || t.startsWith('//'));
+          })
+          .join('\n');
+      }
+
+      function parseKeyLiteral(rawLiteral) {
+        const raw = rawLiteral.trim();
+        if (/^0x[0-9a-f]+$/i.test(raw)) {
+          const codepoint = Number.parseInt(raw, 16);
+          return {
+            keyType: 'codepoint',
+            keyValue: codepoint,
+            displayKey: `0x${codepoint.toString(16).toUpperCase()}`,
+          };
+        }
+        if (/^\d+$/.test(raw)) {
+          const codepoint = Number.parseInt(raw, 10);
+          return {
+            keyType: 'codepoint',
+            keyValue: codepoint,
+            displayKey: `0x${codepoint.toString(16).toUpperCase()}`,
+          };
+        }
+        if ((raw.startsWith("'") && raw.endsWith("'")) || (raw.startsWith('"') && raw.endsWith('"'))) {
+          const inner = raw.slice(1, -1).replace(/\\(['"\\])/g, '$1');
+          const chars = Array.from(inner);
+          if (chars.length === 1) {
+            const codepoint = inner.codePointAt(0);
+            return {
+              keyType: 'codepoint',
+              keyValue: codepoint,
+              displayKey: `0x${codepoint.toString(16).toUpperCase()}`,
+            };
+          }
+          return {
+            keyType: 'string',
+            keyValue: inner,
+            displayKey: `'${escapePhpSingleQuoted(inner)}'`,
+          };
+        }
+        throw new Error(`Unsupported key syntax: ${raw}`);
+      }
+
+      function parseUserKeyInput(rawInput) {
+        const raw = rawInput.trim();
+        if (!raw) {
+          throw new Error('Please enter a glyph key first.');
+        }
+        if (/^0x[0-9a-f]+$/i.test(raw) || /^\d+$/.test(raw)) {
+          return parseKeyLiteral(raw);
+        }
+        if ((raw.startsWith("'") && raw.endsWith("'")) || (raw.startsWith('"') && raw.endsWith('"'))) {
+          return parseKeyLiteral(raw);
+        }
+        const chars = Array.from(raw);
+        if (chars.length === 1) {
+          const codepoint = raw.codePointAt(0);
+          return {
+            keyType: 'codepoint',
+            keyValue: codepoint,
+            displayKey: `0x${codepoint.toString(16).toUpperCase()}`,
+          };
+        }
+        return {
+          keyType: 'string',
+          keyValue: raw,
+          displayKey: `'${escapePhpSingleQuoted(raw)}'`,
+        };
+      }
+
+      function glyphSortValue(glyph) {
+        if (glyph.keyType === 'codepoint') {
+          return [0, glyph.keyValue, ''];
+        }
+        return [1, Number.MAX_SAFE_INTEGER, String(glyph.keyValue).toLowerCase()];
+      }
+
+      function sortGlyphs() {
+        state.glyphs.sort((a, b) => {
+          const av = glyphSortValue(a);
+          const bv = glyphSortValue(b);
+          if (av[0] !== bv[0]) return av[0] - bv[0];
+          if (av[1] !== bv[1]) return av[1] - bv[1];
+          return av[2].localeCompare(bv[2]);
+        });
+      }
+
+      function makeGlyphId(parsedKey) {
+        return parsedKey.keyType === 'codepoint'
+          ? `cp:${parsedKey.keyValue}`
+          : `str:${parsedKey.keyValue}`;
+      }
+
+      function charFromGlyph(glyph) {
+        if (glyph.keyType !== 'codepoint') return glyph.keyValue;
+        try {
+          return String.fromCodePoint(glyph.keyValue);
+        } catch {
+          return '�';
+        }
+      }
+
+      function glyphLabel(glyph) {
+        if (glyph.comment) return glyph.comment;
+        if (glyph.keyType === 'codepoint') {
+          return `U+${glyph.keyValue.toString(16).toUpperCase().padStart(4, '0')}`;
+        }
+        return glyph.keyValue;
+      }
+
+      function formatGlyphKey(glyph) {
+        if (glyph.keyType === 'codepoint') {
+          return `0x${glyph.keyValue.toString(16).toUpperCase()}`;
+        }
+        return `'${escapePhpSingleQuoted(glyph.keyValue)}'`;
+      }
+
+      function glyphSummary(glyph) {
+        if (glyph.keyType === 'codepoint') {
+          const cp = `U+${glyph.keyValue.toString(16).toUpperCase().padStart(4, '0')}`;
+          return `${cp} · ${formatGlyphKey(glyph)}`;
+        }
+        return `string key · ${formatGlyphKey(glyph)}`;
+      }
+
+      function parsePhpSource(source) {
+        const cleaned = stripCommentLines(source);
+        const regex = /\$c\[(0x[0-9A-Fa-f]+|\d+|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")\]\s*=\s*\[((?:.|\n|\r)*?)\]\s*;\s*(?:\/\/\s*(.*))?/g;
+        const glyphs = [];
+        const seen = new Set();
+        let match;
+
+        while ((match = regex.exec(cleaned)) !== null) {
+          const [, keyLiteral, cellsLiteral, trailingComment = ''] = match;
+          const parsedKey = parseKeyLiteral(keyLiteral);
+          const id = makeGlyphId(parsedKey);
+          if (seen.has(id)) {
+            throw new Error(`Duplicate glyph key found: ${formatParsedKey(parsedKey)}`);
+          }
+          seen.add(id);
+
+          const rawValues = cellsLiteral
+            .split(',')
+            .map((part) => part.trim())
+            .filter(Boolean)
+            .map((part) => {
+              const value = Number.parseInt(part, 10);
+              return Number.isNaN(value) ? 0 : value;
+            });
+
+          glyphs.push({
+            uid: uid(),
+            id,
+            keyType: parsedKey.keyType,
+            keyValue: parsedKey.keyValue,
+            comment: trailingComment.trim(),
+            cells: normalizeCells(rawValues),
+          });
+        }
+
+        sortGlyphArray(glyphs);
+        return glyphs;
+      }
+
+      function formatParsedKey(parsedKey) {
+        return parsedKey.keyType === 'codepoint'
+          ? `0x${parsedKey.keyValue.toString(16).toUpperCase()}`
+          : `'${escapePhpSingleQuoted(parsedKey.keyValue)}'`;
+      }
+
+      function sortGlyphArray(glyphs) {
+        glyphs.sort((a, b) => {
+          const av = a.keyType === 'codepoint' ? [0, a.keyValue, ''] : [1, Number.MAX_SAFE_INTEGER, String(a.keyValue).toLowerCase()];
+          const bv = b.keyType === 'codepoint' ? [0, b.keyValue, ''] : [1, Number.MAX_SAFE_INTEGER, String(b.keyValue).toLowerCase()];
+          if (av[0] !== bv[0]) return av[0] - bv[0];
+          if (av[1] !== bv[1]) return av[1] - bv[1];
+          return av[2].localeCompare(bv[2]);
+        });
+      }
+
+      function getSelectedGlyph() {
+        return state.glyphs.find((glyph) => glyph.uid === state.selectedId) || null;
+      }
+
+      function setStatus(message, isError = false) {
+        els.status.textContent = message;
+        els.status.classList.toggle('error', isError);
+      }
+
+      function updateGlyphCount() {
+        els.glyphCount.textContent = String(state.glyphs.length);
+      }
+
+      function renderGlyphList() {
+        const query = state.search.trim().toLowerCase();
+        const filtered = state.glyphs.filter((glyph) => {
+          if (!query) return true;
+          const haystack = [
+            glyphLabel(glyph),
+            glyphSummary(glyph),
+            charFromGlyph(glyph),
+            formatGlyphKey(glyph),
+          ].join(' ').toLowerCase();
+          return haystack.includes(query);
+        });
+
+        if (!filtered.length) {
+          els.glyphList.innerHTML = '<li><div class="glyph-item"><div class="glyph-meta"><div class="glyph-title">No glyphs found</div><div class="glyph-subtitle">Try a different search or load a dataset.</div></div></div></li>';
+          return;
+        }
+
+        els.glyphList.innerHTML = filtered.map((glyph) => {
+          const isSelected = glyph.uid === state.selectedId;
+          const active = glyph.cells.reduce((sum, value) => sum + value, 0);
+          return `
+            <li>
+              <button class="glyph-item ${isSelected ? 'is-selected' : ''}" type="button" data-glyph-id="${escapeHtml(glyph.uid)}">
+                <div class="glyph-swatch">${buildMiniSvg(glyph.cells)}</div>
+                <div class="glyph-meta">
+                  <div class="glyph-title">${escapeHtml(charFromGlyph(glyph))} <span class="small">${escapeHtml(glyphLabel(glyph))}</span></div>
+                  <div class="glyph-subtitle mono">${escapeHtml(glyphSummary(glyph))}</div>
+                </div>
+                <div class="glyph-count">${active}/25</div>
+              </button>
+            </li>`;
+        }).join('');
+      }
+
+      function buildMiniSvg(cells) {
+        const unit = 6;
+        const size = GRID_SIZE * unit;
+        const rects = [];
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            const value = cells[row * GRID_SIZE + col];
+            if (!value) continue;
+            rects.push(`<rect x="${col * unit}" y="${row * unit}" width="${unit}" height="${unit}" fill="#eef2f7" />`);
+          }
+        }
+        return `<svg viewBox="0 0 ${size} ${size}" aria-hidden="true"><rect width="${size}" height="${size}" fill="#0b0f18"/>${rects.join('')}</svg>`;
+      }
+
+      function renderEditorGrid() {
+        const glyph = getSelectedGlyph();
+        const cells = glyph ? glyph.cells : new Array(CELL_COUNT).fill(0);
+        els.gridEditor.innerHTML = cells.map((value, index) => `
+          <button
+            class="grid-cell"
+            type="button"
+            data-index="${index}"
+            aria-label="Cell ${index + 1}"
+            aria-pressed="${value ? 'true' : 'false'}"
+            title="Cell ${index + 1}"
+          ></button>
+        `).join('');
+      }
+
+      function renderSelectedGlyphMeta() {
+        const glyph = getSelectedGlyph();
+        if (!glyph) {
+          els.glyphKeyInput.value = '';
+          els.glyphCommentInput.value = '';
+          els.glyphCharInput.value = '';
+          els.activeCellCount.textContent = '0';
+          els.glyphSvgWrap.innerHTML = '';
+          clearRecursiveCanvas();
+          els.glyphExportOutput.value = '';
+          return;
+        }
+
+        els.glyphKeyInput.value = glyph.keyType === 'codepoint' ? formatGlyphKey(glyph) : glyph.keyValue;
+        els.glyphCommentInput.value = glyph.comment || '';
+        els.glyphCharInput.value = glyph.keyType === 'codepoint'
+          ? `${charFromGlyph(glyph)} · U+${glyph.keyValue.toString(16).toUpperCase().padStart(4, '0')}`
+          : `${glyph.keyValue} · string key`;
+        els.activeCellCount.textContent = String(glyph.cells.reduce((sum, value) => sum + value, 0));
+
+        els.glyphSvgWrap.innerHTML = buildPreviewSvg(glyph.cells);
+        renderRecursivePreview();
+        els.glyphExportOutput.value = formatGlyphAssignment(glyph);
+      }
+
+      function buildPreviewSvg(cells) {
+        const margin = 12;
+        const unit = 26;
+        const gap = 4;
+        const size = margin * 2 + GRID_SIZE * unit + (GRID_SIZE - 1) * gap;
+        const rects = [];
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            const x = margin + col * (unit + gap);
+            const y = margin + row * (unit + gap);
+            rects.push(`<rect x="${x}" y="${y}" width="${unit}" height="${unit}" rx="7" fill="${cells[row * GRID_SIZE + col] ? '#111827' : '#d9e1ee'}" />`);
+          }
+        }
+        return `<svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Glyph preview"><rect width="${size}" height="${size}" fill="#ffffff"/>${rects.join('')}</svg>`;
+      }
+
+      function clearRecursiveCanvas() {
+        const ctx = els.recursiveCanvas.getContext('2d');
+        ctx.clearRect(0, 0, els.recursiveCanvas.width, els.recursiveCanvas.height);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, els.recursiveCanvas.width, els.recursiveCanvas.height);
+      }
+
+      function drawRecursiveGlyph(ctx, cells, x, y, size, depth) {
+        const unit = size / GRID_SIZE;
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            if (!cells[row * GRID_SIZE + col]) continue;
+            const nextX = x + col * unit;
+            const nextY = y + row * unit;
+            if (depth === 0) {
+              ctx.fillRect(nextX, nextY, unit, unit);
+            } else {
+              drawRecursiveGlyph(ctx, cells, nextX, nextY, unit, depth - 1);
+            }
+          }
+        }
+      }
+
+      function renderRecursivePreview() {
+        const glyph = getSelectedGlyph();
+        clearRecursiveCanvas();
+        if (!glyph) return;
+        const ctx = els.recursiveCanvas.getContext('2d');
+        const depth = Number(els.recursiveDepthInput.value);
+        els.recursiveDepthValue.textContent = String(depth);
+        ctx.fillStyle = '#111827';
+        drawRecursiveGlyph(ctx, glyph.cells, 0, 0, els.recursiveCanvas.width, depth);
+      }
+
+      function buildGlyphMap() {
+        const map = new Map();
+        for (const glyph of state.glyphs) {
+          if (glyph.keyType === 'codepoint') {
+            map.set(glyph.keyValue, glyph);
+          }
+        }
+        return map;
+      }
+
+      function buildTextPreviewSvg() {
+        const text = els.textPreviewInput.value || '';
+        const scale = Number(els.textScaleInput.value);
+        els.textScaleValue.textContent = String(scale);
+        const map = buildGlyphMap();
+        const chars = Array.from(text || ' ');
+        const gap = scale;
+        const unit = scale;
+        const glyphSize = GRID_SIZE * unit;
+        const width = Math.max(1, chars.length * glyphSize + Math.max(0, chars.length - 1) * gap + 20);
+        const height = glyphSize + 20;
+        const out = [`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Text preview"><rect width="${width}" height="${height}" fill="#ffffff"/>`];
+
+        chars.forEach((char, index) => {
+          const cp = char.codePointAt(0);
+          const glyph = map.get(cp);
+          const offsetX = 10 + index * (glyphSize + gap);
+          const offsetY = 10;
+          if (!glyph) {
+            out.push(`<rect x="${offsetX}" y="${offsetY}" width="${glyphSize}" height="${glyphSize}" fill="#f3f4f6" stroke="#d1d5db" stroke-dasharray="6 4"/>`);
+            out.push(`<text x="${offsetX + glyphSize / 2}" y="${offsetY + glyphSize / 2 + scale / 3}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="${Math.max(10, scale)}" fill="#6b7280">?</text>`);
+            return;
+          }
+          for (let row = 0; row < GRID_SIZE; row += 1) {
+            for (let col = 0; col < GRID_SIZE; col += 1) {
+              if (!glyph.cells[row * GRID_SIZE + col]) continue;
+              out.push(`<rect x="${offsetX + col * unit}" y="${offsetY + row * unit}" width="${unit}" height="${unit}" fill="#111827"/>`);
+            }
+          }
+        });
+
+        out.push('</svg>');
+        return out.join('');
+      }
+
+      function renderTextPreview() {
+        els.textSvgWrap.innerHTML = buildTextPreviewSvg();
+      }
+
+      function formatGlyphAssignment(glyph) {
+        const cells = glyph.cells.join(',');
+        const suffix = glyph.comment ? `// ${glyph.comment}` : '';
+        return `$c[${formatGlyphKey(glyph)}] = [${cells}];${suffix}`;
+      }
+
+      function formatDataset() {
+        const lines = [
+          '<?php',
+          'declare(strict_types=1);',
+          '',
+          '$c = [];',
+          '',
+        ];
+
+        const glyphs = [...state.glyphs];
+        sortGlyphArray(glyphs);
+
+        for (const glyph of glyphs) {
+          lines.push(formatGlyphAssignment(glyph));
+        }
+
+        lines.push('', 'return $c;', '');
+        return lines.join('\n');
+      }
+
+      function updateExports() {
+        const glyph = getSelectedGlyph();
+        els.glyphExportOutput.value = glyph ? formatGlyphAssignment(glyph) : '';
+        els.datasetExportOutput.value = formatDataset();
+      }
+
+      function renderAll() {
+        sortGlyphs();
+        updateGlyphCount();
+        renderGlyphList();
+        renderEditorGrid();
+        renderSelectedGlyphMeta();
+        renderTextPreview();
+        updateExports();
+      }
+
+      function selectGlyphByUid(uidValue) {
+        const glyph = state.glyphs.find((item) => item.uid === uidValue);
+        if (!glyph) return;
+        state.selectedId = glyph.uid;
+        renderAll();
+      }
+
+      function toggleCell(index, forcedValue = null) {
+        const glyph = getSelectedGlyph();
+        if (!glyph) return;
+        glyph.cells[index] = forcedValue === null ? (glyph.cells[index] ? 0 : 1) : (forcedValue ? 1 : 0);
+        renderAll();
+      }
+
+      function mutateCells(transformer) {
+        const glyph = getSelectedGlyph();
+        if (!glyph) return;
+        glyph.cells = normalizeCells(transformer([...glyph.cells]));
+        renderAll();
+      }
+
+      function shiftCells(cells, dx, dy) {
+        const out = new Array(CELL_COUNT).fill(0);
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            const nextRow = row + dy;
+            const nextCol = col + dx;
+            if (nextRow < 0 || nextRow >= GRID_SIZE || nextCol < 0 || nextCol >= GRID_SIZE) continue;
+            out[nextRow * GRID_SIZE + nextCol] = cells[row * GRID_SIZE + col];
+          }
+        }
+        return out;
+      }
+
+      function mirrorCells(cells, vertical = false) {
+        const out = new Array(CELL_COUNT).fill(0);
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            const sourceIndex = row * GRID_SIZE + col;
+            const targetRow = vertical ? (GRID_SIZE - 1 - row) : row;
+            const targetCol = vertical ? col : (GRID_SIZE - 1 - col);
+            out[targetRow * GRID_SIZE + targetCol] = cells[sourceIndex];
+          }
+        }
+        return out;
+      }
+
+      function rotateCells(cells, clockwise = true) {
+        const out = new Array(CELL_COUNT).fill(0);
+        for (let row = 0; row < GRID_SIZE; row += 1) {
+          for (let col = 0; col < GRID_SIZE; col += 1) {
+            const sourceIndex = row * GRID_SIZE + col;
+            const targetRow = clockwise ? col : (GRID_SIZE - 1 - col);
+            const targetCol = clockwise ? (GRID_SIZE - 1 - row) : row;
+            out[targetRow * GRID_SIZE + targetCol] = cells[sourceIndex];
+          }
+        }
+        return out;
+      }
+
+      async function copyText(value, button) {
+        try {
+          await navigator.clipboard.writeText(value);
+          const original = button.textContent;
+          button.textContent = 'Copied';
+          window.setTimeout(() => { button.textContent = original; }, 900);
+        } catch {
+          setStatus('Copy failed. Your browser may block clipboard access here.', true);
+        }
+      }
+
+      function downloadText(filename, text) {
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function addGlyphFromInput(rawInput, duplicateFromSelected = false) {
+        const parsedKey = parseUserKeyInput(rawInput);
+        const id = makeGlyphId(parsedKey);
+        const existing = state.glyphs.find((glyph) => glyph.id === id);
+        if (existing) {
+          state.selectedId = existing.uid;
+          renderAll();
+          setStatus(`Glyph ${formatParsedKey(parsedKey)} already exists, so it has been selected.`);
+          return;
+        }
+        const selected = getSelectedGlyph();
+        const glyph = {
+          uid: uid(),
+          id,
+          keyType: parsedKey.keyType,
+          keyValue: parsedKey.keyValue,
+          comment: '',
+          cells: duplicateFromSelected && selected ? [...selected.cells] : new Array(CELL_COUNT).fill(0),
+        };
+        state.glyphs.push(glyph);
+        state.selectedId = glyph.uid;
+        renderAll();
+        setStatus(`Created glyph ${formatParsedKey(parsedKey)}.`);
+      }
+
+      function applyGlyphMeta() {
+        const glyph = getSelectedGlyph();
+        if (!glyph) return;
+        const parsedKey = parseUserKeyInput(els.glyphKeyInput.value);
+        const nextId = makeGlyphId(parsedKey);
+        const duplicate = state.glyphs.find((item) => item.id === nextId && item.uid !== glyph.uid);
+        if (duplicate) {
+          throw new Error(`Another glyph already uses ${formatParsedKey(parsedKey)}.`);
+        }
+        glyph.keyType = parsedKey.keyType;
+        glyph.keyValue = parsedKey.keyValue;
+        glyph.id = nextId;
+        glyph.comment = els.glyphCommentInput.value.trim();
+        renderAll();
+        setStatus(`Updated glyph ${formatParsedKey(parsedKey)}.`);
+      }
+
+      function deleteSelectedGlyph() {
+        const glyph = getSelectedGlyph();
+        if (!glyph) return;
+        const index = state.glyphs.findIndex((item) => item.uid === glyph.uid);
+        if (index === -1) return;
+        state.glyphs.splice(index, 1);
+        state.selectedId = state.glyphs[Math.max(0, index - 1)]?.uid || state.glyphs[0]?.uid || null;
+        renderAll();
+        setStatus(`Deleted glyph ${formatGlyphKey(glyph)}.`);
+      }
+
+      function parseCurrentSource() {
+        const source = els.sourceInput.value;
+        const glyphs = parsePhpSource(source);
+        state.glyphs = glyphs;
+        state.selectedId = glyphs[0]?.uid || null;
+        renderAll();
+        setStatus(`Parsed ${glyphs.length} glyph${glyphs.length === 1 ? '' : 's'} from the PHP source.`);
+      }
+
+      function bindEvents() {
+        els.parseSourceBtn.addEventListener('click', () => {
+          try {
+            parseCurrentSource();
+          } catch (error) {
+            setStatus(error.message || 'Could not parse the PHP source.', true);
+          }
+        });
+
+        els.loadExampleBtn.addEventListener('click', () => {
+          els.sourceInput.value = DEFAULT_SOURCE;
+          setStatus('Loaded a small sample dataset into the source textarea.');
+        });
+
+        els.clearSourceBtn.addEventListener('click', () => {
+          els.sourceInput.value = '';
+          setStatus('Cleared the source textarea.');
+        });
+
+        els.fileInput.addEventListener('change', async (event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          els.sourceInput.value = await file.text();
+          setStatus(`Loaded ${file.name}. Click Parse source to import it.`);
+        });
+
+        els.searchInput.addEventListener('input', () => {
+          state.search = els.searchInput.value;
+          renderGlyphList();
+        });
+
+        els.addGlyphBtn.addEventListener('click', () => {
+          try {
+            addGlyphFromInput(els.newGlyphKeyInput.value);
+          } catch (error) {
+            setStatus(error.message || 'Could not create glyph.', true);
+          }
+        });
+
+        els.glyphList.addEventListener('click', (event) => {
+          const button = event.target.closest('[data-glyph-id]');
+          if (!button) return;
+          selectGlyphByUid(button.dataset.glyphId);
+        });
+
+        els.gridEditor.addEventListener('pointerdown', (event) => {
+          const cell = event.target.closest('.grid-cell');
+          if (!cell) return;
+          const index = Number(cell.dataset.index);
+          const glyph = getSelectedGlyph();
+          if (!glyph) return;
+          state.dragValue = glyph.cells[index] ? 0 : 1;
+          toggleCell(index, state.dragValue);
+          cell.setPointerCapture?.(event.pointerId);
+          event.preventDefault();
+        });
+
+        els.gridEditor.addEventListener('pointerenter', (event) => {
+          const cell = event.target.closest('.grid-cell');
+          if (!cell || state.dragValue === null || !(event.buttons & 1)) return;
+          toggleCell(Number(cell.dataset.index), state.dragValue);
+        }, true);
+
+        window.addEventListener('pointerup', () => {
+          state.dragValue = null;
+        });
+
+        els.clearGlyphBtn.addEventListener('click', () => mutateCells(() => new Array(CELL_COUNT).fill(0)));
+        els.fillGlyphBtn.addEventListener('click', () => mutateCells(() => new Array(CELL_COUNT).fill(1)));
+        els.invertGlyphBtn.addEventListener('click', () => mutateCells((cells) => cells.map((value) => value ? 0 : 1)));
+        els.shiftUpBtn.addEventListener('click', () => mutateCells((cells) => shiftCells(cells, 0, -1)));
+        els.shiftDownBtn.addEventListener('click', () => mutateCells((cells) => shiftCells(cells, 0, 1)));
+        els.shiftLeftBtn.addEventListener('click', () => mutateCells((cells) => shiftCells(cells, -1, 0)));
+        els.shiftRightBtn.addEventListener('click', () => mutateCells((cells) => shiftCells(cells, 1, 0)));
+        els.mirrorHBtn.addEventListener('click', () => mutateCells((cells) => mirrorCells(cells, false)));
+        els.mirrorVBtn.addEventListener('click', () => mutateCells((cells) => mirrorCells(cells, true)));
+        els.rotateLeftBtn.addEventListener('click', () => mutateCells((cells) => rotateCells(cells, false)));
+        els.rotateRightBtn.addEventListener('click', () => mutateCells((cells) => rotateCells(cells, true)));
+
+        els.saveGlyphMetaBtn.addEventListener('click', () => {
+          try {
+            applyGlyphMeta();
+          } catch (error) {
+            setStatus(error.message || 'Could not update the glyph key.', true);
+          }
+        });
+
+        els.duplicateGlyphBtn.addEventListener('click', () => {
+          const glyph = getSelectedGlyph();
+          if (!glyph) return;
+          const suggestion = glyph.keyType === 'codepoint'
+            ? `0x${(glyph.keyValue + 1).toString(16).toUpperCase()}`
+            : `${glyph.keyValue}-copy`;
+          try {
+            addGlyphFromInput(suggestion, true);
+          } catch (error) {
+            setStatus(error.message || 'Could not duplicate glyph.', true);
+          }
+        });
+
+        els.deleteGlyphBtn.addEventListener('click', () => {
+          deleteSelectedGlyph();
+        });
+
+        els.recursiveDepthInput.addEventListener('input', renderRecursivePreview);
+        els.textPreviewInput.addEventListener('input', renderTextPreview);
+        els.textScaleInput.addEventListener('input', renderTextPreview);
+
+        els.copyGlyphBtn.addEventListener('click', () => copyText(els.glyphExportOutput.value, els.copyGlyphBtn));
+        els.copyDatasetBtn.addEventListener('click', () => copyText(els.datasetExportOutput.value, els.copyDatasetBtn));
+        els.downloadDatasetBtn.addEventListener('click', () => downloadText('chars.php', els.datasetExportOutput.value));
+      }
+
+      function init() {
+        bindEvents();
+        els.sourceInput.value = '';
+        renderAll();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

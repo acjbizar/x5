@@ -7,6 +7,7 @@
   <style>
     :root {
       --bg: #0b0d12;
+      --bg-2: #0e1320;
       --panel: #121723;
       --panel2: #171e2c;
       --panel3: #0f1420;
@@ -22,15 +23,67 @@
       --cell-off: #0d1320;
       --cell-on: #eef2f7;
       --cell-grid: rgba(255,255,255,.08);
+      --preview-paper: #ffffff;
+      --preview-ink: #111827;
+      --preview-muted: #d9e1ee;
+      --preview-missing: #f3f4f6;
+      --preview-missing-stroke: #d1d5db;
+      --preview-missing-text: #6b7280;
       --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]):not([data-theme="light"]) {
+        --bg: #eef2f8;
+        --bg-2: #e4eaf5;
+        --panel: #ffffff;
+        --panel2: #f4f7fb;
+        --panel3: #edf2f8;
+        --text: #162032;
+        --muted: #5d6b82;
+        --border: rgba(17,24,39,.12);
+        --border-strong: rgba(17,24,39,.22);
+        --shadow: 0 16px 42px rgba(17,24,39,.10);
+        --cell-off: #dfe8f3;
+        --cell-on: #162032;
+        --cell-grid: rgba(17,24,39,.10);
+        --preview-paper: #ffffff;
+        --preview-ink: #162032;
+        --preview-muted: #dde5ef;
+        --preview-missing: #edf2f7;
+        --preview-missing-stroke: #c8d1dd;
+        --preview-missing-text: #5d6b82;
+      }
+    }
+
+    :root[data-theme="light"] {
+      --bg: #eef2f8;
+      --bg-2: #e4eaf5;
+      --panel: #ffffff;
+      --panel2: #f4f7fb;
+      --panel3: #edf2f8;
+      --text: #162032;
+      --muted: #5d6b82;
+      --border: rgba(17,24,39,.12);
+      --border-strong: rgba(17,24,39,.22);
+      --shadow: 0 16px 42px rgba(17,24,39,.10);
+      --cell-off: #dfe8f3;
+      --cell-on: #162032;
+      --cell-grid: rgba(17,24,39,.10);
+      --preview-paper: #ffffff;
+      --preview-ink: #162032;
+      --preview-muted: #dde5ef;
+      --preview-missing: #edf2f7;
+      --preview-missing-stroke: #c8d1dd;
+      --preview-missing-text: #5d6b82;
     }
 
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
       margin: 0;
-      background: linear-gradient(180deg, #0b0d12 0%, #0e1320 100%);
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       color: var(--text);
       font: 500 14px/1.45 var(--font);
     }
@@ -234,14 +287,19 @@
 
     .grid-editor {
       width: min(100%, 380px);
+      min-width: 280px;
+      max-width: 380px;
       aspect-ratio: 1;
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 8px;
       padding: 12px;
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel3);
       border: 1px solid var(--border);
+      box-shadow: inset 0 0 0 1px var(--border), 0 10px 28px rgba(0,0,0,.10);
+      align-self: start;
+      justify-self: start;
       user-select: none;
       touch-action: none;
     }
@@ -253,6 +311,7 @@
       display: grid;
       place-items: center;
       min-width: 0;
+      min-height: 44px;
       padding: 0;
       aspect-ratio: 1;
       font-size: 0;
@@ -295,7 +354,7 @@
       border-radius: 12px;
       background: rgba(125,211,252,.08);
       border: 1px solid rgba(125,211,252,.18);
-      color: #d7f3ff;
+      color: var(--text);
     }
     .status.error {
       background: rgba(252,165,165,.08);
@@ -325,6 +384,11 @@
       font-size: .85rem;
     }
 
+    .theme-select {
+      min-width: 120px;
+      width: auto;
+    }
+
     @media (max-width: 1180px) {
       .page {
         grid-template-columns: 1fr;
@@ -349,7 +413,17 @@
             <h1>x5 glyph designer</h1>
             <p class="subtle">Load <span class="mono">data/chars.php</span>, edit the 5×5 cells, and preview the recursive x5 structure live.</p>
           </div>
-          <span class="pill"><span id="glyphCount">0</span> glyphs</span>
+          <div class="toolbar">
+            <label class="small" style="display:flex;align-items:center;gap:8px;font-weight:600;white-space:nowrap;">
+              Theme
+              <select id="themeSelect" class="theme-select">
+                <option value="device">Device</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+            <span class="pill"><span id="glyphCount">0</span> glyphs</span>
+          </div>
         </div>
 
         <div class="stack">
@@ -357,11 +431,12 @@
           <textarea id="sourceInput" spellcheck="false" placeholder="Paste data/chars.php here."></textarea>
           <div class="source-actions">
             <button class="primary" id="parseSourceBtn" type="button">Parse source</button>
-            <button id="loadExampleBtn" type="button">Load pasted example</button>
+            <button id="autoLoadBtn" type="button">Reload data/chars.php</button>
+            <button id="loadExampleBtn" type="button">Load example</button>
             <button id="clearSourceBtn" type="button">Clear</button>
             <input id="fileInput" type="file" accept=".php,.txt" style="max-width:240px">
           </div>
-          <div id="status" class="status">Paste your x5 <code>chars.php</code> data and click <strong>Parse source</strong>.</div>
+          <div id="status" class="status">Trying to load <code>data/chars.php</code> automatically. You can still paste or upload a file manually.</div>
         </div>
       </section>
 
@@ -550,6 +625,8 @@
         loadExampleBtn: document.getElementById('loadExampleBtn'),
         clearSourceBtn: document.getElementById('clearSourceBtn'),
         fileInput: document.getElementById('fileInput'),
+        autoLoadBtn: document.getElementById('autoLoadBtn'),
+        themeSelect: document.getElementById('themeSelect'),
         status: document.getElementById('status'),
         glyphCount: document.getElementById('glyphCount'),
         glyphList: document.getElementById('glyphList'),
@@ -595,6 +672,7 @@
         selectedId: null,
         search: '',
         dragValue: null,
+        autoLoadSucceeded: false,
       };
 
       function uid() {
@@ -858,15 +936,17 @@
       function buildMiniSvg(cells) {
         const unit = 6;
         const size = GRID_SIZE * unit;
+        const paper = getCssVar('--preview-paper') || '#ffffff';
+        const ink = getCssVar('--preview-ink') || '#111827';
         const rects = [];
         for (let row = 0; row < GRID_SIZE; row += 1) {
           for (let col = 0; col < GRID_SIZE; col += 1) {
             const value = cells[row * GRID_SIZE + col];
             if (!value) continue;
-            rects.push(`<rect x="${col * unit}" y="${row * unit}" width="${unit}" height="${unit}" fill="#eef2f7" />`);
+            rects.push(`<rect x="${col * unit}" y="${row * unit}" width="${unit}" height="${unit}" fill="${paper}" />`);
           }
         }
-        return `<svg viewBox="0 0 ${size} ${size}" aria-hidden="true"><rect width="${size}" height="${size}" fill="#0b0f18"/>${rects.join('')}</svg>`;
+        return `<svg viewBox="0 0 ${size} ${size}" aria-hidden="true"><rect width="${size}" height="${size}" fill="${ink}"/>${rects.join('')}</svg>`;
       }
 
       function renderEditorGrid() {
@@ -914,21 +994,28 @@
         const unit = 26;
         const gap = 4;
         const size = margin * 2 + GRID_SIZE * unit + (GRID_SIZE - 1) * gap;
+        const paper = getCssVar('--preview-paper') || '#ffffff';
+        const ink = getCssVar('--preview-ink') || '#111827';
+        const muted = getCssVar('--preview-muted') || '#d9e1ee';
         const rects = [];
         for (let row = 0; row < GRID_SIZE; row += 1) {
           for (let col = 0; col < GRID_SIZE; col += 1) {
             const x = margin + col * (unit + gap);
             const y = margin + row * (unit + gap);
-            rects.push(`<rect x="${x}" y="${y}" width="${unit}" height="${unit}" rx="7" fill="${cells[row * GRID_SIZE + col] ? '#111827' : '#d9e1ee'}" />`);
+            rects.push(`<rect x="${x}" y="${y}" width="${unit}" height="${unit}" rx="7" fill="${cells[row * GRID_SIZE + col] ? ink : muted}" />`);
           }
         }
-        return `<svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Glyph preview"><rect width="${size}" height="${size}" fill="#ffffff"/>${rects.join('')}</svg>`;
+        return `<svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Glyph preview"><rect width="${size}" height="${size}" fill="${paper}"/>${rects.join('')}</svg>`;
+      }
+
+      function getCssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
       }
 
       function clearRecursiveCanvas() {
         const ctx = els.recursiveCanvas.getContext('2d');
         ctx.clearRect(0, 0, els.recursiveCanvas.width, els.recursiveCanvas.height);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = getCssVar('--preview-paper') || '#ffffff';
         ctx.fillRect(0, 0, els.recursiveCanvas.width, els.recursiveCanvas.height);
       }
 
@@ -955,7 +1042,7 @@
         const ctx = els.recursiveCanvas.getContext('2d');
         const depth = Number(els.recursiveDepthInput.value);
         els.recursiveDepthValue.textContent = String(depth);
-        ctx.fillStyle = '#111827';
+        ctx.fillStyle = getCssVar('--preview-ink') || '#111827';
         drawRecursiveGlyph(ctx, glyph.cells, 0, 0, els.recursiveCanvas.width, depth);
       }
 
@@ -978,9 +1065,14 @@
         const gap = scale;
         const unit = scale;
         const glyphSize = GRID_SIZE * unit;
+        const paper = getCssVar('--preview-paper') || '#ffffff';
+        const ink = getCssVar('--preview-ink') || '#111827';
+        const missing = getCssVar('--preview-missing') || '#edf2f7';
+        const missingStroke = getCssVar('--preview-missing-stroke') || '#c8d1dd';
+        const missingText = getCssVar('--preview-missing-text') || '#5d6b82';
         const width = Math.max(1, chars.length * glyphSize + Math.max(0, chars.length - 1) * gap + 20);
         const height = glyphSize + 20;
-        const out = [`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Text preview"><rect width="${width}" height="${height}" fill="#ffffff"/>`];
+        const out = [`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Text preview"><rect width="${width}" height="${height}" fill="${paper}"/>`];
 
         chars.forEach((char, index) => {
           const cp = char.codePointAt(0);
@@ -988,14 +1080,14 @@
           const offsetX = 10 + index * (glyphSize + gap);
           const offsetY = 10;
           if (!glyph) {
-            out.push(`<rect x="${offsetX}" y="${offsetY}" width="${glyphSize}" height="${glyphSize}" fill="#f3f4f6" stroke="#d1d5db" stroke-dasharray="6 4"/>`);
-            out.push(`<text x="${offsetX + glyphSize / 2}" y="${offsetY + glyphSize / 2 + scale / 3}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="${Math.max(10, scale)}" fill="#6b7280">?</text>`);
+            out.push(`<rect x="${offsetX}" y="${offsetY}" width="${glyphSize}" height="${glyphSize}" fill="${missing}" stroke="${missingStroke}" stroke-dasharray="6 4"/>`);
+            out.push(`<text x="${offsetX + glyphSize / 2}" y="${offsetY + glyphSize / 2 + scale / 3}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="${Math.max(10, scale)}" fill="${missingText}">?</text>`);
             return;
           }
           for (let row = 0; row < GRID_SIZE; row += 1) {
             for (let col = 0; col < GRID_SIZE; col += 1) {
               if (!glyph.cells[row * GRID_SIZE + col]) continue;
-              out.push(`<rect x="${offsetX + col * unit}" y="${offsetY + row * unit}" width="${unit}" height="${unit}" fill="#111827"/>`);
+              out.push(`<rect x="${offsetX + col * unit}" y="${offsetY + row * unit}" width="${unit}" height="${unit}" fill="${ink}"/>`);
             }
           }
         });
@@ -1133,6 +1225,66 @@
         URL.revokeObjectURL(url);
       }
 
+
+      function applyTheme(mode) {
+        const value = mode === 'light' || mode === 'dark' ? mode : 'device';
+        els.themeSelect.value = value;
+        if (value === 'device') {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', value);
+        }
+        try {
+          localStorage.setItem('x5GlyphDesigner.theme', value);
+        } catch {
+          // Ignore storage errors.
+        }
+        renderSelectedGlyphMeta();
+        renderGlyphList();
+        renderTextPreview();
+      }
+
+      function initTheme() {
+        let saved = 'device';
+        try {
+          saved = localStorage.getItem('x5GlyphDesigner.theme') || 'device';
+        } catch {
+          saved = 'device';
+        }
+        applyTheme(saved);
+      }
+
+      async function fetchText(url) {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`Could not load ${url} (${response.status}).`);
+        }
+        return response.text();
+      }
+
+      async function autoLoadSource() {
+        const candidates = ['data/chars.php', '../data/chars.php'];
+        let lastError = null;
+        for (const candidate of candidates) {
+          try {
+            const text = await fetchText(candidate);
+            els.sourceInput.value = text;
+            parseCurrentSource();
+            state.autoLoadSucceeded = true;
+            setStatus(`Loaded ${candidate} automatically and parsed ${state.glyphs.length} glyph${state.glyphs.length === 1 ? '' : 's'}.`);
+            return true;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+        state.autoLoadSucceeded = false;
+        const message = window.location.protocol === 'file:'
+          ? 'Automatic loading is blocked from file:// pages. Serve this file from your project and it will try data/chars.php and ../data/chars.php automatically.'
+          : (lastError?.message || 'Automatic loading failed.');
+        setStatus(message, true);
+        return false;
+      }
+
       function addGlyphFromInput(rawInput, duplicateFromSelected = false) {
         const parsedKey = parseUserKeyInput(rawInput);
         const id = makeGlyphId(parsedKey);
@@ -1219,6 +1371,14 @@
           if (!file) return;
           els.sourceInput.value = await file.text();
           setStatus(`Loaded ${file.name}. Click Parse source to import it.`);
+        });
+
+        els.autoLoadBtn.addEventListener('click', () => {
+          autoLoadSource();
+        });
+
+        els.themeSelect.addEventListener('change', () => {
+          applyTheme(els.themeSelect.value);
         });
 
         els.searchInput.addEventListener('input', () => {
@@ -1309,9 +1469,11 @@
       }
 
       function init() {
+        initTheme();
         bindEvents();
         els.sourceInput.value = '';
         renderAll();
+        autoLoadSource();
       }
 
       init();
